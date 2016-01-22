@@ -3,6 +3,11 @@ try
   call plug#begin('~/.vim/plugged')
   Plug 'vim-airline/vim-airline'
   Plug 'tpope/vim-fugitive'
+  
+  if executable("ruby") 
+    Plug 'junegunn/fzf'
+  endif
+
   call plug#end()
   let g:noplugin_fallback=0
 catch
@@ -33,5 +38,4 @@ else
   let g:airline_theme="distinguished"
   let g:airline_powerline_fonts = 1
   let ttimeout=50
-
 endif
