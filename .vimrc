@@ -3,9 +3,9 @@ try
   call plug#begin('~/.vim/plugged')
   Plug 'vim-airline/vim-airline'
   Plug 'tpope/vim-fugitive'
-  
-  if executable("ruby") 
-    Plug 'junegunn/fzf'
+
+  if executable("ruby")
+    Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
   endif
 
   call plug#end()
@@ -14,6 +14,20 @@ catch
   let g:noplugin_fallback=1
 endtry
 
+function! StripTrailingWhitespace()
+  " Preparation: save last search, and cursor position.
+  let _s=@/
+  let l = line(".")
+  let c = col(".")
+  " do the business:
+  %s/\s\+$//e
+  " clean up: restore previous search history, and cursor position
+  let @/=_s
+  call cursor(l, c)
+endfunction
+
+set nocompatible
+set background=dark
 set encoding=utf-8
 "enable 256 colors support
 let &t_Co=256
@@ -25,6 +39,18 @@ else
   let &t_Sf="\ESC[3%dm"
   let &t_Sb="\ESC[4%dm"
 endif
+
+set incsearch
+filetype plugin indent on
+syntax on
+set history=100
+set showmatch
+set ignorecase                                       "ignore case if search with /,? etc.
+set smartcase                                        "case sensitive if uppercase in search pattern
+set listchars=eol:$,tab:>.,trail:.,extends:\#,nbsp:. "dispaley all whitespace chars with set list
+
+" remove trailing whitespaces and \^M chars
+autocmd FileType c,cpp,java,go,php,javascript,puppet,python,rust,twig,xml,yml,perl,sql autocmd BufWritePre <buffer> call StripTrailingWhitespace()
 
 "statusline
 set laststatus=2 "always show statusline
