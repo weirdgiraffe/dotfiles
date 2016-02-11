@@ -3,7 +3,6 @@ try
   call plug#begin('~/.vim/plugged')
   Plug 'vim-airline/vim-airline'
   Plug 'tpope/vim-fugitive'
-  Plug 'klen/python-mode'
 
   if executable("ruby")
     Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
@@ -66,19 +65,3 @@ else
   let g:airline_powerline_fonts = 1
   let ttimeout=50
 endif
-
-
-filetype plugin on
-let mapleader=","
-
-let g:pymode=1
-let g:pymode_trim_whitespaces=1
-let g:pymode_python='python3'
-let g:pymode_indent=1
-let g:pymode_folding=0
-let g:pymode_rope_complete_on_dot=0
-
-
-
-
-
