@@ -4,7 +4,7 @@ try
   Plug 'vim-airline/vim-airline'
   Plug 'vim-airline/vim-airline-themes'
   Plug 'klen/python-mode'
-  Plug 'aperezdc/vim-template'
+  Plug 'weirdgiraffe/vim-template'
   Plug 'scrooloose/nerdtree'
 
   if executable("ruby")
@@ -35,8 +35,17 @@ endfunction
 
 set nocompatible
 set background=dark
-set encoding=utf-8
-"enable 256 colors support
+
+" vim encodings and files encoding
+if has("multi_byte")
+  if &termencoding == ""
+    let &termencoding = &encoding
+  endif
+  set encoding=utf-8            " default encoding displayed by vim
+  setglobal fileencoding=utf-8  " change default file encoding when writing new files
+endif
+
+" enable 256 colors support
 let &t_Co=256
 "restore screen after quit
 if has("terminfo")
@@ -58,6 +67,9 @@ set listchars=eol:$,tab:>.,trail:.,extends:\#,nbsp:. "dispaley all whitespace ch
 
 " remove trailing whitespaces and \^M chars
 autocmd FileType py,c,cpp,java,go,php,javascript,puppet,python,rust,twig,xml,yml,perl,sql autocmd BufWritePre <buffer> call StripTrailingWhitespace()
+
+" settings for vim-template plugin
+let g:email="giraffeoncode@gmail.com"
 
 "statusline
 set laststatus=2 "always show statusline
