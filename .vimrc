@@ -2,8 +2,10 @@
 try
   call plug#begin('~/.vim/plugged')
   Plug 'vim-airline/vim-airline'
-  Plug 'tpope/vim-fugitive'
+  Plug 'vim-airline/vim-airline-themes'
   Plug 'klen/python-mode'
+  Plug 'aperezdc/vim-template'
+  Plug 'scrooloose/nerdtree'
 
   if executable("ruby")
     Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
@@ -11,6 +13,10 @@ try
 
   call plug#end()
   let g:noplugin_fallback=0
+
+  " completely disable netrw in favor of NERDTree
+  let g:loaded_netrw=1
+  let g:loaded_netrwPlugin=1
 catch
   let g:noplugin_fallback=1
 endtry
@@ -51,7 +57,7 @@ set smartcase                                        "case sensitive if uppercas
 set listchars=eol:$,tab:>.,trail:.,extends:\#,nbsp:. "dispaley all whitespace chars with set list
 
 " remove trailing whitespaces and \^M chars
-autocmd FileType c,cpp,java,go,php,javascript,puppet,python,rust,twig,xml,yml,perl,sql autocmd BufWritePre <buffer> call StripTrailingWhitespace()
+autocmd FileType py,c,cpp,java,go,php,javascript,puppet,python,rust,twig,xml,yml,perl,sql autocmd BufWritePre <buffer> call StripTrailingWhitespace()
 
 "statusline
 set laststatus=2 "always show statusline
@@ -70,13 +76,21 @@ endif
 
 filetype plugin on
 let mapleader=","
+syntax enable
+
+" colorscheme 
+set background=dark
+let g:solarized_termcolors=256
+let g:solarized_termtrans=1
+colorscheme solarized
 
 let g:pymode=1
-let g:pymode_trim_whitespaces=1
 let g:pymode_python='python3'
 let g:pymode_indent=1
 let g:pymode_folding=0
 let g:pymode_rope_complete_on_dot=0
+autocmd FileType python setlocal nonumber "remove line numbers in pythonmode
+
 
 
 
