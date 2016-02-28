@@ -41,6 +41,7 @@
 	ll = log --pretty=format:'%C(auto)%h %d %Cgreen(%ad) %Cblue%an <%ae>%Creset%n%s%n%n%b' --date=local -10
 	lll = log --pretty=format:'%C(auto)%h %d %Cgreen(%ad) %Cblue%an <%ae>%Creset%n%s%n%n%b' --date=local --stat -C -5
 	tree = log --pretty=format:'%C(auto)%h %d %s %Cgreen(%ad) %Cblue%an <%ae>%Creset' --graph --all -10
+	br = branch -a
 [log]
 	date=relative
 [rerere]
