@@ -32,7 +32,6 @@
 	quotepath = false
 	autocrlf = input
 	editor = vim
-	date=relative
 [alias]
 	st = status -u
 	dh = diff HEAD
