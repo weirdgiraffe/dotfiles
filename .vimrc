@@ -4,6 +4,8 @@ try
   Plug 'vim-airline/vim-airline'
   Plug 'vim-airline/vim-airline-themes'
   Plug 'klen/python-mode'
+  Plug 'kien/ctrlp.vim'
+  Plug 'jeetsukumaran/vim-buffergator'
   Plug 'weirdgiraffe/vim-template'
   Plug 'scrooloose/nerdtree'
 
@@ -70,6 +72,7 @@ autocmd FileType py,c,cpp,java,go,php,javascript,puppet,python,rust,twig,xml,yml
 
 " settings for vim-template plugin
 let g:email="giraffeoncode@gmail.com"
+
 
 "statusline
 set laststatus=2 "always show statusline
