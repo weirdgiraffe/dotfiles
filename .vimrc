@@ -68,8 +68,8 @@ if (g:loaded_plug) " if have plugins installed
   "
   " vim-template
   "
-  let g:email=system("git config user.email") " use email from gitconfig in templates
-
+  " use email from gitconfig in templates
+  let g:email=substitute(system('git config --get user.email'), '[\r\n]*$', '', '')
 
 else " if have no plugins
 
