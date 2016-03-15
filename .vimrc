@@ -36,18 +36,7 @@ if (g:loaded_plug) " if have plugins installed
   "
   let g:loaded_netrw=1
   let g:loaded_netrwPlugin=1
-  silent! nnoremap <F2> :NERDTreeFind<CR>
-  if has('nvim')
-    " don't know why but in neovim <S-F2> is <F14>
-    silent! nnoremap <F14>  :NERDTreeClose<CR>
-  else
-    " need to set <S-F2> to a proper symbol
-    " if gui not running
-    if !has("gui_running")
-      set <S-F2>=[1;2Q
-    endif
-    silent! nnoremap <S-F2>  :NERDTreeClose<CR>
-  endif
+  silent! nnoremap <F2> :NERDTreeToggle<CR>
   let g:NERDTreeMapPreview="<F3>"
   let g:NERDTreeMapActivateNode="<F4>"
   "
