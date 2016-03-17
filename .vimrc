@@ -22,7 +22,21 @@ try
 catch
   echom "Plug is not installed"
 endtry
-
+"
+" colorscheme
+"
+let &t_Co=256              " set 256 colors
+if has("terminfo")         " restore terminal screen after quit
+  let &t_Sf="\ESC[3%p1%dm"
+  let &t_Sb="\ESC[4%p1%dm"
+else
+  let &t_Sf="\ESC[3%dm"
+  let &t_Sb="\ESC[4%dm"
+endif
+syntax enable
+set background=dark
+let g:solarized_termtrans=1
+colorscheme solarized
 if (g:loaded_plug) " if have plugins installed
 
   "
@@ -43,8 +57,11 @@ if (g:loaded_plug) " if have plugins installed
   " airline and airline-themes
   "
   set noshowmode "we dont need modehint anymore: we got airline
-  let g:airline_theme="distinguished"
-  let g:airline_powerline_fonts = 1
+  let g:airline_powerline_fonts=1
+  " force theme to use ansi colors which match gnome terminal
+  let g:solarized_termcolors=254 
+  let g:airline_solarized_bg="dark"
+  let g:airline_theme="solarized"
   "
   " py-mode
   "
@@ -96,22 +113,6 @@ set history=100   " increase history
 let mapleader=',' " remap leader to ,
 set foldlevel=20  " do not fold first 20 levels when open a file
 
-"
-" colorscheme
-"
-let &t_Co=256              " set 256 colors
-if has("terminfo")         " restore terminal screen after quit
-  let &t_Sf="\ESC[3%p1%dm"
-  let &t_Sb="\ESC[4%p1%dm"
-else
-  let &t_Sf="\ESC[3%dm"
-  let &t_Sb="\ESC[4%dm"
-endif
-syntax enable
-set background=dark
-let g:solarized_termcolors=256
-let g:solarized_termtrans=1
-colorscheme solarized
 "
 " enable syntax specific things
 "
