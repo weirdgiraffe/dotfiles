@@ -132,6 +132,24 @@ function! StripTrailingWhitespace()
   call cursor(l, c)
 endfunction
 autocmd FileType py,c,cpp,java,go,php,javascript,puppet,python,rust,twig,xml,yml,perl,sql autocmd BufWritePre <buffer> call StripTrailingWhitespace()
+" explisitely define directory to store temp files in cygwin
+if has("win32unix")
+  silent execute '!mkdir -p "'.$VIMRUNTIME.'/temp"'
+  set backupdir=$VIMRUNTIME/temp/
+  set directory=$VIMRUNTIME/temp/
+  silent execute '!rm -f "'.$VIMRUNTIME.'/temp/*~"'
+  silent execute '!rm -f "'.$VIMRUNTIME.'/temp/.*~"'
+endif
+" close current buffer but leave the window open
+nnoremap <C-b>d :bp<bar>sp<bar>bn<bar>bd<CR>
+" simply go to the next buffer
+nnoremap <C-b>n :bn<CR>
+
+
+
+
+
+
 
 
 
