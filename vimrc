@@ -55,6 +55,16 @@ syntax enable                               " enable syntax highlighting
 filetype on                                 " enable filetype detection
 filetype plugin on                          " enable filetype plugins
 filetype plugin indent on                   " enable syntax defined indendation
+set number                                  " display line numbers for all files
+set cursorline                              " highlight cursorline for all files
+
+" display current line number in yellow
+augroup CurrentLineNumberHighlight
+  au!
+  au! ColorScheme * hi clear CursorLine
+  au! ColorScheme * hi CursorLineNR ctermfg=3
+augroup END
+
 
 " load plugins
 try
@@ -146,9 +156,19 @@ function! StripTrailingWhitespace()
   let @/=_s
   call cursor(l, c)
 endfunction
-autocmd FileType py,c,cpp,java,
-      \go,php,javascript,puppet,
-      \python,rust,twig,xml,yml,
-      \perl,sql
-      \ autocmd BufWritePre <buffer>
-      \ call StripTrailingWhitespace()
+au FileType py,c,cpp,java,
+ \go,php,javascript,puppet,
+ \python,rust,twig,xml,yml,
+ \perl,sql
+ \  autocmd BufWritePre <buffer>
+ \  call StripTrailingWhitespace()
+
+" higlight lines in python if they are more than 80 chars
+augroup HighlightOverLength
+  au!
+  au FileType py,python
+   \ au BufEnter * hi OverLength ctermbg=1
+  au FileType py,python
+   \ au BufEnter * match OverLength /.\%>80v/
+augroup END
+
