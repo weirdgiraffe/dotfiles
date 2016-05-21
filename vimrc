@@ -108,7 +108,6 @@ if (g:loaded_plug)
   let g:airline_powerline_fonts=1           " enable powerfonts for airline
 
   let g:airline_theme="solarized"
-  let g:solarized_termcolors=254            " force theme to use ansi colors which match gnome terminal
   let g:airline_solarized_bg="dark"
   " Enable the list of buffers in a topline
   let g:airline#extensions#tabline#enabled=1
