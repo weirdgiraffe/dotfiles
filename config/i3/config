@@ -67,7 +67,9 @@ set $mod Mod4
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 # start a terminal
-bindsym $mod+Return exec termite
+#bindsym $mod+Return exec termite
+bindsym $mod+Return exec st-solarized-dark -e tmux
+
 # kill focused window
 bindsym $mod+Shift+q kill
 # dmenu replacement
