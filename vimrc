@@ -26,6 +26,8 @@ set nohlsearch                              " do not highlight all search result
 set autoindent                              " indent automatically
 set splitright                              " vertical split focus on the right
 set splitbelow                              " horisontal split focus on the bottom
+set hidden                                  " allow buffers to be hidden,
+                                            " i.e switch modified buffers
 
 " disable Ex mode because I don't use it
 nnoremap Q <Nop>
@@ -36,7 +38,6 @@ inoremap <c-u> <c-g>u<c-u>
 inoremap <c-w> <c-g>u<c-w>
 
 set mouse=a                                 " enable mouse in every mode
-let mapleader=','                           " remap leader to ,
 set foldlevel=20                            " do not fold first 20 levels when open a file
 set laststatus=2                            " always show statusline
 let ttimeot=50                              " reduce timeout between keystrokes
@@ -109,6 +110,10 @@ if (g:loaded_plug)
   let g:airline_theme="solarized"
   let g:solarized_termcolors=254            " force theme to use ansi colors which match gnome terminal
   let g:airline_solarized_bg="dark"
+  " Enable the list of buffers in a topline
+  let g:airline#extensions#tabline#enabled=1
+  " Show just the filename in buffers list
+  let g:airline#extensions#tabline#fnamemod=':t'
 
   let g:pymode=1                            " enable py-mode
   let g:pymode_python='python3'             " use python3 as interpreter
@@ -135,8 +140,15 @@ else
 endif
 
 
+" if need to save with sudo
+cmap w!! w !sudo tee % >/dev/null
+nnoremap <leader>bb :CtrlPBuffer<CR>
 " close current buffer but leave the window open
-nnoremap <C-b>d :bp<bar>sp<bar>bn<bar>bd<CR>
+nnoremap <leader>bd :bp<bar>sp<bar>bn<bar>bd<CR>
+" simply go to the next buffer
+nnoremap <leader>bn :bn<CR>
+" simply go to the previous buffer
+nnoremap <leader>bp :bp<CR>
 
 " simply go to the next buffer
 nnoremap <C-b>n :bn<CR>
