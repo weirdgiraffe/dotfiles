@@ -175,11 +175,14 @@ au FileType py,c,cpp,java,
  \  call StripTrailingWhitespace()
 
 " higlight lines in python if they are more than 80 chars
-augroup HighlightOverLength
-  au!
-  au FileType py,python
-   \ au BufEnter * hi OverLength ctermbg=1
-  au FileType py,python
-   \ au BufEnter * match OverLength /.\%>80v/
-augroup END
+fun! UpdateMatch()
+  if &ft =~ '^\%(py\|python\)$'
+    match OverLength /\%81v.*/
+  else
+    match NONE
+  endif
+endfun
+
+hi OverLength ctermbg=1
+autocmd BufEnter,BufWinEnter * call UpdateMatch()
 
