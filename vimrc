@@ -28,6 +28,7 @@ set splitright                              " vertical split focus on the right
 set splitbelow                              " horisontal split focus on the bottom
 set hidden                                  " allow buffers to be hidden,
                                             " i.e switch modified buffers
+set encoding=utf-8                          " essential for airline to work
 
 " disable Ex mode because I don't use it
 nnoremap Q <Nop>
