@@ -77,8 +77,12 @@ try
   Plug 'klen/python-mode'
   Plug 'scrooloose/nerdtree'
   Plug 'weirdgiraffe/vim-template'
+  if has("unix")
+    Plug 'fatih/vim-go'
+  endif
   call plug#end()
 catch
+  let g:loaded_plug=0
   echom "Plug is not installed"
 endtry
 
@@ -88,6 +92,7 @@ if (g:loaded_plug)
 
   " F2  Display/Hide NERDTree
   nnoremap <F2> :NERDTreeToggle<CR>
+  let NERDTreeIgnore = ['__pycache__', '\.pyc', '\.o']
 
   " Inside NERDTree
   "   F3 Preview file
@@ -123,6 +128,7 @@ if (g:loaded_plug)
   let g:pymode_options_max_line_length=79   " line warning on such linelen
 
   " in vim-templates get user email from gitconfig
+  let g:username=substitute(system('git config --get user.name'), '[\r\n]*$', '', '')
   let g:email=substitute(system('git config --get user.email'), '[\r\n]*$', '', '')
 
 else
@@ -168,8 +174,9 @@ function! StripTrailingWhitespace()
   let @/=_s
   call cursor(l, c)
 endfunction
+
 au FileType py,c,cpp,java,
- \go,php,javascript,puppet,
+ \php,javascript,puppet,
  \python,rust,twig,xml,yml,
  \perl,sql
  \  autocmd BufWritePre <buffer>
@@ -177,7 +184,7 @@ au FileType py,c,cpp,java,
 
 " higlight lines in python if they are more than 80 chars
 fun! UpdateMatch()
-  if &ft =~ '^\%(py\|python\)$'
+  if &ft =~ '^\%(py\|python\|go\)$'
     match OverLength /\%81v.*/
   else
     match NONE
