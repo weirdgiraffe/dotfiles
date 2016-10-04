@@ -1,6 +1,6 @@
 # This is Git's per-user configuration file.
 [user]
-	email = weirdgiraffe@cyberzoo.xyz
+	email = giraffe@cyberzoo.xyz
 	name = weirdgiraffe
 [color]
 # ui = true is a superset of all the more specific color options
