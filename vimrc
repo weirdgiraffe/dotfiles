@@ -79,6 +79,8 @@ try
   Plug 'weirdgiraffe/vim-template'
   if has("unix")
     Plug 'fatih/vim-go'
+    Plug 'Konfekt/FastFold'
+    Plug 'Shougo/neocomplete.vim'
   endif
   call plug#end()
 catch
@@ -89,6 +91,13 @@ endtry
 if (g:loaded_plug)
   let g:loaded_netrw=1                      " disable netrw and use NERDTree
   let g:loaded_netrwPlugin=1                " disable netrw and use NERDTree
+
+  if has("unix")
+    let g:neocomplete#enable_at_startup=1   " enable completion on startup
+    let g:go_fmt_command = "goimports"      " run go-imports before save
+    let g:go_metalinter_autosave = 1
+    let g:py_fold_enabled = 1
+  endif
 
   " F2  Display/Hide NERDTree
   nnoremap <F2> :NERDTreeToggle<CR>
