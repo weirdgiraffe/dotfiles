@@ -154,6 +154,10 @@ else
   hi StatusLine ctermbg=15 ctermfg=10
 endif
 
+au FileType go nmap <leader>q <Plug>(go-build)
+au FileType go nmap <leader>w <Plug>(go-test)
+au FileType go nmap <leader>e <Plug>(go-run)
+au FileType go nmap <leader>r <Plug>(go-coverage)
 
 " if need to save with sudo
 cmap w!! w !sudo tee % >/dev/null
@@ -193,7 +197,7 @@ au FileType py,c,cpp,java,
 
 " higlight lines in python if they are more than 80 chars
 fun! UpdateMatch()
-  if &ft =~ '^\%(py\|python\|go\)$'
+  if &ft =~ '^\%(py\|python\)$'
     match OverLength /\%81v.*/
   else
     match NONE
