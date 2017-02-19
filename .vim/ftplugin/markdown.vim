@@ -19,6 +19,7 @@ else
   let b:undo_ftplugin = "setl cms< com< fo< flp<"
 endif
 
+setlocal nonumber
 setlocal ts=4
 setlocal sw=4
 setlocal et
@@ -29,12 +30,6 @@ setlocal et
 " otherwise you could loose your original formating
 setlocal tw=79
 
-" to show which lines with length more than 80 symbols, let's define some
-" highlighting
-fun! MarkdownUpdateLineOverflow()
-  match MarkdownOverflowSymbols /\%80v.*/
-endfun
-
 " this settings are for solarized colorscheme
 " check https://github.com/altercation/vim-colors-solarized
 
@@ -43,11 +38,19 @@ endfun
 hi MarkdownOverflowSymbols ctermbg=10
 hi MarkdownOverflowSymbols ctermfg=8
 
-" update lines when enter is pressed
-autocmd Syntax markdown
-  \ autocmd BufEnter,BufWinEnter *
-  \  call MarkdownUpdateLineOverflow()
+" to show which lines with length more than 80 symbols, let's define some
+" highlighting
+fun! MarkdownUpdateLineOverflow()
+  if  &ft == 'markdown'
+    match MarkdownOverflowSymbols /\%81v.*/
+  else
+    match NONE
+  endif
+endfun
 
+" update lines when enter is pressed
+autocmd BufEnter,BufWinEnter *
+  \ call MarkdownUpdateLineOverflow()
 
 " remove all trailing whitespaces in markdown on :w
 autocmd Syntax markdown
