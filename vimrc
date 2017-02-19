@@ -60,27 +60,22 @@ filetype plugin indent on                   " enable syntax defined indendation
 set number                                  " display line numbers for all files
 set cursorline                              " highlight cursorline for all files
 
-" display current line number in yellow
-augroup CurrentLineNumberHighlight
-  au!
-  au! ColorScheme * hi clear CursorLine
-  au! ColorScheme * hi CursorLineNR ctermfg=3
-augroup END
-
-
 " load plugins
 try
   call plug#begin($HOME.'/.vim/plugged')
   Plug 'vim-airline/vim-airline'
   Plug 'vim-airline/vim-airline-themes'
   Plug 'kien/ctrlp.vim'
-  Plug 'klen/python-mode'
   Plug 'scrooloose/nerdtree'
   Plug 'weirdgiraffe/vim-template'
+  Plug 'junegunn/goyo.vim'
   if has("unix")
+    Plug 'Shougo/neocomplete.vim'
+    Plug 'vim-syntastic/syntastic'
     Plug 'fatih/vim-go'
     Plug 'Konfekt/FastFold'
-    Plug 'Shougo/neocomplete.vim'
+    Plug 'Valloric/YouCompleteMe'
+    Plug 'rdnetto/YCM-Generator', { 'branch': 'stable'}
   endif
   call plug#end()
 catch
@@ -94,9 +89,25 @@ if (g:loaded_plug)
 
   if has("unix")
     let g:neocomplete#enable_at_startup=1   " enable completion on startup
-    let g:go_fmt_command = "goimports"      " run go-imports before save
+
+    " do some magic with autocompletion for python
+    if !exists('g:neocomplete#force_omni_input_patterns')
+      let g:neocomplete#force_omni_input_patterns = {}
+    endif
+    " deafult pattern: \'[@]\?\h\w*'
+    let g:neocomplete#force_omni_input_patterns.python =
+      \ '\%([^. \t]\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
+
+    " run go-imports before save
+    let g:go_fmt_command = "goimports"
     let g:go_metalinter_autosave = 1
     let g:py_fold_enabled = 1
+
+    " Configure syntastic for python
+    "
+    " need to install pylama, beacuse it wraps all needed linters and checkers
+    " for python:    https://github.com/klen/pylama
+    "
   endif
 
   " F2  Display/Hide NERDTree
@@ -117,7 +128,10 @@ if (g:loaded_plug)
 
   set background=dark
   let g:solarized_termtrans=1
+
   colorscheme solarized
+  let g:goyo_width=90
+  let g:goyo_height=90
 
   set noshowmode                            " dont display modeline because we have airline
   let g:airline_powerline_fonts=1           " enable powerfonts for airline
@@ -128,13 +142,6 @@ if (g:loaded_plug)
   let g:airline#extensions#tabline#enabled=1
   " Show just the filename in buffers list
   let g:airline#extensions#tabline#fnamemod=':t'
-
-  let g:pymode=1                            " enable py-mode
-  let g:pymode_python='python3'             " use python3 as interpreter
-  let g:pymode_indent=1                     " enable pep8 indendation
-  let g:pymode_folding=1                    " enable folding
-  let g:pymode_rope_complete_on_dot=0       " disable rope completions on .
-  let g:pymode_options_max_line_length=79   " line warning on such linelen
 
   " in vim-templates get user email from gitconfig
   let g:username=substitute(system('git config --get user.name'), '[\r\n]*$', '', '')
@@ -206,4 +213,3 @@ endfun
 
 hi OverLength ctermbg=1
 autocmd BufEnter,BufWinEnter * call UpdateMatch()
-
