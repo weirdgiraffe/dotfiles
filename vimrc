@@ -90,6 +90,11 @@ if (g:loaded_plug)
   if has("unix")
     let g:neocomplete#enable_at_startup=1   " enable completion on startup
 
+    let g:ycm_filteype_whitelist = {
+          \ 'c': 1,
+          \ 'cpp': 1,
+          \}
+
     " do some magic with autocompletion for python
     if !exists('g:neocomplete#force_omni_input_patterns')
       let g:neocomplete#force_omni_input_patterns = {}
@@ -100,7 +105,12 @@ if (g:loaded_plug)
 
     " run go-imports before save
     let g:go_fmt_command = "goimports"
-    let g:go_metalinter_autosave = 1
+    let g:go_metalinter_autosave = 0
+    let g:go_fmt_autosave = 1
+    let g:go_gocode_unimported_packages = 0
+    let g:go_template_autocreate = 0
+    let g:go_updatetime = 800
+
     let g:py_fold_enabled = 1
 
     " Configure syntastic for python
@@ -181,35 +191,3 @@ nnoremap <C-b>n :bn<CR>
 
 " display all whitespace chars with set list
 set listchars=eol:$,tab:>.,trail:.,extends:\#,nbsp:.
-
-" remove trailing whitespaces and \^M chars
-function! StripTrailingWhitespace()
-  " preparation: save last search, and cursor position.
-  let _s=@/
-  let l = line(".")
-  let c = col(".")
-  " do the business:
-  %s/\s\+$//e
-  " clean up: restore previous search history, and cursor position
-  let @/=_s
-  call cursor(l, c)
-endfunction
-
-au FileType py,c,cpp,java,
- \php,javascript,puppet,
- \python,rust,twig,xml,yml,
- \perl,sql
- \  autocmd BufWritePre <buffer>
- \  call StripTrailingWhitespace()
-
-" higlight lines in python if they are more than 80 chars
-fun! UpdateMatch()
-  if &ft =~ '^\%(py\|python\)$'
-    match OverLength /\%81v.*/
-  else
-    match NONE
-  endif
-endfun
-
-hi OverLength ctermbg=1
-autocmd BufEnter,BufWinEnter * call UpdateMatch()
