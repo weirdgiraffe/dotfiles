@@ -3,7 +3,7 @@
 ```sh
 cd
 git clone --bare git@github.com:weirdgiraffe/dotfiles.git $HOME/.dotfiles
-export config="git --git-dir=$HOME/.dotfiles/ --work-dir=$HOME/"
+alias config="git --git-dir=$HOME/.dotfiles/ --work-dir=$HOME/"
 config checkout
 ```
 
