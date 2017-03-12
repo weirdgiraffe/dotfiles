@@ -1,4 +1,4 @@
-# dotfiles deployment:
+# dotfiles deployment (inspired by [hackernews](https://news.ycombinator.com/item?id=11070797)):
 
 ```sh
 cd
