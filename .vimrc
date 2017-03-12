@@ -5,7 +5,7 @@ set backspace=indent,eol,start " make backspace full functional
 "
 " disable Ex mode
 "
-nnoremap Q <Nop>    
+nnoremap Q <Nop>
 nnoremap gQ <Nop>
 "
 " fix undo.
@@ -35,7 +35,7 @@ set directory=/tmp/vim-swap//
 set undodir=/tmp/vim-undo//
 "
 " display all whitespace chars with set list
-" 
+"
 set listchars=eol:$,tab:>.,trail:.,extends:\#,nbsp:.
 "
 set backup                " do create backup files
@@ -73,22 +73,19 @@ colorscheme solarized
 
 " vim-plug {{{
 if empty(glob($HOME.'/.vim/autoload/plug.vim')) " Automatically install Vim-Plug if it is not yet installed
-	silent !curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs
-		\ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-	autocmd VimEnter * PlugInstall | source $MYVIMRC
+  silent !curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall | source $MYVIMRC
 endif
 call plug#begin($HOME.'/.vim/plugged')
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'scrooloose/nerdtree'
 Plug 'kien/ctrlp.vim'
-Plug 'Shougo/neocomplete.vim'  
+Plug 'Shougo/neocomplete.vim'
 Plug 'weirdgiraffe/vim-template'
 Plug 'fatih/vim-go', {'for': 'go'}
 Plug 'vim-syntastic/syntastic', {'for': 'python'}
-Plug 'junegunn/goyo.vim'
-Plug 'Valloric/YouCompleteMe', {'for': 'c,cpp'}
-Plug 'rdnetto/YCM-Generator', {'for': 'c,cpp', 'branch': 'stable'}
 call plug#end()
 " vim-plug }}}
 
@@ -107,7 +104,7 @@ let g:loaded_netrwPlugin=1                     " disable netrw and use NERDTree
 nnoremap <F2> :NERDTreeToggle<CR>
 " F2  Display/Hide NERDTree
 let NERDTreeIgnore = ['__pycache__', '\.pyc', '\.o']
-" F3 Preview file when inside NERDTree  
+" F3 Preview file when inside NERDTree
 let g:NERDTreeMapPreview="<F3>"
 " nerdtree }}}
 
@@ -160,4 +157,4 @@ au FileType go nmap <leader>r <Plug>(go-coverage)
 "
 " to write some into some file own by root just type :w!!
 "
-cmap w!! w !sudo tee % >/dev/null  
+cmap w!! w !sudo tee % >/dev/null
