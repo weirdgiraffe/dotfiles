@@ -72,8 +72,9 @@ let g:solarized_termtrans=1
 colorscheme solarized
 
 " vim-plug {{{
-if empty(glob($HOME.'/.vim/autoload/plug.vim')) " Automatically install Vim-Plug if it is not yet installed
-  silent !curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs
+" Automatically install Vim-Plug if it is not yet installed
+if empty(glob($HOME.'/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
     \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
   autocmd VimEnter * PlugInstall | source $MYVIMRC
 endif
