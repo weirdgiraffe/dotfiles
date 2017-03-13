@@ -30,7 +30,7 @@ bindkey    "^[[3~"          delete-char
 bindkey    "^[3;5~"         delete-char
 
 alias myip='curl -s http://ip-api.com/json| python -m json.tool'
-alias config='git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+alias dotfiles='git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
