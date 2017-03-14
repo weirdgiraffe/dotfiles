@@ -78,15 +78,36 @@ if empty(glob($HOME.'/.vim/autoload/plug.vim'))
     \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
   autocmd VimEnter * PlugInstall | source $MYVIMRC
 endif
+
+function! BinaryPath(binary)
+  let l:cmd = 'which '.a:binary
+  let l:ret = substitute(system(l:cmd), "\n", "", "")
+  let l:ret = substitute(l:ret, ".* not found", "", "")
+  return l:ret
+endfunction
+
+let s:os_make = BinaryPath('make')
+let s:os_cc = BinaryPath('cc')
+let s:os_ld = BinaryPath('ld')
+let s:pylama = BinaryPath('pylama')
+
 call plug#begin($HOME.'/.vim/plugged')
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'scrooloose/nerdtree'
 Plug 'kien/ctrlp.vim'
-Plug 'Shougo/neocomplete.vim'
 Plug 'weirdgiraffe/vim-template'
-Plug 'fatih/vim-go', {'for': 'go'}
-Plug 'vim-syntastic/syntastic', {'for': 'python'}
+Plug 'fatih/vim-go', {'for': 'go', 'do': ':GoInstallBinaries'}
+Plug 'Shougo/neocomplete.vim'
+
+if !empty(s:os_make) && !empty(s:os_cc) && !empty(s:os_ld)
+  Plug 'Shougo/vimproc.vim', {'do' : 'make'}
+endif
+
+if !empty(s:pylama)
+  Plug 'vim-syntastic/syntastic', {'for': 'python'}
+endif
+
 call plug#end()
 " vim-plug }}}
 
@@ -127,6 +148,13 @@ nnoremap <leader>bp :bp<CR>
 
 " neocomplete.vim {{{
 let g:neocomplete#enable_at_startup=1
+let g:neocomplete#enable_smart_case = 1
+au FileType css setlocal omnifunc=csscomplete#CompleteCSS
+au FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+au FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+au FileType python setlocal omnifunc=pythoncomplete#Complete
+au FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+au FileType go setlocal omnifunc=go#complete#Complete
 " do some magic with autocompletion for python
 if !exists('g:neocomplete#force_omni_input_patterns')
   let g:neocomplete#force_omni_input_patterns = {}
@@ -145,14 +173,15 @@ let g:neocomplete#force_omni_input_patterns.python =
 " vim-go {{{
 let g:go_fmt_command = "goimports"
 let g:go_fmt_autosave = 1
-let g:go_metalinter_autosave = 0
-let g:go_gocode_unimported_packages = 0
+let g:go_gocode_unimported_packages = 1
 let g:go_template_autocreate = 0
-let g:go_updatetime = 800
 au FileType go nmap <leader>q <Plug>(go-build)
 au FileType go nmap <leader>w <Plug>(go-test)
 au FileType go nmap <leader>e <Plug>(go-run)
 au FileType go nmap <leader>r <Plug>(go-coverage)
+au FileType go nmap K <Plug>(go-info)
+au FileType go nmap <C-t> <Plug>(go-def-vertical)
+au FileType go nmap gd <Plug>(go-def)
 " vim-go }}}
 
 "
