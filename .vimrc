@@ -108,6 +108,11 @@ if !empty(s:pylama)
   Plug 'vim-syntastic/syntastic', {'for': 'python'}
 endif
 
+Plug 'Valloric/YouCompleteMe', {'for': 'c,cpp'}
+Plug 'rdnetto/YCM-Generator', {'for': 'c,cpp', 'branch': 'stable'}
+
+Plug 'junegunn/goyo.vim', {'for': 'markdown'}
+
 call plug#end()
 " vim-plug }}}
 
