@@ -49,3 +49,5 @@
 	enabled = true
 [push]
 	default = simple
+[github]
+	user = weirdgiraffe
