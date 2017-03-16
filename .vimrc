@@ -113,6 +113,10 @@ Plug 'rdnetto/YCM-Generator', {'for': 'c,cpp', 'branch': 'stable'}
 
 Plug 'junegunn/goyo.vim', {'for': 'markdown'}
 
+" to work with gists
+Plug 'mattn/webapi-vim'
+Plug 'mattn/gist-vim'
+
 call plug#end()
 " vim-plug }}}
 
@@ -134,6 +138,12 @@ let NERDTreeIgnore = ['__pycache__', '\.pyc', '\.o']
 " F3 Preview file when inside NERDTree
 let g:NERDTreeMapPreview="<F3>"
 " nerdtree }}}
+
+" vim-template {{{
+" use user and email from gitconfig
+let g:username=substitute(system('git config --get user.name'), '[\r\n]*$', '', '')
+let g:email=substitute(system('git config --get user.email'), '[\r\n]*$', '', '')
+" vim-template }}}
 
 " ctrlp.vim {{{
 " Filenames and directory names to ignore in ctrlp plugin
@@ -188,6 +198,13 @@ au FileType go nmap K <Plug>(go-info)
 au FileType go nmap <C-t> <Plug>(go-def-vertical)
 au FileType go nmap gd <Plug>(go-def)
 " vim-go }}}
+
+" gist-vim {{{
+let g:gist_open_browser_after_post = 1
+let g:gist_post_private = 1 " gists are private by default, to make public :Gist -P
+
+" gist-vim }}}
+
 
 "
 " to write some into some file own by root just type :w!!
