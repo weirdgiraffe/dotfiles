@@ -207,6 +207,9 @@ let g:gist_open_browser_after_post = 1
 let g:gist_post_private = 1 " gists are private by default, to make public :Gist -P
 " gist-vim }}}
 
+" YouCompleteMe {{{
+au FileType c,cpp nmap gd :YcmCompleter GoTo<CR>
+" YouCompleteMe }}}
 
 "
 " to write some into some file own by root just type :w!!
