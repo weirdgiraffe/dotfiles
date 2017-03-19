@@ -90,6 +90,7 @@ let s:os_make = BinaryPath('make')
 let s:os_cc = BinaryPath('cc')
 let s:os_ld = BinaryPath('ld')
 let s:pylama = BinaryPath('pylama')
+let s:cmake = BinaryPath('cmake')
 
 call plug#begin($HOME.'/.vim/plugged')
 Plug 'vim-airline/vim-airline'
@@ -108,8 +109,10 @@ if !empty(s:pylama)
   Plug 'vim-syntastic/syntastic', {'for': 'python'}
 endif
 
-Plug 'Valloric/YouCompleteMe', {'for': 'c,cpp'}
-Plug 'rdnetto/YCM-Generator', {'for': 'c,cpp', 'branch': 'stable'}
+if !empty(s:cmake) && !empty(glob('/usr/include/python*'))
+  Plug 'Valloric/YouCompleteMe', {'for': 'c,cpp'}
+  Plug 'rdnetto/YCM-Generator', {'for': 'c,cpp', 'branch': 'stable'}
+endif
 
 Plug 'junegunn/goyo.vim', {'for': 'markdown'}
 
