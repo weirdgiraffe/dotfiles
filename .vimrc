@@ -205,7 +205,6 @@ au FileType go nmap gd <Plug>(go-def)
 " gist-vim {{{
 let g:gist_open_browser_after_post = 1
 let g:gist_post_private = 1 " gists are private by default, to make public :Gist -P
-
 " gist-vim }}}
 
 
