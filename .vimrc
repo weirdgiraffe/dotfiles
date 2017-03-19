@@ -106,6 +106,11 @@ if !empty(s:os_make) && !empty(s:os_cc) && !empty(s:os_ld)
 endif
 
 if !empty(s:pylama)
+  "
+  " need to install pylama, beacuse it wraps all needed 
+  " linters and checkers for python.
+  " https://github.com/klen/pylama
+  "
   Plug 'vim-syntastic/syntastic', {'for': 'python'}
 endif
 
@@ -182,11 +187,6 @@ let g:neocomplete#force_omni_input_patterns.python =
   \ '\%([^. \t]\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
 " neocomplete.vim }}}
 
-" syntastic for python
-"
-" need to install pylama, beacuse it wraps all needed linters and checkers
-" for python:    https://github.com/klen/pylama
-"
 
 " vim-go {{{
 let g:go_fmt_command = "goimports"
