@@ -107,7 +107,7 @@ endif
 
 if !empty(s:pylama)
   "
-  " need to install pylama, beacuse it wraps all needed 
+  " need to install pylama, because it wraps all needed
   " linters and checkers for python.
   " https://github.com/klen/pylama
   "
@@ -115,7 +115,7 @@ if !empty(s:pylama)
 endif
 
 if !empty(s:cmake) && !empty(glob('/usr/include/python*'))
-  Plug 'Valloric/YouCompleteMe', {'for': 'c,cpp'}
+  Plug 'Valloric/YouCompleteMe', {'for': 'c,cpp,python'}
   Plug 'rdnetto/YCM-Generator', {'for': 'c,cpp', 'branch': 'stable'}
 endif
 
@@ -208,7 +208,7 @@ let g:gist_post_private = 1 " gists are private by default, to make public :Gist
 " gist-vim }}}
 
 " YouCompleteMe {{{
-au FileType c,cpp nmap gd :YcmCompleter GoTo<CR>
+au FileType c,cpp,python nmap gd :YcmCompleter GoTo<CR>
 " YouCompleteMe }}}
 
 "
