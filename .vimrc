@@ -195,8 +195,7 @@ let g:go_gocode_unimported_packages = 1
 let g:go_template_autocreate = 0
 au FileType go nmap <leader>q <Plug>(go-build)
 au FileType go nmap <leader>w <Plug>(go-test)
-au FileType go nmap <leader>e <Plug>(go-run)
-au FileType go nmap <leader>r <Plug>(go-coverage)
+au FileType go nmap <leader>e <Plug>(go-coverage)
 au FileType go nmap K <Plug>(go-info)
 au FileType go nmap <C-t> <Plug>(go-def-vertical)
 au FileType go nmap gd <Plug>(go-def)
