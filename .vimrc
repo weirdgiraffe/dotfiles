@@ -99,7 +99,11 @@ Plug 'scrooloose/nerdtree'
 Plug 'kien/ctrlp.vim'
 Plug 'weirdgiraffe/vim-template'
 Plug 'fatih/vim-go', {'for': 'go', 'do': ':GoInstallBinaries'}
-Plug 'Shougo/neocomplete.vim'
+if has('nvim')
+  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+else
+  Plug 'Shougo/neocomplete.vim'
+endif
 
 if !empty(s:os_make) && !empty(s:os_cc) && !empty(s:os_ld)
   Plug 'Shougo/vimproc.vim', {'do' : 'make'}
@@ -170,21 +174,33 @@ nnoremap <leader>bp :bp<CR>
 " ctrlp.vim }}}
 
 " neocomplete.vim {{{
-let g:neocomplete#enable_at_startup=1
-let g:neocomplete#enable_smart_case = 1
 au FileType css setlocal omnifunc=csscomplete#CompleteCSS
 au FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
 au FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
 au FileType python setlocal omnifunc=pythoncomplete#Complete
 au FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 au FileType go setlocal omnifunc=go#complete#Complete
-" do some magic with autocompletion for python
-if !exists('g:neocomplete#force_omni_input_patterns')
-  let g:neocomplete#force_omni_input_patterns = {}
+if has('nvim')
+  let g:duocomplete#enable_at_startup=1
+  let g:duocomplete#enable_smart_case = 1
+  " do some magic with autocompletion for python
+  if !exists('g:neocomplete#force_omni_input_patterns')
+    let g:duocomplete#force_omni_input_patterns = {}
+  endif
+  " deafult pattern: \'[@]\?\h\w*'
+  let g:duocomplete#force_omni_input_patterns.python =
+    \ '\%([^. \t]\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
+else
+  let g:neocomplete#enable_at_startup=1
+  let g:neocomplete#enable_smart_case = 1
+  " do some magic with autocompletion for python
+  if !exists('g:neocomplete#force_omni_input_patterns')
+    let g:neocomplete#force_omni_input_patterns = {}
+  endif
+  " deafult pattern: \'[@]\?\h\w*'
+  let g:neocomplete#force_omni_input_patterns.python =
+    \ '\%([^. \t]\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
 endif
-" deafult pattern: \'[@]\?\h\w*'
-let g:neocomplete#force_omni_input_patterns.python =
-  \ '\%([^. \t]\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
 " neocomplete.vim }}}
 
 
@@ -214,3 +230,9 @@ au FileType c,cpp,python nmap gd :YcmCompleter GoTo<CR>
 " to write some into some file own by root just type :w!!
 "
 cmap w!! w !sudo tee % >/dev/null
+
+
+" disable cursor shaping in neovim
+if has('nvim')
+  set guicursor=
+endif
