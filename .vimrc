@@ -89,8 +89,8 @@ endfunction
 let s:os_make = BinaryPath('make')
 let s:os_cc = BinaryPath('cc')
 let s:os_ld = BinaryPath('ld')
-let s:pylama = BinaryPath('pylama')
 let s:cmake = BinaryPath('cmake')
+let s:pylama = BinaryPath('pylama')   " https://github.com/klen/pylama
 
 call plug#begin($HOME.'/.vim/plugged')
 Plug 'vim-airline/vim-airline'
@@ -106,7 +106,13 @@ else
 endif
 
 if !empty(s:os_make) && !empty(s:os_cc) && !empty(s:os_ld)
+  " for asycnchronous process call
   Plug 'Shougo/vimproc.vim', {'do' : 'make'}
+endif
+
+if !empty(s:cmake) && !empty(glob('/usr/include/python*'))
+  Plug 'Valloric/YouCompleteMe', {'for': 'c,cpp,python'}
+  Plug 'rdnetto/YCM-Generator', {'for': 'c,cpp', 'branch': 'stable'}
 endif
 
 if !empty(s:pylama)
@@ -116,11 +122,6 @@ if !empty(s:pylama)
   " https://github.com/klen/pylama
   "
   Plug 'vim-syntastic/syntastic', {'for': 'python'}
-endif
-
-if !empty(s:cmake) && !empty(glob('/usr/include/python*'))
-  Plug 'Valloric/YouCompleteMe', {'for': 'c,cpp,python'}
-  Plug 'rdnetto/YCM-Generator', {'for': 'c,cpp', 'branch': 'stable'}
 endif
 
 Plug 'junegunn/goyo.vim', {'for': 'markdown'}
@@ -184,7 +185,7 @@ if has('nvim')
   let g:duocomplete#enable_at_startup=1
   let g:duocomplete#enable_smart_case = 1
   " do some magic with autocompletion for python
-  if !exists('g:neocomplete#force_omni_input_patterns')
+  if !exists('g:duocomplete#force_omni_input_patterns')
     let g:duocomplete#force_omni_input_patterns = {}
   endif
   " deafult pattern: \'[@]\?\h\w*'
@@ -203,7 +204,6 @@ else
 endif
 " neocomplete.vim }}}
 
-
 " vim-go {{{
 let g:go_fmt_command = "goimports"
 let g:go_fmt_autosave = 1
@@ -215,6 +215,7 @@ au FileType go nmap <leader>e <Plug>(go-coverage)
 au FileType go nmap K <Plug>(go-info)
 au FileType go nmap <C-t> <Plug>(go-def-vertical)
 au FileType go nmap gd <Plug>(go-def)
+au FileType go nmap <leader>r <Plug>(go-referrers)
 " vim-go }}}
 
 " gist-vim {{{
