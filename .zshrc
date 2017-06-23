@@ -14,9 +14,8 @@ fi
 
 export EDITOR="vim"
 export VISUAL="vim"
-export GOROOT=/usr/lib/go
 export GOPATH=$HOME/go
-export PATH=$PATH:$GOPATH/bin:/opt/android-sdk/platform-tools
+export PATH=$PATH:$GOPATH/bin
 
 # do not share history between terminals
 unsetopt share_history
