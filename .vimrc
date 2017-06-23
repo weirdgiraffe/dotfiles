@@ -1,21 +1,13 @@
 " vim:ts=2:sw=2:et
-"
 set nocompatible               " disable vi
 set backspace=indent,eol,start " make backspace full functional
-"
 " disable Ex mode
-"
 nnoremap Q <Nop>
 nnoremap gQ <Nop>
-"
-" fix undo.
-" http://vim.wikia.com/wiki/Recover_from_accidental_Ctrl-U
-"
+" fix undo (http://vim.wikia.com/wiki/Recover_from_accidental_Ctrl-U)
 inoremap <c-u> <c-g>u<c-u>
 inoremap <c-w> <c-g>u<c-w>
-"
 " restore terminal screen after quit
-"
 if has("terminfo")
   let &t_Sf="\ESC[3%p1%dm"
   let &t_Sb="\ESC[4%p1%dm"
@@ -23,21 +15,15 @@ else
   let &t_Sf="\ESC[3%dm"
   let &t_Sb="\ESC[4%dm"
 endif
-"
-" do not store .swp and *~ files in working directory,
-" save them into /tmp
-"
-silent execute '!mkdir -p "/tmp/vim-backup"'
-silent execute '!mkdir -p "/tmp/vim-swap"'
-silent execute '!mkdir -p "/tmp/vim-undo"'
-set backupdir=/tmp/vim-backup//
-set directory=/tmp/vim-swap//
-set undodir=/tmp/vim-undo//
-"
+" do not store .swp and *~ files in working directory, save them into /tmp
+silent execute '!mkdir -p "/tmp/$USER/vim-backup"'
+silent execute '!mkdir -p "/tmp/$USER/vim-swap"'
+silent execute '!mkdir -p "/tmp/$USER/vim-undo"'
+set backupdir=/tmp/$USER/vim-backup//
+set directory=/tmp/$USER/vim-swap//
+set undodir=/tmp/$USER/vim-undo//
 " display all whitespace chars with set list
-"
 set listchars=eol:$,tab:>.,trail:.,extends:\#,nbsp:.
-"
 set backup                " do create backup files
 set swapfile              " do create swap files
 set undofile              " do create undo files
@@ -64,12 +50,12 @@ filetype plugin on        " enable filetype plugins
 filetype plugin indent on " enable syntax defined indendation
 "set number                " display line numbers for all files
 "set cursorline            " highlight cursorline for all files
-"
-" colorscheme
-"
+
+" colorscheme {{{
 set background=dark
 let g:solarized_termtrans=1
 colorscheme solarized
+" colorscheme }}}
 
 " vim-plug {{{
 " Automatically install Vim-Plug if it is not yet installed
@@ -99,11 +85,7 @@ Plug 'scrooloose/nerdtree'
 Plug 'kien/ctrlp.vim'
 Plug 'weirdgiraffe/vim-template'
 Plug 'fatih/vim-go', {'for': 'go', 'do': ':GoInstallBinaries'}
-if has('nvim')
-  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-else
-  Plug 'Shougo/neocomplete.vim'
-endif
+Plug 'Shougo/neocomplete.vim'
 
 if !empty(s:os_make) && !empty(s:os_cc) && !empty(s:os_ld)
   " for asycnchronous process call
@@ -153,7 +135,6 @@ let g:NERDTreeMapPreview="<F3>"
 " nerdtree }}}
 
 " vim-template {{{
-" use user and email from gitconfig
 let g:username=substitute(system('git config --get user.name'), '[\r\n]*$', '', '')
 let g:email=substitute(system('git config --get user.email'), '[\r\n]*$', '', '')
 " vim-template }}}
@@ -164,14 +145,6 @@ let g:ctrlp_custom_ignore = {
   \ 'dir':  '\v[\/](\.git|\.svn|\.ropeproject|\.cache|__pycache__)$',
   \ 'file': '\v(\.exe|\.lib|\.so|\.dll|\.pyc|\~)$',
   \ }
-" list open buffers
-nnoremap <leader>bb :CtrlPBuffer<CR>
-" close current buffer but leave the window open
-nnoremap <leader>bd :bp<bar>sp<bar>bn<bar>bd<CR>
-" simply go to the next buffer
-nnoremap <leader>bn :bn<CR>
-" simply go to the previous buffer
-nnoremap <leader>bp :bp<CR>
 " ctrlp.vim }}}
 
 " neocomplete.vim {{{
@@ -181,27 +154,15 @@ au FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
 au FileType python setlocal omnifunc=pythoncomplete#Complete
 au FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 au FileType go setlocal omnifunc=go#complete#Complete
-if has('nvim')
-  let g:duocomplete#enable_at_startup=1
-  let g:duocomplete#enable_smart_case = 1
-  " do some magic with autocompletion for python
-  if !exists('g:duocomplete#force_omni_input_patterns')
-    let g:duocomplete#force_omni_input_patterns = {}
-  endif
-  " deafult pattern: \'[@]\?\h\w*'
-  let g:duocomplete#force_omni_input_patterns.python =
-    \ '\%([^. \t]\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
-else
-  let g:neocomplete#enable_at_startup=1
-  let g:neocomplete#enable_smart_case = 1
-  " do some magic with autocompletion for python
-  if !exists('g:neocomplete#force_omni_input_patterns')
-    let g:neocomplete#force_omni_input_patterns = {}
-  endif
-  " deafult pattern: \'[@]\?\h\w*'
-  let g:neocomplete#force_omni_input_patterns.python =
-    \ '\%([^. \t]\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
+let g:neocomplete#enable_at_startup=1
+let g:neocomplete#enable_smart_case = 1
+" do some magic with autocompletion for python
+if !exists('g:neocomplete#force_omni_input_patterns')
+  let g:neocomplete#force_omni_input_patterns = {}
 endif
+" deafult pattern: \'[@]\?\h\w*'
+let g:neocomplete#force_omni_input_patterns.python =
+  \ '\%([^. \t]\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
 " neocomplete.vim }}}
 
 " vim-go {{{
@@ -232,8 +193,11 @@ au FileType c,cpp,python nmap gd :YcmCompleter GoTo<CR>
 "
 cmap w!! w !sudo tee % >/dev/null
 
-
-" disable cursor shaping in neovim
-if has('nvim')
-  set guicursor=
-endif
+" list open buffers
+nnoremap <leader>bb :CtrlPBuffer<CR>
+" close current buffer but leave the window open
+nnoremap <leader>bd :bp<bar>sp<bar>bn<bar>bd<CR>
+" simply go to the next buffer
+nnoremap <leader>bn :bn<CR>
+" simply go to the previous buffer
+nnoremap <leader>bp :bp<CR>
