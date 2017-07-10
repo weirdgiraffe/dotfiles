@@ -9,19 +9,19 @@ inoremap <c-u> <c-g>u<c-u>
 inoremap <c-w> <c-g>u<c-w>
 " restore terminal screen after quit
 if has("terminfo")
-  let &t_Sf="\ESC[3%p1%dm"
-  let &t_Sb="\ESC[4%p1%dm"
+  let &t_Sf = "\ESC[3%p1%dm"
+  let &t_Sb = "\ESC[4%p1%dm"
 else
-  let &t_Sf="\ESC[3%dm"
-  let &t_Sb="\ESC[4%dm"
+  let &t_Sf = "\ESC[3%dm"
+  let &t_Sb = "\ESC[4%dm"
 endif
 " do not store .swp and *~ files in working directory, save them into /tmp
 silent execute '!mkdir -p "/tmp/$USER/vim-backup"'
 silent execute '!mkdir -p "/tmp/$USER/vim-swap"'
 silent execute '!mkdir -p "/tmp/$USER/vim-undo"'
-set backupdir=/tmp/$USER/vim-backup//
-set directory=/tmp/$USER/vim-swap//
-set undodir=/tmp/$USER/vim-undo//
+set backupdir=/tmp/$USER/vim-backup/
+set directory=/tmp/$USER/vim-swap/
+set undodir=/tmp/$USER/vim-undo/
 " display all whitespace chars with set list
 set listchars=eol:$,tab:>.,trail:.,extends:\#,nbsp:.
 set backup                " do create backup files
@@ -39,7 +39,7 @@ set splitright            " vertical split focus on the right pane
 set splitbelow            " horisontal split focus on the bottom pane
 set hidden                " allow switch of modified buffers
 set encoding=utf-8        " use utf-8 as default encoding
-set mouse=a               " enable mouse in every mode
+set mouse=                " disable mouse in every mode
 set foldlevel=20          " do not fold first 20 levels when open a file
 set laststatus=2          " always show statusline
 set ttimeoutlen=50        " reduce timeout between keystrokes
@@ -48,12 +48,14 @@ syntax enable             " enable syntax highlighting
 filetype on               " enable filetype detection
 filetype plugin on        " enable filetype plugins
 filetype plugin indent on " enable syntax defined indendation
-"set number                " display line numbers for all files
-"set cursorline            " highlight cursorline for all files
+"set number               " display line numbers for all files
+set cursorline            " highlight cursorline for all files
+set synmaxcol=140         " turn off syntax coloring after 140 symbols
+let mapleader = ','       " set the leader button
 
 " colorscheme {{{
 set background=dark
-let g:solarized_termtrans=1
+let g:solarized_termtrans = 1
 colorscheme solarized
 " colorscheme }}}
 
@@ -106,8 +108,6 @@ if !empty(s:pylama)
   Plug 'vim-syntastic/syntastic', {'for': 'python'}
 endif
 
-Plug 'junegunn/goyo.vim', {'for': 'markdown'}
-
 " to work with gists
 Plug 'mattn/webapi-vim'
 Plug 'mattn/gist-vim'
@@ -116,27 +116,27 @@ call plug#end()
 " vim-plug }}}
 
 " vim-airline {{{
-set noshowmode                                 " don't show modeline because of airline
-let g:airline_powerline_fonts=1                " enable powerfonts for airline
-let g:airline_theme="solarized"
-let g:airline_solarized_bg="dark"
-let g:airline#extensions#tabline#enabled=1     " Enable the list of buffers in a topline
-let g:airline#extensions#tabline#fnamemod=':t' " Show filename only in buffer list
+set noshowmode                                   " don't show modeline because of airline
+let g:airline_powerline_fonts = 1                " enable powerfonts for airline
+let g:airline_theme = "solarized"
+let g:airline_solarized_bg = "dark"
+let g:airline#extensions#tabline#enabled = 1     " Enable the list of buffers in a topline
+let g:airline#extensions#tabline#fnamemod = ':t' " Show filename only in buffer list
 " vim-airline }}}
 
 " nerdtree {{{
-let g:loaded_netrw=1                           " disable netrw and use NERDTree
-let g:loaded_netrwPlugin=1                     " disable netrw and use NERDTree
+let g:loaded_netrw = 1                           " disable netrw and use NERDTree
+let g:loaded_netrwPlugin = 1                     " disable netrw and use NERDTree
 nnoremap <F2> :NERDTreeToggle<CR>
 " F2  Display/Hide NERDTree
 let NERDTreeIgnore = ['__pycache__', '\.pyc', '\.o']
 " F3 Preview file when inside NERDTree
-let g:NERDTreeMapPreview="<F3>"
+let g:NERDTreeMapPreview = "<F3>"
 " nerdtree }}}
 
 " vim-template {{{
-let g:username=substitute(system('git config --get user.name'), '[\r\n]*$', '', '')
-let g:email=substitute(system('git config --get user.email'), '[\r\n]*$', '', '')
+let g:username = substitute(system('git config --get user.name'), '[\r\n]*$', '', '')
+let g:email = substitute(system('git config --get user.email'), '[\r\n]*$', '', '')
 " vim-template }}}
 
 " ctrlp.vim {{{
@@ -148,21 +148,28 @@ let g:ctrlp_custom_ignore = {
 " ctrlp.vim }}}
 
 " neocomplete.vim {{{
+let g:acp_enableAtStartup = 0
+let g:neocomplete#enable_at_startup = 1
+let g:neocomplete#enable_smart_case = 1
+let g:neocomplete#sources#syntax#min_keyword_length = 3
+inoremap <expr><C-g>     neocomplete#undo_completion()
+inoremap <expr><C-l>     neocomplete#complete_common_string()
+inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+function! s:my_cr_function()
+   return (pumvisible() ? "\<C-y>" : "" ) . "\<CR>"
+endfunction
+inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
+inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
 au FileType css setlocal omnifunc=csscomplete#CompleteCSS
 au FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
 au FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
 au FileType python setlocal omnifunc=pythoncomplete#Complete
 au FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 au FileType go setlocal omnifunc=go#complete#Complete
-let g:neocomplete#enable_at_startup=1
-let g:neocomplete#enable_smart_case = 1
-" do some magic with autocompletion for python
 if !exists('g:neocomplete#force_omni_input_patterns')
   let g:neocomplete#force_omni_input_patterns = {}
 endif
-" deafult pattern: \'[@]\?\h\w*'
-let g:neocomplete#force_omni_input_patterns.python =
-  \ '\%([^. \t]\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
+let g:neocomplete#force_omni_input_patterns.python = '\%([^. \t]\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
 " neocomplete.vim }}}
 
 " vim-go {{{
@@ -170,13 +177,16 @@ let g:go_fmt_command = "goimports"
 let g:go_fmt_autosave = 1
 let g:go_gocode_unimported_packages = 1
 let g:go_template_autocreate = 0
+let g:go_auto_type_info = 1
+let g:go_addtags_transform = "snakecase"
+let g:go_def_reuse_buffer = 1
 au FileType go nmap <leader>q <Plug>(go-build)
 au FileType go nmap <leader>w <Plug>(go-test)
 au FileType go nmap <leader>e <Plug>(go-coverage)
-au FileType go nmap K <Plug>(go-info)
-au FileType go nmap <C-t> <Plug>(go-def-vertical)
-au FileType go nmap gd <Plug>(go-def)
 au FileType go nmap <leader>r <Plug>(go-referrers)
+au FileType go nmap <leader>t <Plug>(go-def-vertical)
+"au FileType go nmap K <Plug>(go-info)
+"au FileType go nmap gd <Plug>(go-def)
 " vim-go }}}
 
 " gist-vim {{{
