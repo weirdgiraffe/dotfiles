@@ -1,34 +1,53 @@
 " vim:ts=2:sw=2:et
-set nocompatible               " disable vi
-set backspace=indent,eol,start " make backspace full functional
-" disable Ex mode
+
+" remove old compatibility shit
+" - disable vi compatibility (help
+" - fix backspace functionality (:help 'backspace')
+" - disable Ex mode (:help Q, :help gQ)
+set nocompatible
+set backspace=indent,eol,start
+set encoding=utf-8
 nnoremap Q <Nop>
 nnoremap gQ <Nop>
-" fix undo (http://vim.wikia.com/wiki/Recover_from_accidental_Ctrl-U)
+
+" .swp, ~, and undo files
+" normaly these files are stored in the same folder as file itself
+" producing a great mess of hidden files. For me these backups are
+" like a session storage, i.e. they could be deleted after a reboot.
+" /tmp is almost always mounted as tmpfs, so let's store them there
+" NOTE: not windows compatible, but who cares ?!
+" NOTE: check (:help dir) for // explanation
+silent execute '!mkdir -p "/tmp/vim/$USER/backup"'
+silent execute '!mkdir -p "/tmp/vim/$USER/swap"'
+silent execute '!mkdir -p "/tmp/vim/$USER/undo"'
+set undodir=/tmp/vim/$USER/undo//
+set backupdir=/tmp/vim/$USER/backup//
+set directory=/tmp/vim/$USER/swap//
+set backup
+set writebackup
+set swapfile
+set undofile
+autocmd BufWritePre * let &backupext = substitute(expand('%:p:h'), '/', '%', 'g')
+
+" Terminal settings
+if has("terminfo")
+  set t_Co=256
+  set t_Sf="\ESC[3%p1%dm"
+  set t_Sb="\ESC[4%p1%dm"
+else
+  set t_Co=256
+  set t_Sf="\ESC[3%dm"
+  set t_Sb="\ESC[4%dm"
+endif
+
+" useful behaviour tweaks
+" - fix undo (http://vim.wikia.com/wiki/Recover_from_accidental_Ctrl-U)
+" - set maximum history length
 inoremap <c-u> <c-g>u<c-u>
 inoremap <c-w> <c-g>u<c-w>
-" restore terminal screen after quit
-if has("terminfo")
-  let &t_Sf = "\ESC[3%p1%dm"
-  let &t_Sb = "\ESC[4%p1%dm"
-else
-  let &t_Sf = "\ESC[3%dm"
-  let &t_Sb = "\ESC[4%dm"
-endif
-" do not store .swp and *~ files in working directory, save them into /tmp
-silent execute '!mkdir -p "/tmp/$USER/vim-backup"'
-silent execute '!mkdir -p "/tmp/$USER/vim-swap"'
-silent execute '!mkdir -p "/tmp/$USER/vim-undo"'
-set backupdir=/tmp/$USER/vim-backup/
-set directory=/tmp/$USER/vim-swap/
-set undodir=/tmp/$USER/vim-undo/
-" display all whitespace chars with set list
 set listchars=eol:$,tab:>.,trail:.,extends:\#,nbsp:.
-set backup                " do create backup files
-set swapfile              " do create swap files
-set undofile              " do create undo files
 set history=100           " how many lines of command history to keep
-set showcmd               " enable vim own command completion
+set showcmd               " enable vim built-in command completion
 set ignorecase            " ignore case if search with /,? etc.
 set smartcase             " case sensitive if uppercase in search pattern
 set incsearch             " highlight search term while typing
@@ -38,82 +57,61 @@ set autoindent            " indent automatically
 set splitright            " vertical split focus on the right pane
 set splitbelow            " horisontal split focus on the bottom pane
 set hidden                " allow switch of modified buffers
-set encoding=utf-8        " use utf-8 as default encoding
 set mouse=                " disable mouse in every mode
 set foldlevel=20          " do not fold first 20 levels when open a file
 set laststatus=2          " always show statusline
 set ttimeoutlen=50        " reduce timeout between keystrokes
-set t_Co=256              " force 256-colors terminal
-syntax enable             " enable syntax highlighting
-filetype on               " enable filetype detection
-filetype plugin on        " enable filetype plugins
-filetype plugin indent on " enable syntax defined indendation
-"set number               " display line numbers for all files
 set cursorline            " highlight cursorline for all files
 set synmaxcol=140         " turn off syntax coloring after 140 symbols
 let mapleader = ','       " set the leader button
 
-" colorscheme {{{
+" Color scheme
+if empty(glob($HOME.'/.vim/colors/solarized.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/altercation/vim-colors-solarized/master/colors/solarized.vim
+  source $MYVIMRS
+endif
 set background=dark
 let g:solarized_termtrans = 1
 colorscheme solarized
-" colorscheme }}}
 
-" vim-plug {{{
-" Automatically install Vim-Plug if it is not yet installed
+" Vim-Plug
 if empty(glob($HOME.'/.vim/autoload/plug.vim'))
   silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
     \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
   autocmd VimEnter * PlugInstall | source $MYVIMRC
 endif
-
-function! BinaryPath(binary)
-  let l:cmd = 'which '.a:binary
-  let l:ret = substitute(system(l:cmd), "\n", "", "")
-  let l:ret = substitute(l:ret, ".* not found", "", "")
-  return l:ret
-endfunction
-
-let s:os_make = BinaryPath('make')
-let s:os_cc = BinaryPath('cc')
-let s:os_ld = BinaryPath('ld')
-let s:cmake = BinaryPath('cmake')
-let s:pylama = BinaryPath('pylama')   " https://github.com/klen/pylama
-
 call plug#begin($HOME.'/.vim/plugged')
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'scrooloose/nerdtree'
 Plug 'kien/ctrlp.vim'
-Plug 'weirdgiraffe/vim-template'
-Plug 'fatih/vim-go', {'for': 'go', 'do': ':GoInstallBinaries'}
 Plug 'Shougo/neocomplete.vim'
-
-if !empty(s:os_make) && !empty(s:os_cc) && !empty(s:os_ld)
-  " for asycnchronous process call
+" snipets engine, used by vim-go
+Plug 'SirVer/ultisnips'
+Plug 'fatih/vim-go', {'for': 'go', 'do': ':GoInstallBinaries'}
+if executable("make") && executable("cc") && executable("ld")
+  " plugin for asycnchronous process call
   Plug 'Shougo/vimproc.vim', {'do' : 'make'}
 endif
-
-if !empty(s:cmake) && !empty(glob('/usr/include/python*'))
+if executable("cmake") && !empty(glob('/usr/include/python*'))
+  " autocompletion for c/c++/python
   Plug 'Valloric/YouCompleteMe', {'for': 'c,cpp,python'}
+  " YCM project generator
   Plug 'rdnetto/YCM-Generator', {'for': 'c,cpp', 'branch': 'stable'}
 endif
-
-if !empty(s:pylama)
-  "
-  " need to install pylama, because it wraps all needed
-  " linters and checkers for python.
-  " https://github.com/klen/pylama
-  "
+if executable("pylama")
+  " linters and checkers, pylama is a dependency for python
+  "   https://github.com/klen/pylama
   Plug 'vim-syntastic/syntastic', {'for': 'python'}
 endif
-
-" to work with gists
+" syntax dependant templates
+Plug 'weirdgiraffe/vim-template'
+" dependency for gist-vim
 Plug 'mattn/webapi-vim'
+" plugin to work with github gists
 Plug 'mattn/gist-vim'
-
 call plug#end()
-" vim-plug }}}
 
 " vim-airline {{{
 set noshowmode                                   " don't show modeline because of airline
@@ -125,19 +123,14 @@ let g:airline#extensions#tabline#fnamemod = ':t' " Show filename only in buffer 
 " vim-airline }}}
 
 " nerdtree {{{
-let g:loaded_netrw = 1                           " disable netrw and use NERDTree
-let g:loaded_netrwPlugin = 1                     " disable netrw and use NERDTree
+let g:loaded_netrw = 1                           " disable netrw and use NERDTree instead
+let g:loaded_netrwPlugin = 1                     " disable netrw and use NERDTree instead
 nnoremap <F2> :NERDTreeToggle<CR>
 " F2  Display/Hide NERDTree
-let NERDTreeIgnore = ['__pycache__', '\.pyc', '\.o']
+let NERDTreeIgnore = ['__pycache__', '\.pyc', '\.o', '\.git', '\.svn']
 " F3 Preview file when inside NERDTree
 let g:NERDTreeMapPreview = "<F3>"
 " nerdtree }}}
-
-" vim-template {{{
-let g:username = substitute(system('git config --get user.name'), '[\r\n]*$', '', '')
-let g:email = substitute(system('git config --get user.email'), '[\r\n]*$', '', '')
-" vim-template }}}
 
 " ctrlp.vim {{{
 " Filenames and directory names to ignore in ctrlp plugin
@@ -147,13 +140,18 @@ let g:ctrlp_custom_ignore = {
   \ }
 " ctrlp.vim }}}
 
+" vim-template {{{
+let g:username = substitute(system('git config --get user.name'), '[\r\n]*$', '', '')
+let g:email = substitute(system('git config --get user.email'), '[\r\n]*$', '', '')
+" vim-template }}}
+
 " neocomplete.vim {{{
 let g:acp_enableAtStartup = 0
 let g:neocomplete#enable_at_startup = 1
 let g:neocomplete#enable_smart_case = 1
 let g:neocomplete#sources#syntax#min_keyword_length = 3
-inoremap <expr><C-g>     neocomplete#undo_completion()
-inoremap <expr><C-l>     neocomplete#complete_common_string()
+inoremap <expr><C-g> neocomplete#undo_completion()
+inoremap <expr><C-l> neocomplete#complete_common_string()
 inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
 function! s:my_cr_function()
    return (pumvisible() ? "\<C-y>" : "" ) . "\<CR>"
@@ -185,24 +183,21 @@ au FileType go nmap <leader>w <Plug>(go-test)
 au FileType go nmap <leader>e <Plug>(go-coverage)
 au FileType go nmap <leader>r <Plug>(go-referrers)
 au FileType go nmap <leader>t <Plug>(go-def-vertical)
-"au FileType go nmap K <Plug>(go-info)
-"au FileType go nmap gd <Plug>(go-def)
+au FileType go nmap <leader>d :GoDecls<CR>
 " vim-go }}}
 
 " gist-vim {{{
 let g:gist_open_browser_after_post = 1
-let g:gist_post_private = 1 " gists are private by default, to make public :Gist -P
+let g:gist_post_private = 1            " new gists should be private
 " gist-vim }}}
 
 " YouCompleteMe {{{
 au FileType c,cpp,python nmap gd :YcmCompleter GoTo<CR>
 " YouCompleteMe }}}
 
-"
+" custom key mappings
 " to write some into some file own by root just type :w!!
-"
 cmap w!! w !sudo tee % >/dev/null
-
 " list open buffers
 nnoremap <leader>bb :CtrlPBuffer<CR>
 " close current buffer but leave the window open
@@ -211,3 +206,14 @@ nnoremap <leader>bd :bp<bar>sp<bar>bn<bar>bd<CR>
 nnoremap <leader>bn :bn<CR>
 " simply go to the previous buffer
 nnoremap <leader>bp :bp<CR>
+
+" syntax settings. better to have it at the end
+" because vim-go could not work if syntax is enabled
+" before plugins load.
+if !exists("g:syntax_on")
+  syntax enable           " enable syntax highlighting
+endif
+filetype on               " enable filetype detection
+filetype plugin on        " enable filetype plugins
+filetype plugin indent on " enable syntax defined indendation
+
