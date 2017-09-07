@@ -34,6 +34,7 @@
 	editor = vim
 	pager = less -FRXK
 [alias]
+	c = commit
 	st = status -u
 	dh = diff HEAD
 	dc = diff --staged
