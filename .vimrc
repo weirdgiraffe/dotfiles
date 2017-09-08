@@ -63,6 +63,16 @@ set laststatus=2          " always show statusline
 set ttimeoutlen=50        " reduce timeout between keystrokes
 set cursorline            " highlight cursorline for all files
 set synmaxcol=140         " turn off syntax coloring after 140 symbols
+set nojoinspaces          " J should always join with one space
+set scrolloff=5           " min number of lines to keep above/bellow current line
+set visualbell            " don't beep
+set wildignore+=.DS_Store
+set wildignore+=*.jpg,*.jpeg,*.gif,*.png,*.gif,*.psd
+set wildignore+=*.o,*.obj,*.min.js,*.pyc,*/__pycache__/*
+set wildignore+=*/.git/*,*/.hg/*,*/.svn/*
+set wildignore+=*.tar,*.gz,*.bz,*.lzma,*.tgz,*.tbz,*.zip,*.rar,*.iso
+set wildmode=longest,list " autocompleting files: prompt, don't autopick.
+"set relativenumber        " funny feature for better navigation
 let mapleader = ','       " set the leader button
 
 " Color scheme
@@ -120,6 +130,19 @@ let g:airline_theme = "solarized"
 let g:airline_solarized_bg = "dark"
 let g:airline#extensions#tabline#enabled = 1     " Enable the list of buffers in a topline
 let g:airline#extensions#tabline#fnamemod = ':t' " Show filename only in buffer list
+let g:airline#extensions#tabline#keymap_ignored_filetypes = ['nerdtree']
+let g:airline#extensions#tabline#buffer_idx_mode = 1
+nmap <leader>1 <Plug>AirlineSelectTab1
+nmap <leader>2 <Plug>AirlineSelectTab2
+nmap <leader>3 <Plug>AirlineSelectTab3
+nmap <leader>4 <Plug>AirlineSelectTab4
+nmap <leader>5 <Plug>AirlineSelectTab5
+nmap <leader>6 <Plug>AirlineSelectTab6
+nmap <leader>7 <Plug>AirlineSelectTab7
+nmap <leader>8 <Plug>AirlineSelectTab8
+nmap <leader>9 <Plug>AirlineSelectTab9
+nmap <leader>- <Plug>AirlineSelectPrevTab
+nmap <leader>+ <Plug>AirlineSelectNextTab
 " vim-airline }}}
 
 " nerdtree {{{
@@ -216,4 +239,3 @@ endif
 filetype on               " enable filetype detection
 filetype plugin on        " enable filetype plugins
 filetype plugin indent on " enable syntax defined indendation
-
