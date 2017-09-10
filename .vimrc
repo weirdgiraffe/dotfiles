@@ -74,6 +74,9 @@ set wildignore+=*.tar,*.gz,*.bz,*.lzma,*.tgz,*.tbz,*.zip,*.rar,*.iso
 set wildmode=longest,list " autocompleting files: prompt, don't autopick.
 "set relativenumber        " funny feature for better navigation
 let mapleader = ','       " set the leader button
+if has('clipboard')
+  set clipboard=unnamed
+endif
 
 " Color scheme
 if empty(glob($HOME.'/.vim/colors/solarized.vim'))
