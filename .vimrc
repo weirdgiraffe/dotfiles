@@ -122,7 +122,7 @@ Plug 'mattn/gist-vim'
 call plug#end()
 
 " color scheme {{{
-colorscheme solarized8_dark_flat
+colorscheme solarized8_dark
 " change annoing color of ~ symbols in empty file
 hi NonText ctermfg=fg
 " make cursorline look better
