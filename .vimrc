@@ -123,6 +123,10 @@ call plug#end()
 
 " color scheme {{{
 colorscheme solarized8_dark_flat
+" change annoing color of ~ symbols in empty file
+hi NonText ctermfg=fg
+" make cursorline look better
+hi CursorLine cterm=NONE ctermbg=0 gui=NONE 
 " color scheme }}}
 
 " vim-airline {{{
