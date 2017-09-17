@@ -35,7 +35,7 @@
 	pager = less -FRXK
 [alias]
 	c = commit
-	st = status -u
+	st = status
 	dh = diff HEAD
 	dc = diff --staged
 	l = log --pretty='%C(auto)%h %d %s %Cgreen(%ad) %Cblue%an <%ae>%Creset' -10
