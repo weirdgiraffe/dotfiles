@@ -39,6 +39,9 @@ else
   set t_Sf="\ESC[3%dm"
   set t_Sb="\ESC[4%dm"
 endif
+" disable visual bell completely setting its duration to 0ms
+" check: http://www.tldp.org/HOWTO/text/Visual-Bell
+set t_vb="\ESC[11,00]
 
 " useful behaviour tweaks
 " - fix undo (http://vim.wikia.com/wiki/Recover_from_accidental_Ctrl-U)
