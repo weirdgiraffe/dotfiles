@@ -81,15 +81,6 @@ if has('clipboard')
   set clipboard=unnamed
 endif
 
-" Color scheme
-if empty(glob($HOME.'/.vim/colors/solarized.vim'))
-  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
-    \ https://raw.githubusercontent.com/altercation/vim-colors-solarized/master/colors/solarized.vim
-  source $MYVIMRS
-endif
-set background=dark
-let g:solarized_termtrans = 1
-colorscheme solarized
 
 " Vim-Plug
 if empty(glob($HOME.'/.vim/autoload/plug.vim'))
@@ -98,6 +89,7 @@ if empty(glob($HOME.'/.vim/autoload/plug.vim'))
   autocmd VimEnter * PlugInstall | source $MYVIMRC
 endif
 call plug#begin($HOME.'/.vim/plugged')
+Plug 'lifepillar/vim-solarized8'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'scrooloose/nerdtree'
@@ -128,6 +120,10 @@ Plug 'mattn/webapi-vim'
 " plugin to work with github gists
 Plug 'mattn/gist-vim'
 call plug#end()
+
+" color scheme {{{
+colorscheme solarized8_dark_flat
+" color scheme }}}
 
 " vim-airline {{{
 set noshowmode                                   " don't show modeline because of airline
