@@ -15,7 +15,7 @@ fi
 export EDITOR="vim"
 export VISUAL="vim"
 export GOPATH=$HOME/go
-export PATH=$PATH:$GOPATH/bin
+export PATH=$PATH:$HOME/bin:$GOPATH/bin
 
 # do not share history between terminals
 unsetopt share_history
@@ -31,4 +31,11 @@ bindkey    "^[3;5~"         delete-char
 alias myip='curl -s http://ip-api.com/json| python -m json.tool'
 alias dotfiles='git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 
+if [ "$TERM" = "xterm" ]; then
+    export TERM=xterm-256color
+fi
+if [ "$TERM" = "screen" -o "$TERM" = "screen-256color" ]; then
+    export TERM=screen-256color
+    unset TERMCAP
+fi
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
