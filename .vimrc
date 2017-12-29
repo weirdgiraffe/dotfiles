@@ -65,7 +65,7 @@ set foldlevel=20          " do not fold first 20 levels when open a file
 set laststatus=2          " always show statusline
 set ttimeoutlen=50        " reduce timeout between keystrokes
 set cursorline            " highlight cursorline for all files
-set synmaxcol=140         " turn off syntax coloring after 140 symbols
+set synmaxcol=160         " turn off syntax coloring after 140 symbols
 set nojoinspaces          " J should always join with one space
 set scrolloff=5           " min number of lines to keep above/bellow current line
 set visualbell            " don't beep
@@ -74,8 +74,9 @@ set wildignore+=*.jpg,*.jpeg,*.gif,*.png,*.gif,*.psd
 set wildignore+=*.o,*.obj,*.min.js,*.pyc,*/__pycache__/*
 set wildignore+=*/.git/*,*/.hg/*,*/.svn/*
 set wildignore+=*.tar,*.gz,*.bz,*.lzma,*.tgz,*.tbz,*.zip,*.rar,*.iso
-set wildmode=longest,list " autocompleting files: prompt, don't autopick.
+set wildmode=full,list:full " autocompleting files: prompt, don't autopick.
 "set relativenumber        " funny feature for better navigation
+set number
 let mapleader = ','       " set the leader button
 if has('clipboard')
   set clipboard=unnamed
@@ -122,11 +123,16 @@ Plug 'mattn/gist-vim'
 call plug#end()
 
 " color scheme {{{
+let g:solarized_use16 = 1
 colorscheme solarized8_dark
 " change annoing color of ~ symbols in empty file
 hi NonText ctermfg=fg
+" reflect background color change of tmux panes
+hi Normal ctermbg=NONE
 " make cursorline look better
-hi CursorLine cterm=NONE ctermbg=0 gui=NONE 
+hi CursorLine cterm=NONE ctermbg=0 gui=NONE
+" make numbers look better
+hi LineNr ctermbg=NONE
 " color scheme }}}
 
 " vim-airline {{{
@@ -211,6 +217,7 @@ au FileType go nmap <leader>q <Plug>(go-build)
 au FileType go nmap <leader>w <Plug>(go-test)
 au FileType go nmap <leader>e <Plug>(go-coverage)
 au FileType go nmap <leader>r <Plug>(go-referrers)
+au FileType go nmap <leader>i :GoImplements<CR>
 au FileType go nmap <leader>t <Plug>(go-def-vertical)
 au FileType go nmap <leader>d :GoDecls<CR>
 " vim-go }}}
@@ -221,6 +228,7 @@ let g:gist_post_private = 1            " new gists should be private
 " gist-vim }}}
 
 " YouCompleteMe {{{
+au FileType python let g:ycm_python_binary_path = 'python'
 au FileType c,cpp,python nmap gd :YcmCompleter GoTo<CR>
 " YouCompleteMe }}}
 
