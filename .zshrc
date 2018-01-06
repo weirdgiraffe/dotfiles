@@ -38,4 +38,8 @@ if [ "$TERM" = "screen" -o "$TERM" = "screen-256color" ]; then
     export TERM=screen-256color
     unset TERMCAP
 fi
+
+# prevent terminal suspend on CTRL+S
+stty -ixon
+
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
