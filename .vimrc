@@ -48,7 +48,8 @@ set t_vb="\ESC[11,00]
 " - set maximum history length
 inoremap <c-u> <c-g>u<c-u>
 inoremap <c-w> <c-g>u<c-w>
-set listchars=eol:$,tab:>.,trail:.,extends:\#,nbsp:.
+set listchars=eol:$,tab:>-,trail:.,extends:>,precedes:<,nbsp:%
+let &showbreak = '^'
 set history=100           " how many lines of command history to keep
 set showcmd               " enable vim built-in command completion
 set ignorecase            " ignore case if search with /,? etc.
