@@ -49,6 +49,10 @@ function gnu_ls() {
   $(command -v gls || command -v ls) $@
 }
 
+function vim() {
+  $(command -v nvim || command -v vim) $@
+}
+
 alias ls="gnu_ls --color=auto --group-directories-first -F"
 alias lah="gnu_ls --color=auto --group-directories-first -Fah"
 
@@ -75,4 +79,8 @@ fi
 
 if [ $commands[kubectl] ]; then
   source <(kubectl completion zsh)
+fi
+
+if [[ -z "$LANG" ]]; then
+  export LANG='en_US.UTF-8'
 fi
