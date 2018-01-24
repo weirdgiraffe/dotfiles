@@ -28,6 +28,9 @@ bindkey -e
 bindkey    "^[[3~"          delete-char
 bindkey    "^[3;5~"         delete-char
 
+# prevent terminal suspend on CTRL+S
+stty -ixon
+
 if [ "$TERM" = "xterm" ]; then
     export TERM=xterm-256color
 fi
