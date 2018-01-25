@@ -61,6 +61,7 @@ set cursorline            " highlight cursorline for all files
 set synmaxcol=160         " turn off syntax coloring after 160 symbols
 set scrolloff=20          " min number of lines to keep above/bellow current line
 set number                " show line numbers
+let mapleader = ','       " set the leader button
 
 " list of files which should be ignored on completion
 set wildignore+=.DS_Store
@@ -87,6 +88,7 @@ Plug 'scrooloose/nerdtree'
 Plug 'fatih/vim-go', {'for': 'go', 'do': ':GoInstallBinaries'}
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'kien/ctrlp.vim'
+Plug 'christoomey/vim-tmux-navigator'
 call plug#end()
 
 " colors {{{
@@ -121,6 +123,15 @@ nmap <leader>9 <Plug>AirlineSelectTab9
 nmap <leader>- <Plug>AirlineSelectPrevTab
 nmap <leader>+ <Plug>AirlineSelectNextTab
 " colors }}}
+
+" vim-tmux-navigator {{
+let g:tmux_navigator_no_mappings = 1
+nnoremap <silent> <M-h> :TmuxNavigateLeft<cr>
+nnoremap <silent> <M-j> :TmuxNavigateDown<cr>
+nnoremap <silent> <M-k> :TmuxNavigateUp<cr>
+nnoremap <silent> <M-l> :TmuxNavigateRight<cr>
+" vim-tmux-navigator }}
+
 
 
 " nerdtree {{{
