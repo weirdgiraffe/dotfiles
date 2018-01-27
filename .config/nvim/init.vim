@@ -87,7 +87,9 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'scrooloose/nerdtree'
 Plug 'fatih/vim-go', {'for': 'go', 'do': ':GoInstallBinaries'}
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'zchee/deoplete-go', { 'do': 'make'}
 Plug 'kien/ctrlp.vim'
+Plug 'SirVer/ultisnips'
 Plug 'christoomey/vim-tmux-navigator'
 call plug#end()
 
@@ -131,8 +133,6 @@ nnoremap <silent> <M-j> :TmuxNavigateDown<cr>
 nnoremap <silent> <M-k> :TmuxNavigateUp<cr>
 nnoremap <silent> <M-l> :TmuxNavigateRight<cr>
 " vim-tmux-navigator }}
-
-
 
 " nerdtree {{{
 let g:loaded_netrw = 1            " disable netrw and use NERDTree instead
