@@ -157,13 +157,24 @@ let g:deoplete#enable_at_startup = 1
 " deocomplete }}
 
 " vim-go {{{
+set completeopt-=preview
 let g:go_fmt_command = "goimports"
 let g:go_fmt_autosave = 1
 let g:go_gocode_unimported_packages = 1
 let g:go_template_autocreate = 0
-let g:go_auto_type_info = 1
 let g:go_addtags_transform = "snakecase"
 let g:go_def_reuse_buffer = 1
+let g:go_auto_type_info = 1
+"let g:go_auto_sameids = 1
+"let g:go_highlight_extra_types = 1
+"let g:go_highlight_operators = 1
+"let g:go_highlight_functions = 1
+"let g:go_highlight_function_arguments = 1
+"let g:go_highlight_function_calls = 1
+"let g:go_highlight_types = 1
+"let g:go_highlight_fields = 1
+"let g:go_highlight_variable_declarations = 1
+"let g:go_highlight_variable_assignments = 1
 au FileType go nmap <leader>q <Plug>(go-build)
 au FileType go nmap <leader>w <Plug>(go-test)
 au FileType go nmap <leader>e <Plug>(go-coverage)
@@ -186,9 +197,9 @@ nnoremap <leader>bp :bp<CR>
 " syntax settings. better to have it at the end
 " because vim-go could not work if syntax is enabled
 " before plugins load.
-if !exists("g:syntax_on")
-  syntax enable           " enable syntax highlighting
-endif
-filetype on               " enable filetype detection
-filetype plugin on        " enable filetype plugins
+syntax enable           " enable syntax highlighting
+"filetype on               " enable filetype detection
+"filetype plugin on        " enable filetype plugins
 filetype plugin indent on " enable syntax defined indendation
+
+au BufRead,BufNewFile BUILD.bazel setf bzl
