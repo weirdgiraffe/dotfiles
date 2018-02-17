@@ -2,6 +2,20 @@
 [user]
 	email = giraffe@cyberzoo.xyz
 	name = weirdgiraffe
+[diff]
+	tool = meld-macos
+[difftool]
+	prompt = true
+[difftool "meld-macos"]
+	cmd = open -W -a Meld --args \"$LOCAL\" \"$REMOTE\"
+	trustExitCode = true
+[merge]
+	tool = meld-macos
+[mergetool]
+	prompt = true
+[mergetool "meld-macos"]
+	cmd = open -W -a Meld --args --auto-merge \"$LOCAL\" \"$BASE\" \"$REMOTE\" --output=\"$MERGED\"
+	trustExitCode = true
 [color]
 # ui = true is a superset of all the more specific color options
 # as documented at http://book.git-scm.com/5_customizing_git.html
@@ -35,6 +49,7 @@
 	pager = less -FRXK
 [alias]
 	c = commit
+	co = checkout
 	st = status
 	dh = diff HEAD
 	dc = diff --staged
@@ -50,5 +65,9 @@
 	enabled = true
 [push]
 	default = simple
+[url "git@gitlab.com:"]
+	insteadOf = https://gitlab.com
+[pull]
+	rebase = true
 [github]
 	user = weirdgiraffe

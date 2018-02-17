@@ -12,11 +12,6 @@ if [[ -s ${ZDOTDIR:-${HOME}}/.zim/init.zsh ]]; then
   source ${ZDOTDIR:-${HOME}}/.zim/init.zsh
 fi
 
-export EDITOR="vim"
-export VISUAL="vim"
-export GOPATH=$HOME/go
-export PATH=/usr/local/bin:$PATH:$HOME/bin:$GOPATH/bin:$HOME/istio-0.4.0/bin
-
 # do not share history between terminals
 unsetopt share_history
 setopt no_share_history
@@ -39,8 +34,10 @@ if [ "$TERM" = "screen" -o "$TERM" = "screen-256color" ]; then
     unset TERMCAP
 fi
 
-# aliases and other stuff
+export GOPATH=$HOME/go
+export PATH=/usr/local/bin:$PATH:$HOME/bin:$GOPATH/bin:$HOME/istio-0.5.0/bin
 
+# aliases and other stuff
 alias myip='curl -s http://ip-api.com/json| python -m json.tool'
 alias dotfiles='git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 alias go..="cd $GOPATH/src"
@@ -54,7 +51,7 @@ function vim() {
 }
 
 alias ls="gnu_ls --color=auto --group-directories-first -F"
-alias lah="gnu_ls --color=auto --group-directories-first -Fah"
+alias lah="gnu_ls --color=auto --group-directories-first -Flah"
 
 function kwatchlogs()
 {
@@ -83,4 +80,11 @@ fi
 
 if [[ -z "$LANG" ]]; then
   export LANG='en_US.UTF-8'
+fi
+
+export EDITOR="vim"
+export VISUAL="vim"
+if [ $commands[nvim] ]; then
+  export EDITOR="nvim"
+  export VISUAL="nvim"
 fi
