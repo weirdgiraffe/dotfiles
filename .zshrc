@@ -43,7 +43,9 @@ alias dotfiles='git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 alias go..="cd $GOPATH/src"
 
 function gnu_ls() {
-  $(command -v gls || command -v ls) $@
+  cmd=$(command -v gls)
+  [ -z "$cmd" ] && cmd=$(command -p -v ls)
+  $cmd $@
 }
 
 function vim() {
