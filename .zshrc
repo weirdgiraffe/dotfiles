@@ -12,9 +12,9 @@ if [[ -s ${ZDOTDIR:-${HOME}}/.zim/init.zsh ]]; then
   source ${ZDOTDIR:-${HOME}}/.zim/init.zsh
 fi
 
-# do not share history between terminals
-unsetopt share_history
-setopt no_share_history
+# do share history between terminals
+unsetopt no_share_history
+setopt share_history
 
 # set emacs keybinding for zsh
 bindkey -e
