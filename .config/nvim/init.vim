@@ -91,6 +91,7 @@ Plug 'zchee/deoplete-go', { 'do': 'make'}
 Plug 'kien/ctrlp.vim'
 Plug 'SirVer/ultisnips'
 Plug 'christoomey/vim-tmux-navigator'
+Plug 'tpope/vim-markdown'
 call plug#end()
 
 " colors {{{
@@ -184,6 +185,10 @@ au FileType go nmap <leader>t <Plug>(go-def-vertical)
 au FileType go nmap <leader>d :GoDecls<CR>
 " vim-go }}}
 
+" vim-markdown {{
+let g:markdown_fenced_languages = ['javascript', 'json', 'html', 'python', 'bash=sh']
+" vim-markdown }}
+
 " custom key mappings
 " to write some into some file own by root just type :w!!
 cmap w!! w !sudo tee % >/dev/null
@@ -194,12 +199,10 @@ nnoremap <leader>bn :bn<CR>
 " simply go to the previous buffer
 nnoremap <leader>bp :bp<CR>
 
-" syntax settings. better to have it at the end
-" because vim-go could not work if syntax is enabled
-" before plugins load.
-syntax enable           " enable syntax highlighting
-"filetype on               " enable filetype detection
-"filetype plugin on        " enable filetype plugins
-filetype plugin indent on " enable syntax defined indendation
+" better to have syntax settings at the end because, for example vim-go could
+" not work if syntax is enabled before plugin is loaded
+syntax enable
+filetype plugin indent on 
 
+" recognize bazel build files
 au BufRead,BufNewFile BUILD.bazel setf bzl
