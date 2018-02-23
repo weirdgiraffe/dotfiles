@@ -12,9 +12,36 @@ if [[ -s ${ZDOTDIR:-${HOME}}/.zim/init.zsh ]]; then
   source ${ZDOTDIR:-${HOME}}/.zim/init.zsh
 fi
 
+# ----------------------------------------------------
+# deduplicate history entries
+setopt hist_save_no_dups
 # do share history between terminals
-unsetopt no_share_history
+unsetopt inc_append_history
+unsetopt inc_append_history_time
 setopt share_history
+# set up/down key as well as CTRL+P/CTRL+N to work with
+# a local history only but CTRL+R will still work with
+# a global history
+up-line-or-local-history() {
+    zle set-local-history 1
+    zle up-line-or-history
+    zle set-local-history 0
+}
+zle -N up-line-or-local-history
+
+down-line-or-local-history() {
+    zle set-local-history 1
+    zle down-line-or-history
+    zle set-local-history 0
+}
+zle -N down-line-or-local-history
+
+bindkey '^[[A' up-line-or-local-history
+bindkey '^[[B' down-line-or-local-history
+bindkey '^P' up-line-or-local-history
+bindkey '^N' down-line-or-local-history
+# ----------------------------------------------------
+
 
 # set emacs keybinding for zsh
 bindkey -e
