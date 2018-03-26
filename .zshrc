@@ -19,6 +19,8 @@ setopt hist_save_no_dups
 unsetopt inc_append_history
 unsetopt inc_append_history_time
 setopt share_history
+# do not save lines starting with space in history
+setopt hist_ignore_space
 # set up/down key as well as CTRL+P/CTRL+N to work with
 # a local history only but CTRL+R will still work with
 # a global history
@@ -80,7 +82,7 @@ function vim() {
 }
 
 alias ls="gnu_ls --color=auto --group-directories-first -F"
-alias lah="gnu_ls --color=auto --group-directories-first -Flah"
+alias lah="gnu_ls --color=auto --group-directories-first --time-style long-iso -Flah"
 
 function kwatchlogs()
 {
@@ -101,7 +103,10 @@ if [ $commands[cloc] ]; then
   alias cloc="cloc --exclude-dir=.git,vendor"
 fi
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+if [ -f ~/.fzf.zsh ]; then
+  [ $commands[fd] ] && export FZF_ALT_C_COMMAND="command fd -L -t d -t l"
+  source ~/.fzf.zsh
+fi
 
 if [ $commands[kubectl] ]; then
   source <(kubectl completion zsh)
@@ -117,3 +122,7 @@ if [ $commands[nvim] ]; then
   export EDITOR="nvim"
   export VISUAL="nvim"
 fi
+
+autoload -U colors; colors
+source /usr/local/etc/zsh-kubectl-prompt/kubectl.zsh
+RPROMPT='%{$fg[blue]%}($ZSH_KUBECTL_PROMPT)%{$reset_color%}'
