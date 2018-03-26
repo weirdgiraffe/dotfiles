@@ -29,4 +29,3 @@ autocmd FileType py,python
   \ autocmd BufWritePre <buffer>
   \  %s/\s\+$//e
 
-let b:did_ftplugin = 1
