@@ -56,7 +56,7 @@
 	l = log --pretty='%C(auto)%h %d %s %Cgreen(%ad) %Cblue%an <%ae>%Creset' -10
 	ll = log --pretty='%C(auto)%h %d %Cgreen(%ad) %Cblue%an <%ae>%Creset%n%s%n%n%b' -10
 	lll = log --pretty='%C(auto)%h %d %Cgreen(%ad) %Cblue%an <%ae>%Creset%n%s%n%n%b' --stat -C -5
-	tree = log --pretty='%C(auto)%h %d %s %Cgreen(%ad) %Cblue%an <%ae>%Creset' --graph --all -10
+	tree = log --pretty='%C(auto)%h %d %s %Cgreen(%ad) %Cblue%an <%ae>%Creset' --graph --all --simplify-by-decoration -30
 	br = branch -a
 [log]
 	date=relative
