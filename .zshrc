@@ -15,35 +15,12 @@ fi
 # ----------------------------------------------------
 # deduplicate history entries
 setopt hist_save_no_dups
+# do not save lines starting with space in history
+setopt hist_ignore_space
 # do share history between terminals
 unsetopt inc_append_history
 unsetopt inc_append_history_time
 setopt share_history
-# do not save lines starting with space in history
-setopt hist_ignore_space
-# set up/down key as well as CTRL+P/CTRL+N to work with
-# a local history only but CTRL+R will still work with
-# a global history
-up-line-or-local-history() {
-    zle set-local-history 1
-    zle up-line-or-history
-    zle set-local-history 0
-}
-zle -N up-line-or-local-history
-
-down-line-or-local-history() {
-    zle set-local-history 1
-    zle down-line-or-history
-    zle set-local-history 0
-}
-zle -N down-line-or-local-history
-
-bindkey '^[[A' up-line-or-local-history
-bindkey '^[[B' down-line-or-local-history
-bindkey '^P' up-line-or-local-history
-bindkey '^N' down-line-or-local-history
-# ----------------------------------------------------
-
 
 # set emacs keybinding for zsh
 bindkey -e
@@ -51,6 +28,27 @@ bindkey -e
 # make Del key work instead of outputing ~
 bindkey    "^[[3~"          delete-char
 bindkey    "^[3;5~"         delete-char
+
+# set up/down key as well as CTRL+P/CTRL+N to work with
+# a local history only but CTRL+R will still work with
+# a global history
+function up-line-or-local-history() {
+    zle set-local-history 1
+    zle up-line-or-history
+    zle set-local-history 0
+}
+zle -N up-line-or-local-history
+function down-line-or-local-history() {
+    zle set-local-history 1
+    zle down-line-or-history
+    zle set-local-history 0
+}
+zle -N down-line-or-local-history
+bindkey '^[OA' up-line-or-local-history
+bindkey '^[OB' down-line-or-local-history
+bindkey '^P' up-line-or-local-history
+bindkey '^N' down-line-or-local-history
+# ----------------------------------------------------
 
 # prevent terminal suspend on CTRL+S
 stty -ixon
