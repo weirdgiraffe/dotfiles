@@ -80,7 +80,7 @@ function vim() {
 }
 
 alias ls="gnu_ls --color=auto --group-directories-first -F"
-alias lah="gnu_ls --color=auto --group-directories-first --time-style long-iso -Flah"
+alias lah="gnu_ls --color=auto --group-directories-first --time-style=long-iso -Flah"
 
 function kwatchlogs()
 {
