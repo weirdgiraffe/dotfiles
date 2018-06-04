@@ -13,6 +13,8 @@ if [[ "$(uname)" = "Darwin" ]]; then
   [[ -d /usr/local/Cellar/reattach-to-user-namespace ]] || brew install reattach-to-usernamespace
   [[ -d /usr/local/Cellar/neovim ]] || brew install neovim
   [[ -d /usr/local/Cellar/kubernetes-cli ]] || brew install kubectl
+  [[ -d /usr/local/Cellar/fzf ]] || ( brew install fzf && $(brew --prefix)/opt/fzf/install )
+  [[ -d /usr/local/Cellar/fd ]] || brew install fd
 fi
 
 # Source zim
