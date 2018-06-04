@@ -45,7 +45,7 @@
 	excludesfile = ~/.gitignore_global
 	quotepath = false
 	autocrlf = input
-	editor = vim
+	editor = nvim
 	pager = less -FRXK
 [alias]
 	c = commit

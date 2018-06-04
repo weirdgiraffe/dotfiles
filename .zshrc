@@ -7,6 +7,14 @@ if [[ ! -d ${ZDOTDIR:-${HOME}}/.zim ]]; then
   git clone --recursive https://github.com/Eriner/zim.git ${ZDOTDIR:-${HOME}}/.zim
 fi
 
+if [[ "$(uname)" = "Darwin" ]]; then
+  [[ -d /usr/local/Cellar/coreutils ]] || brew install coreutils
+  [[ -d /usr/local/Cellar/tmux ]] || brew install tmux
+  [[ -d /usr/local/Cellar/reattach-to-user-namespace ]] || brew install reattach-to-usernamespace
+  [[ -d /usr/local/Cellar/neovim ]] || brew install neovim
+  [[ -d /usr/local/Cellar/kubernetes-cli ]] || brew install kubectl
+fi
+
 # Source zim
 if [[ -s ${ZDOTDIR:-${HOME}}/.zim/init.zsh ]]; then
   source ${ZDOTDIR:-${HOME}}/.zim/init.zsh
