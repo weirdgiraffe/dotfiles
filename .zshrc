@@ -72,12 +72,15 @@ if [ "$TERM" = "screen" -o "$TERM" = "screen-256color" ]; then
 fi
 
 export GOPATH=$HOME/go
-export PATH=/usr/local/bin:$PATH:$HOME/bin:$GOPATH/bin:$HOME/istio-0.5.0/bin
+export PATH=/usr/local/bin:$PATH:$HOME/bin:$GOPATH/bin:$HOME/istio-0.5.0/bin:$HOME/google-cloud-sdk/bin
+
 
 # aliases and other stuff
 alias myip='curl -s http://ip-api.com/json| python -m json.tool'
 alias dotfiles='git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 alias go..="cd $GOPATH/src"
+# cd to the root of git repository
+alias gcd="cd \$(git rev-parse --show-toplevel)"
 
 function gnu_ls() {
   cmd=$(command -v gls)
@@ -132,5 +135,5 @@ if [ $commands[nvim] ]; then
 fi
 
 autoload -U colors; colors
-source /usr/local/etc/zsh-kubectl-prompt/kubectl.zsh
-RPROMPT='%{$fg[blue]%}($ZSH_KUBECTL_PROMPT)%{$reset_color%}'
+#source /usr/local/etc/zsh-kubectl-prompt/kubectl.zsh
+#RPROMPT='%{$fg[blue]%}($ZSH_KUBECTL_PROMPT)%{$reset_color%}'
