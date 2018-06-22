@@ -13,7 +13,7 @@ setlocal tw=79
 " this settings are for solarized colorscheme
 " check https://github.com/altercation/vim-colors-solarized
 " set overflow background to base02
-hi MarkdownOverflowSymbols ctermbg=0
+hi MarkdownOverflowSymbols ctermbg=9 ctermfg=8
 
 " highlighting for lines with length more than 80 symbols
 fun! MarkdownUpdateLineOverflow()
