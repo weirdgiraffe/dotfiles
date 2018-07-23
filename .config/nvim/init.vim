@@ -114,6 +114,14 @@ let g:airline#extensions#tabline#enabled=1     " Enable the list of buffers in a
 let g:airline#extensions#tabline#fnamemod=':t' " Show filename only in buffer list
 let g:airline#extensions#tabline#keymap_ignored_filetypes=['nerdtree']
 let g:airline#extensions#tabline#buffer_idx_mode=1
+let g:airline#extensions#default#section_truncate_width = {
+      \ 'b': 79,
+      \ 'x': 60,
+      \ 'y': 88,
+      \ 'z': 45,
+      \ 'warning': 80,
+      \ 'error': 80,
+      \ }
 nmap <leader>1 <Plug>AirlineSelectTab1
 nmap <leader>2 <Plug>AirlineSelectTab2
 nmap <leader>3 <Plug>AirlineSelectTab3
@@ -133,6 +141,13 @@ nnoremap <silent> <M-h> :TmuxNavigateLeft<cr>
 nnoremap <silent> <M-j> :TmuxNavigateDown<cr>
 nnoremap <silent> <M-k> :TmuxNavigateUp<cr>
 nnoremap <silent> <M-l> :TmuxNavigateRight<cr>
+
+augroup BgHighlight
+    autocmd!
+    autocmd FocusGained * hi Normal ctermbg=8
+    autocmd FocusLost * hi Normal ctermbg=0
+augroup END
+
 " vim-tmux-navigator }}
 
 " nerdtree {{{

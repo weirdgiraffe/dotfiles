@@ -81,6 +81,7 @@ alias dotfiles='git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 alias go..="cd $GOPATH/src"
 # cd to the root of git repository
 alias gcd="cd \$(git rev-parse --show-toplevel)"
+alias ccd="cd \$GOPATH/src/github.com/wattx/cryptorado"
 
 function gnu_ls() {
   cmd=$(command -v gls)
@@ -123,6 +124,10 @@ if [ $commands[kubectl] ]; then
   source <(kubectl completion zsh)
 fi
 
+if [ $commands[helm] ]; then
+  source <(helm completion zsh)
+fi
+
 if [[ -z "$LANG" ]]; then
   export LANG='en_US.UTF-8'
 fi
@@ -132,6 +137,10 @@ export VISUAL="vim"
 if [ $commands[nvim] ]; then
   export EDITOR="nvim"
   export VISUAL="nvim"
+fi
+
+if [ -f "${HOME}/google-cloud-sdk/completion.zsh.inc" ]; then 
+  source "${HOME}/google-cloud-sdk/completion.zsh.inc"
 fi
 
 autoload -U colors; colors
