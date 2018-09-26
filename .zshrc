@@ -4,7 +4,16 @@
 
 # Install zim if not already installed
 if [[ ! -d ${ZDOTDIR:-${HOME}}/.zim ]]; then
-  git clone --recursive https://github.com/Eriner/zim.git ${ZDOTDIR:-${HOME}}/.zim
+  local ZIM_DIR=${ZDOTDIR:-${HOME}}/.zim
+  local SPACESHIP_DIR=${ZIM_DIR}/modules/prompt/external-themes/spaceship
+  git clone https://github.com/zimfw/zimfw.git ${ZIM_DIR}
+  (
+  cd ${ZIM_DIR};
+  git config --file=.gitmodules submodule.modules/prompt/external-themes/pure.url https://github.com/weirdgiraffe/pure.git;
+  git config --file=.gitmodules submodule.modules/prompt/external-themes/pure.branch master;
+  git submodule sync;
+  git submodule update --init --recursive --remote;
+  )
 fi
 
 if [[ "$(uname)" = "Darwin" ]]; then
@@ -78,10 +87,12 @@ export PATH=/usr/local/bin:$PATH:$HOME/bin:$GOPATH/bin:$HOME/istio-0.5.0/bin:$HO
 # aliases and other stuff
 alias myip='curl -s http://ip-api.com/json| python -m json.tool'
 alias dotfiles='git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
-alias go..="cd $GOPATH/src"
-# cd to the root of git repository
-alias gcd="cd \$(git rev-parse --show-toplevel)"
-alias ccd="cd \$GOPATH/src/github.com/wattx/cryptorado"
+
+alias urldecode='python -c "import sys, urllib as ul; \
+    print ul.unquote_plus(sys.argv[1])"'
+
+alias urlencode='python -c "import sys, urllib as ul; \
+    print ul.quote_plus(sys.argv[1])"'
 
 function gnu_ls() {
   cmd=$(command -v gls)
@@ -93,18 +104,9 @@ function vim() {
   $(command -v nvim || command -v vim) $@
 }
 
+alias k="kubectl"
 alias ls="gnu_ls --color=auto --group-directories-first -F"
 alias lah="gnu_ls --color=auto --group-directories-first --time-style=long-iso -Flah"
-
-function kwatchlogs()
-{
-  while true
-  do
-    # kubectl logs -f $(kubectl get pods --field-selector=status.phase==Running -l app=$1 -o name)
-    kubectl logs -f $(kubectl get po | grep $1 | sed 's/\([^ ]*\).*Running.*$/\1/' | head -1) 2>/dev/null
-    echo "reloading..."
-  done
-}
 
 function plantuml()
 {
@@ -139,10 +141,21 @@ if [ $commands[nvim] ]; then
   export VISUAL="nvim"
 fi
 
+
 if [ -f "${HOME}/google-cloud-sdk/completion.zsh.inc" ]; then 
   source "${HOME}/google-cloud-sdk/completion.zsh.inc"
 fi
 
+#
+# cd aliases
+#
+alias reporoot="cd \$(git rev-parse --show-toplevel)"
+
+gocd() { cd ${GOPATH}/src/$1 }
+compctl -/ -W ${GOPATH}/src/ gocd
+
+wattx() { cd ${GOPATH}/src/github.com/wattx/$1 }
+compctl -/ -W ${GOPATH}/src/github.com/wattx/ wattx
+
+
 autoload -U colors; colors
-#source /usr/local/etc/zsh-kubectl-prompt/kubectl.zsh
-#RPROMPT='%{$fg[blue]%}($ZSH_KUBECTL_PROMPT)%{$reset_color%}'
