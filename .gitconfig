@@ -49,6 +49,7 @@
 	pager = less -FRXK
 [alias]
 	c = commit
+	amend = commit --amend
 	co = checkout
 	st = status
 	dh = diff HEAD
