@@ -60,7 +60,7 @@ set guicursor=            " use block cursor shape always
 set cursorline            " highlight cursorline for all files
 set synmaxcol=160         " turn off syntax coloring after 160 symbols
 set scrolloff=20          " min number of lines to keep above/bellow current line
-set number                " show line numbers
+"set number                " show line numbers
 let mapleader = ','       " set the leader button
 
 " list of files which should be ignored on completion
@@ -92,6 +92,7 @@ Plug 'kien/ctrlp.vim'
 Plug 'SirVer/ultisnips'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'tpope/vim-markdown'
+Plug 'iamcco/markdown-preview.vim'
 call plug#end()
 
 " colors {{{
@@ -169,18 +170,26 @@ let g:ctrlp_custom_ignore = {
 " ctrlp.vim }}}
 
 " deocomplete {{
+set completeopt+=noinsert
+set completeopt+=noselect
+set completeopt-=preview
 let g:deoplete#enable_at_startup = 1
+call deoplete#custom#option('smart_case', v:true)
+let g:deoplete#sources#go#gocode_binary = $GOPATH.'/bin/gocode'
+let g:deoplete#sources#go#sort_class = ['package', 'func', 'type', 'var', 'const']
+let g:deoplete#sources#go#source_importer = 1
 " deocomplete }}
 
 " vim-go {{{
-set completeopt-=preview
 let g:go_fmt_command = "goimports"
 let g:go_fmt_autosave = 1
-let g:go_gocode_unimported_packages = 1
 let g:go_template_autocreate = 0
 let g:go_addtags_transform = "snakecase"
-let g:go_def_reuse_buffer = 1
-let g:go_auto_type_info = 1
+let g:go_def_reuse_buffer = 1            " do not open new buffers for gd
+let g:go_auto_type_info = 1              " show type info for word under cursor
+let g:go_gocode_propose_builtins = 1     " show builtin types in completion
+let g:go_gocode_unimported_packages = 1  " show completion for not imported packages
+let g:go_gocode_autobuild = 1            " rebuild outdated packages automaticaly
 "let g:go_auto_sameids = 1
 "let g:go_highlight_extra_types = 1
 "let g:go_highlight_operators = 1
@@ -191,6 +200,7 @@ let g:go_auto_type_info = 1
 "let g:go_highlight_fields = 1
 "let g:go_highlight_variable_declarations = 1
 "let g:go_highlight_variable_assignments = 1
+au FileType go nmap <leader>a :GoAlternate<CR>
 au FileType go nmap <leader>q <Plug>(go-build)
 au FileType go nmap <leader>w <Plug>(go-test)
 au FileType go nmap <leader>e <Plug>(go-coverage)
