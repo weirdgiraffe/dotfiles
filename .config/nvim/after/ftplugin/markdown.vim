@@ -18,7 +18,8 @@ hi MarkdownOverflowSymbols ctermbg=9 ctermfg=8
 " highlighting for lines with length more than 80 symbols
 fun! MarkdownUpdateLineOverflow()
   if  &ft == 'markdown'
-    match MarkdownOverflowSymbols /\%81v.*/
+    " do not highlite overflow on markdown tables
+    match MarkdownOverflowSymbols /\%81v\(.*[^|]\)$/
   else
     match NONE
   endif
