@@ -60,7 +60,7 @@ set guicursor=            " use block cursor shape always
 set cursorline            " highlight cursorline for all files
 set synmaxcol=160         " turn off syntax coloring after 160 symbols
 set scrolloff=20          " min number of lines to keep above/bellow current line
-"set number                " show line numbers
+set number                " show line numbers
 let mapleader = ','       " set the leader button
 
 " list of files which should be ignored on completion
@@ -85,6 +85,7 @@ Plug 'lifepillar/vim-solarized8'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'scrooloose/nerdtree'
+Plug 'mdempsky/gocode', { 'rtp': 'nvim', 'do': '~/.local/share/nvim/plugged/gocode/nvim/symlink.sh' }
 Plug 'fatih/vim-go', {'for': 'go', 'do': ':GoInstallBinaries'}
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'zchee/deoplete-go', { 'do': 'make'}
@@ -96,9 +97,10 @@ Plug 'iamcco/markdown-preview.vim'
 call plug#end()
 
 " colors {{{
-let g:solarized_use16=1
 set background=dark
-colorscheme solarized8
+"let g:solarized_use16=1
+"colorscheme solarized8
+colorscheme Tomorrow-Night
 " change annoing color of ~ symbols in empty file
 hi NonText ctermfg=NONE
 " reflect background color change of tmux panes
@@ -108,7 +110,8 @@ hi CursorLine cterm=NONE ctermbg=0 gui=NONE
 " make numbers look better
 hi LineNr ctermbg=NONE
 set noshowmode          " don't show modeline because of airline
-let g:airline_theme="solarized"
+"let g:airline_theme="solarized"
+let g:airline_theme="tomorrow"
 let g:airline_solarized_bg="dark"
 let g:airline_powerline_fonts=1                " enable powerfonts for airline
 let g:airline#extensions#tabline#enabled=1     " Enable the list of buffers in a topline
@@ -145,8 +148,8 @@ nnoremap <silent> <M-l> :TmuxNavigateRight<cr>
 
 augroup BgHighlight
     autocmd!
-    autocmd FocusGained * hi Normal ctermbg=8
-    autocmd FocusLost * hi Normal ctermbg=0
+    autocmd FocusGained * hi Normal ctermbg=234
+    autocmd FocusLost * hi Normal ctermbg=238
 augroup END
 
 " vim-tmux-navigator }}
@@ -173,23 +176,34 @@ let g:ctrlp_custom_ignore = {
 set completeopt+=noinsert
 set completeopt+=noselect
 set completeopt-=preview
+let g:python3_host_prog  = '/usr/local/bin/python3'
+let g:python3_host_skip_check = 1
+
 let g:deoplete#enable_at_startup = 1
-call deoplete#custom#option('smart_case', v:true)
+call deoplete#custom#option({
+\ 'auto_complete_delay': 50,
+\ 'async_timeout': 100,
+\ 'num_processes': 4,
+\ 'smart_case': v:true,
+\ })
 let g:deoplete#sources#go#gocode_binary = $GOPATH.'/bin/gocode'
-let g:deoplete#sources#go#sort_class = ['package', 'func', 'type', 'var', 'const']
-let g:deoplete#sources#go#source_importer = 1
+let g:deoplete#sources#go#sort_class = ['func', 'var', 'const', 'type', 'package']
+let g:deoplete#sources#go#auto_goos = 1
+let g:deoplete#sources#go#gocode_sock = 'unix'
+" let g:deoplete#sources#go#source_importer = 1
 " deocomplete }}
 
 " vim-go {{{
 let g:go_fmt_command = "goimports"
 let g:go_fmt_autosave = 1
+let g:go_info_mode = 'gocode'
+let g:go_gocode_socket_type = 'unix'
+
 let g:go_template_autocreate = 0
 let g:go_addtags_transform = "snakecase"
 let g:go_def_reuse_buffer = 1            " do not open new buffers for gd
 let g:go_auto_type_info = 1              " show type info for word under cursor
-let g:go_gocode_propose_builtins = 1     " show builtin types in completion
-let g:go_gocode_unimported_packages = 1  " show completion for not imported packages
-let g:go_gocode_autobuild = 1            " rebuild outdated packages automaticaly
+let g:go_gocode_propose_source = 1       " show completion for not built packages
 "let g:go_auto_sameids = 1
 "let g:go_highlight_extra_types = 1
 "let g:go_highlight_operators = 1
@@ -227,7 +241,7 @@ nnoremap <leader>bp :bp<CR>
 " better to have syntax settings at the end because, for example vim-go could
 " not work if syntax is enabled before plugin is loaded
 syntax enable
-filetype plugin indent on 
+filetype plugin indent on
 
 " recognize bazel build files
 au BufRead,BufNewFile BUILD.bazel setf bzl

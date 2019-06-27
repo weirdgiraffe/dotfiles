@@ -48,25 +48,28 @@ bindkey -e
 bindkey    "^[[3~"          delete-char
 bindkey    "^[3;5~"         delete-char
 
-# set up/down key as well as CTRL+P/CTRL+N to work with
 # a local history only but CTRL+R will still work with
 # a global history
-function up-line-or-local-history() {
+function up-line-or-search-local-history() {
     zle set-local-history 1
     zle up-line-or-history
     zle set-local-history 0
 }
-zle -N up-line-or-local-history
-function down-line-or-local-history() {
+zle -N up-line-or-search-local-history
+
+function down-line-or-search-local-history() {
     zle set-local-history 1
     zle down-line-or-history
     zle set-local-history 0
 }
-zle -N down-line-or-local-history
-bindkey '^[OA' up-line-or-local-history
-bindkey '^[OB' down-line-or-local-history
-bindkey '^P' up-line-or-local-history
-bindkey '^N' down-line-or-local-history
+zle -N down-line-or-search-local-history
+
+#bindkey '\eOA' up-line-or-search-local-history
+#bindkey '\eOB' down-line-or-search-local-history
+bindkey '^[[A' up-line-or-search-local-history
+bindkey '^[[B' down-line-or-search-local-history
+bindkey '^P' up-line-or-search-local-history
+bindkey '^N' down-line-or-search-local-history
 # ----------------------------------------------------
 
 # prevent terminal suspend on CTRL+S
@@ -104,14 +107,23 @@ function vim() {
   $(command -v nvim || command -v vim) $@
 }
 
+alias vi=vim
 alias k="kubectl"
+alias kgn="kubectl --namespace=glassnode"
 alias ls="gnu_ls --color=auto --group-directories-first -F"
 alias lah="gnu_ls --color=auto --group-directories-first --time-style=long-iso -Flah"
 
 function plantuml()
 {
-  cat $1| docker container run --rm -i plantuml -tsvg | cat
+  docker container run --rm -i -v $(pwd):$(pwd) -w $(pwd) plantuml -tsvg $1
 }
+
+function wscat() 
+{
+  docker container run --rm -it wscat wscat $@
+}
+
+alias trello='docker run --rm -it 3llo'
 
 if [ $commands[cloc] ]; then
   alias cloc="cloc --exclude-dir=.git,vendor"
@@ -126,8 +138,13 @@ if [ $commands[kubectl] ]; then
   source <(kubectl completion zsh)
 fi
 
-if [ $commands[helm] ]; then
-  source <(helm completion zsh)
+# disable until 2.14
+# if [ $commands[helm] ]; then
+#   source <(helm completion zsh)
+# fi
+
+if [ -f /usr/local/etc/profile.d/z.sh ]; then
+  source  /usr/local/etc/profile.d/z.sh
 fi
 
 if [[ -z "$LANG" ]]; then
@@ -157,5 +174,10 @@ compctl -/ -W ${GOPATH}/src/ gocd
 wattx() { cd ${GOPATH}/src/github.com/wattx/$1 }
 compctl -/ -W ${GOPATH}/src/github.com/wattx/ wattx
 
+glassnode() { cd ${GOPATH}/src/github.com/glassnode/$1 }
+compctl -/ -W ${GOPATH}/src/github.com/glassnode/ glassnode
+
 
 autoload -U colors; colors
+
+alias remove-obsolete-branches="git fetch -p && git branch -vv| sed '/: gone] /!d;s/^[ ]*\([^ ]*\) .*$/\1/' | xargs git branch -D"

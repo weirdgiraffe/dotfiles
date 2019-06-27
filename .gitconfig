@@ -50,6 +50,7 @@
 [alias]
 	c = commit
 	amend = commit --amend
+	amendne = commit --amend --no-edit
 	co = checkout
 	st = status
 	dh = diff HEAD
