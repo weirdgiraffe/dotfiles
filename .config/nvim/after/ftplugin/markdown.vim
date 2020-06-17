@@ -1,6 +1,6 @@
 setlocal nonumber
-setlocal ts=4
-setlocal sw=4
+setlocal ts=2
+setlocal sw=2
 setlocal et
 let b:indent_already_set=1
 
@@ -24,10 +24,6 @@ fun! MarkdownUpdateLineOverflow()
     match NONE
   endif
 endfun
-
-" update lines when enter is pressed
-autocmd BufEnter,BufWinEnter *
-  \ call MarkdownUpdateLineOverflow()
 
 " update lines when enter is pressed
 autocmd BufEnter,BufWinEnter *

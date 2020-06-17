@@ -81,26 +81,34 @@ if empty(glob($HOME.'/.local/share/nvim/site/autoload/plug.vim'))
 endif
 
 call plug#begin($HOME.'/.local/share/nvim/plugged')
+Plug 'scrooloose/nerdtree'
 Plug 'lifepillar/vim-solarized8'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'scrooloose/nerdtree'
-Plug 'mdempsky/gocode', { 'rtp': 'nvim', 'do': '~/.local/share/nvim/plugged/gocode/nvim/symlink.sh' }
+Plug 'christoomey/vim-tmux-navigator'
 Plug 'fatih/vim-go', {'for': 'go', 'do': ':GoInstallBinaries'}
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'zchee/deoplete-go', { 'do': 'make'}
 Plug 'kien/ctrlp.vim'
 Plug 'SirVer/ultisnips'
-Plug 'christoomey/vim-tmux-navigator'
-Plug 'tpope/vim-markdown'
 Plug 'iamcco/markdown-preview.vim'
+Plug 'morhetz/gruvbox'
+Plug 'uarun/vim-protobuf'
+Plug 'airblade/vim-gitgutter'
 call plug#end()
+
+" nerdtree {{{
+let g:loaded_netrw = 1            " disable netrw and use NERDTree instead
+let g:loaded_netrwPlugin = 1      " disable netrw and use NERDTree instead
+let NERDTreeIgnore = ['__pycache__', '\.pyc', '\.o', '\.git', '\.svn']
+" nerdtree }}}
 
 " colors {{{
 set background=dark
 "let g:solarized_use16=1
 "colorscheme solarized8
-colorscheme Tomorrow-Night
+"colorscheme Tomorrow-Night
+colorscheme gruvbox
+
 " change annoing color of ~ symbols in empty file
 hi NonText ctermfg=NONE
 " reflect background color change of tmux panes
@@ -111,8 +119,9 @@ hi CursorLine cterm=NONE ctermbg=0 gui=NONE
 hi LineNr ctermbg=NONE
 set noshowmode          " don't show modeline because of airline
 "let g:airline_theme="solarized"
-let g:airline_theme="tomorrow"
-let g:airline_solarized_bg="dark"
+"let g:airline_solarized_bg="dark"
+"let g:airline_theme="tomorrow"
+let g:airline_theme='gruvbox'
 let g:airline_powerline_fonts=1                " enable powerfonts for airline
 let g:airline#extensions#tabline#enabled=1     " Enable the list of buffers in a topline
 let g:airline#extensions#tabline#fnamemod=':t' " Show filename only in buffer list
@@ -148,75 +157,39 @@ nnoremap <silent> <M-l> :TmuxNavigateRight<cr>
 
 augroup BgHighlight
     autocmd!
-    autocmd FocusGained * hi Normal ctermbg=234
-    autocmd FocusLost * hi Normal ctermbg=238
+    " autocmd FocusGained * hi Normal ctermbg=234
+    " autocmd FocusLost * hi Normal ctermbg=238
+    autocmd FocusGained * hi Normal guibg=#282828
+    autocmd FocusLost * hi Normal guibg=#3c3836
 augroup END
-
 " vim-tmux-navigator }}
 
-" nerdtree {{{
-let g:loaded_netrw = 1            " disable netrw and use NERDTree instead
-let g:loaded_netrwPlugin = 1      " disable netrw and use NERDTree instead
-" F2  Display/Hide NERDTree
-nnoremap <F2> :NERDTreeToggle<CR>
-let NERDTreeIgnore = ['__pycache__', '\.pyc', '\.o', '\.git', '\.svn']
-" F3 Preview file when inside NERDTree
-let g:NERDTreeMapPreview = "<F3>"
-" nerdtree }}}
-
-" ctrlp.vim {{{
-" Filenames and directory names to ignore in ctrlp plugin
-let g:ctrlp_custom_ignore = {
-  \ 'dir':  '\v[\/](\.git|\.svn|\.ropeproject|\.cache|__pycache__)$',
-  \ 'file': '\v(\.exe|\.lib|\.so|\.dll|\.pyc|\~)$',
-  \ }
-" ctrlp.vim }}}
-
-" deocomplete {{
-set completeopt+=noinsert
-set completeopt+=noselect
-set completeopt-=preview
-let g:python3_host_prog  = '/usr/local/bin/python3'
-let g:python3_host_skip_check = 1
-
-let g:deoplete#enable_at_startup = 1
-call deoplete#custom#option({
-\ 'auto_complete_delay': 50,
-\ 'async_timeout': 100,
-\ 'num_processes': 4,
-\ 'smart_case': v:true,
-\ })
-let g:deoplete#sources#go#gocode_binary = $GOPATH.'/bin/gocode'
-let g:deoplete#sources#go#sort_class = ['func', 'var', 'const', 'type', 'package']
-let g:deoplete#sources#go#auto_goos = 1
-let g:deoplete#sources#go#gocode_sock = 'unix'
-" let g:deoplete#sources#go#source_importer = 1
-" deocomplete }}
 
 " vim-go {{{
+let g:go_gopls_enabled = 1
+let g:go_gopls_complete_unimported = 1
+let g:go_gopls_deep_completion = 1
+let g:go_gopls_fuzzy_matching = 1
+let g:go_gopls_staticcheck = 0
+let g:go_gopls_use_placeholders = 0
+
 let g:go_fmt_command = "goimports"
 let g:go_fmt_autosave = 1
-let g:go_info_mode = 'gocode'
-let g:go_gocode_socket_type = 'unix'
+let g:go_info_mode = 'gopls'
+let g:go_def_mode = 'gopls'
+let g:go_referers_mode = 'gopls'
+let g:go_rename_command = 'gopls'
+
+let g:go_term_close_on_exit = 1
+let g:go_code_completion_enabled = 1
+" let g:go_debug = ['lsp']
 
 let g:go_template_autocreate = 0
-let g:go_addtags_transform = "snakecase"
-let g:go_def_reuse_buffer = 1            " do not open new buffers for gd
-let g:go_auto_type_info = 1              " show type info for word under cursor
-let g:go_gocode_propose_source = 1       " show completion for not built packages
-"let g:go_auto_sameids = 1
-"let g:go_highlight_extra_types = 1
-"let g:go_highlight_operators = 1
-"let g:go_highlight_functions = 1
-"let g:go_highlight_function_arguments = 1
-"let g:go_highlight_function_calls = 1
-"let g:go_highlight_types = 1
-"let g:go_highlight_fields = 1
-"let g:go_highlight_variable_declarations = 1
-"let g:go_highlight_variable_assignments = 1
+let g:go_addtags_transform = "camelcase"
 au FileType go nmap <leader>a :GoAlternate<CR>
 au FileType go nmap <leader>q <Plug>(go-build)
 au FileType go nmap <leader>w <Plug>(go-test)
+au FileType go nmap <leader>wf <Plug>(go-test-func)
 au FileType go nmap <leader>e <Plug>(go-coverage)
 au FileType go nmap <leader>r <Plug>(go-referrers)
 au FileType go nmap <leader>i :GoImplements<CR>
@@ -224,9 +197,60 @@ au FileType go nmap <leader>t <Plug>(go-def-vertical)
 au FileType go nmap <leader>d :GoDecls<CR>
 " vim-go }}}
 
-" vim-markdown {{
-let g:markdown_fenced_languages = ['javascript', 'json', 'html', 'python', 'bash=sh']
-" vim-markdown }}
+" deocomplete {{
+set completeopt+=noinsert
+set completeopt+=noselect
+set completeopt-=preview
+if has("patch-7.4.314")
+  set shortmess+=c
+endif
+let g:python3_host_prog  = '/usr/local/bin/python3'
+let g:python3_host_skip_check = 1
+
+let g:deoplete#enable_at_startup = 1
+let g:deoplete#complete_method = "omnifunc"
+" call deoplete#custom#option('profile', v:true)
+" call deoplete#enable_logging('DEBUG', 'deoplete.log')
+call deoplete#custom#option({
+\ 'auto_complete': v:true,
+\ 'auto_complete_delay': 0,
+\ 'auto_refresh_delay': 10,
+\ 'refresh_always': v:false,
+\ 'num_processes': 8,
+\ 'smart_case': v:true,
+\ 'omni_patterns': {'go':'[^. *\t]\.\w*'},
+\ })
+
+call deoplete#custom#source('ultisnips', 'rank', 1)
+let g:deoplete#sources#go#sort_class = ['func', 'var', 'const', 'type', 'package']
+let g:deoplete#sources#go#auto_goos = 1
+let g:deoplete#sources#go#source_importer = 1
+" deocomplete }}
+
+
+" ctrlp.vim {{{
+
+" Filenames and directory names to ignore in ctrlp plugin
+let g:ctrlp_custom_ignore = {
+  \ 'dir':  '\v[\/](\.git|\.svn|\.ropeproject|\.cache|__pycache__|vendor)$',
+  \ 'file': '\v(\.exe|\.lib|\.so|\.dll|\.pyc|\~)$',
+  \ }
+
+" Use fd for ctrlp.
+" if executable('fd')
+"     let g:ctrlp_user_command = 'fd --type f --color never "" %s'
+"     let g:ctrlp_use_caching = 0
+" endif
+
+nmap <C-I> :<C-U>CtrlPBuffer<CR>
+
+" ctrlp.vim }}}
+
+
+
+" vim-gitgutter {{{
+let g:gitgutter_grep='ggrep --color=never'
+" vim-gitgutter }}}
 
 " custom key mappings
 " to write some into some file own by root just type :w!!
@@ -238,10 +262,32 @@ nnoremap <leader>bn :bn<CR>
 " simply go to the previous buffer
 nnoremap <leader>bp :bp<CR>
 
+
+
 " better to have syntax settings at the end because, for example vim-go could
 " not work if syntax is enabled before plugin is loaded
 syntax enable
 filetype plugin indent on
 
-" recognize bazel build files
-au BufRead,BufNewFile BUILD.bazel setf bzl
+let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+set termguicolors
+set foldmethod=syntax
+
+augroup _go_long_lines
+  au!
+  au BufEnter,BufWinEnter *.go highlight OverLength guibg=black guifg=orange
+  au BufEnter,BufWinEnter *.go match OverLength /\%120v.*/
+augroup END
+
+
+fun! _close_all_but_current_buffer()
+  let curr = bufnr("%")
+  let last = bufnr("$")
+
+  if curr > 1    | silent! execute "1,".(curr-1)."bd"     | endif
+  if curr < last | silent! execute (curr+1).",".last."bd" | endif
+endfun
+
+
+nnoremap <leader>bq :call _close_all_but_current_buffer()<CR>
+nnoremap <leader>id "=strftime("%x %X (%Z)")<CR>P

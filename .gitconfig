@@ -49,8 +49,7 @@
 	pager = less -FRXK
 [alias]
 	c = commit
-	amend = commit --amend
-	amendne = commit --amend --no-edit
+	ca = commit --amend
 	co = checkout
 	st = status
 	dh = diff HEAD
@@ -71,8 +70,10 @@
 [push]
 	default = simple
 [url "git@gitlab.com:"]
-	insteadOf = https://gitlab.com
+	insteadOf = https://gitlab.com/
 [pull]
 	rebase = true
 [github]
 	user = weirdgiraffe
+[url "git@github.com:"]
+	insteadOf = https://github.com/

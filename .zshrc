@@ -24,6 +24,8 @@ if [[ "$(uname)" = "Darwin" ]]; then
   [[ -d /usr/local/Cellar/kubernetes-cli ]] || brew install kubectl
   [[ -d /usr/local/Cellar/fzf ]] || ( brew install fzf && $(brew --prefix)/opt/fzf/install )
   [[ -d /usr/local/Cellar/fd ]] || brew install fd
+  [[ -d /usr/local/Cellar/node ]] || brew install node
+  [[ -d /usr/local/Cellar/yarn ]] || brew install yarn
 fi
 
 # Source zim
@@ -78,13 +80,14 @@ stty -ixon
 if [ "$TERM" = "xterm" ]; then
     export TERM=xterm-256color
 fi
+
 if [ "$TERM" = "screen" -o "$TERM" = "screen-256color" ]; then
-    export TERM=screen-256color
-    unset TERMCAP
+    #export TERM=screen-256color
+    #unset TERMCAP
 fi
 
 export GOPATH=$HOME/go
-export PATH=/usr/local/bin:$PATH:$HOME/bin:$GOPATH/bin:$HOME/istio-0.5.0/bin:$HOME/google-cloud-sdk/bin
+export PATH=/usr/local/bin:$PATH:$HOME/bin:$GOPATH/bin:$HOME/istio-1.2.10/bin:$HOME/google-cloud-sdk/bin
 
 
 # aliases and other stuff
@@ -108,8 +111,12 @@ function vim() {
 }
 
 alias vi=vim
+alias dc="docker-compose"
 alias k="kubectl"
 alias kgn="kubectl --namespace=glassnode"
+alias kjn="kubectl --namespace=jobs"
+alias kbn="kubectl --namespace=blockchain"
+alias kdn="kubectl --namespace=database"
 alias ls="gnu_ls --color=auto --group-directories-first -F"
 alias lah="gnu_ls --color=auto --group-directories-first --time-style=long-iso -Flah"
 
@@ -134,18 +141,26 @@ if [ -f ~/.fzf.zsh ]; then
   source ~/.fzf.zsh
 fi
 
+if [ -d /usr/local/share/zsh/site-functions ]; then
+  export FPATH=/usr/local/share/zsh/site-functions:${FPATH}
+fi
+
+if [ -d $HOME/google-cloud-sdk/bin ]; then
+  alias gcloud-kubectl="$HOME/google-cloud-sdk/bin/kubectl"
+fi
+
 if [ $commands[kubectl] ]; then
   source <(kubectl completion zsh)
+fi
+
+if [ $commands[helm] ]; then
+  source <(helm completion zsh)
 fi
 
 # disable until 2.14
 # if [ $commands[helm] ]; then
 #   source <(helm completion zsh)
 # fi
-
-if [ -f /usr/local/etc/profile.d/z.sh ]; then
-  source  /usr/local/etc/profile.d/z.sh
-fi
 
 if [[ -z "$LANG" ]]; then
   export LANG='en_US.UTF-8'
@@ -171,13 +186,35 @@ alias reporoot="cd \$(git rev-parse --show-toplevel)"
 gocd() { cd ${GOPATH}/src/$1 }
 compctl -/ -W ${GOPATH}/src/ gocd
 
-wattx() { cd ${GOPATH}/src/github.com/wattx/$1 }
-compctl -/ -W ${GOPATH}/src/github.com/wattx/ wattx
+gitlab() { cd ${GOPATH}/src/gitlab.com/glassnode/$1 }
+compctl -/ -W ${GOPATH}/src/gitlab.com/glassnode/ gitlab
 
-glassnode() { cd ${GOPATH}/src/github.com/glassnode/$1 }
-compctl -/ -W ${GOPATH}/src/github.com/glassnode/ glassnode
+github() { cd ${GOPATH}/src/github.com/glassnode/$1 }
+compctl -/ -W ${GOPATH}/src/github.com/glassnode/ github
 
+datazoo() { cd ${HOME}/projects/datazoo/$1 }
+compctl -/ -W ${HOME}/projects/datazoo/ datazoo
 
 autoload -U colors; colors
 
 alias remove-obsolete-branches="git fetch -p && git branch -vv| sed '/: gone] /!d;s/^[ ]*\([^ ]*\) .*$/\1/' | xargs git branch -D"
+
+alias failedjobs="kubectl -n jobs get jobs -o json| jq -r '.items[]| select (.status.conditions[0].type == \"Failed\")|\"\(.status.startTime)\t\(.metadata.name)\"'|sort -n"
+
+function dumpjob() {
+  kubectl -n jobs describe job $1
+  glogs $1
+}
+
+function preexec() {
+    cmd_timer=${cmd_timer:-$SECONDS}
+}
+
+function precmd() {
+    if [ $cmd_timer ]; then
+        timer_show=$(($SECONDS - $cmd_timer))
+	RPROMPT=${RPROMPT%% *\[e *}
+	RPROMPT=${RPROMPT}" %F{white}[e ${timer_show}s]%f"
+        unset cmd_timer
+    fi
+}
