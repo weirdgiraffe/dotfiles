@@ -57,10 +57,10 @@ set hidden                " allow switch of modified buffers
 set mouse=                " disable mouse in every mode
 set foldlevel=20          " do not fold first 20 levels when open a file
 set guicursor=            " use block cursor shape always
-set cursorline            " highlight cursorline for all files
 set synmaxcol=160         " turn off syntax coloring after 160 symbols
 set scrolloff=20          " min number of lines to keep above/bellow current line
 set number                " show line numbers
+set noshowmode            " don't show modeline because of airline
 let mapleader = ','       " set the leader button
 
 " list of files which should be ignored on completion
@@ -102,25 +102,7 @@ let g:loaded_netrwPlugin = 1      " disable netrw and use NERDTree instead
 let NERDTreeIgnore = ['__pycache__', '\.pyc', '\.o', '\.git', '\.svn']
 " nerdtree }}}
 
-" colors {{{
-set background=dark
-"let g:solarized_use16=1
-"colorscheme solarized8
-"colorscheme Tomorrow-Night
-colorscheme gruvbox
-
-" change annoing color of ~ symbols in empty file
-hi NonText ctermfg=NONE
-" reflect background color change of tmux panes
-hi Normal ctermbg=NONE
-" make cursorline look better
-hi CursorLine cterm=NONE ctermbg=0 gui=NONE
-" make numbers look better
-hi LineNr ctermbg=NONE
-set noshowmode          " don't show modeline because of airline
-"let g:airline_theme="solarized"
-"let g:airline_solarized_bg="dark"
-"let g:airline_theme="tomorrow"
+" airline {{{
 let g:airline_theme='gruvbox'
 let g:airline_powerline_fonts=1                " enable powerfonts for airline
 let g:airline#extensions#tabline#enabled=1     " Enable the list of buffers in a topline
@@ -146,7 +128,7 @@ nmap <leader>8 <Plug>AirlineSelectTab8
 nmap <leader>9 <Plug>AirlineSelectTab9
 nmap <leader>- <Plug>AirlineSelectPrevTab
 nmap <leader>+ <Plug>AirlineSelectNextTab
-" colors }}}
+" airline }}}
 
 " vim-tmux-navigator {{
 let g:tmux_navigator_no_mappings = 1
@@ -154,23 +136,15 @@ nnoremap <silent> <M-h> :TmuxNavigateLeft<cr>
 nnoremap <silent> <M-j> :TmuxNavigateDown<cr>
 nnoremap <silent> <M-k> :TmuxNavigateUp<cr>
 nnoremap <silent> <M-l> :TmuxNavigateRight<cr>
-
-augroup BgHighlight
-    autocmd!
-    " autocmd FocusGained * hi Normal ctermbg=234
-    " autocmd FocusLost * hi Normal ctermbg=238
-    autocmd FocusGained * hi Normal guibg=#282828
-    autocmd FocusLost * hi Normal guibg=#3c3836
-augroup END
 " vim-tmux-navigator }}
 
 
 " vim-go {{{
-let g:go_gopls_enabled = 1
+" let g:go_gopls_enabled = 1
 let g:go_gopls_complete_unimported = 1
 let g:go_gopls_deep_completion = 1
 let g:go_gopls_fuzzy_matching = 1
-let g:go_gopls_staticcheck = 0
+let g:go_gopls_staticcheck = 1
 let g:go_gopls_use_placeholders = 0
 
 let g:go_fmt_command = "goimports"
@@ -178,6 +152,7 @@ let g:go_fmt_autosave = 1
 let g:go_info_mode = 'gopls'
 let g:go_def_mode = 'gopls'
 let g:go_referers_mode = 'gopls'
+let g:go_implements_mode = 'gopls'
 let g:go_rename_command = 'gopls'
 
 let g:go_term_close_on_exit = 1
@@ -273,13 +248,6 @@ let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 set termguicolors
 set foldmethod=syntax
 
-augroup _go_long_lines
-  au!
-  au BufEnter,BufWinEnter *.go highlight OverLength guibg=black guifg=orange
-  au BufEnter,BufWinEnter *.go match OverLength /\%120v.*/
-augroup END
-
-
 fun! _close_all_but_current_buffer()
   let curr = bufnr("%")
   let last = bufnr("$")
@@ -291,3 +259,37 @@ endfun
 
 nnoremap <leader>bq :call _close_all_but_current_buffer()<CR>
 nnoremap <leader>id "=strftime("%x %X (%Z)")<CR>P
+
+
+"
+" GRUVBOX LIGHT color scheme
+"
+" colors {{{
+set background=light
+colorscheme gruvbox
+
+augroup _go_long_lines
+  au!
+  "au BufEnter,BufWinEnter *.go highlight OverLength guibg=black guifg=orange
+  au BufEnter,BufWinEnter *.go hi OverLength guibg=#af3a03 guifg=#fbf1c7
+  au BufEnter,BufWinEnter *.go match OverLength /\%120v.*/
+augroup END
+
+" change annoing color of ~ symbols in empty file
+hi NonText ctermfg=NONE ctermfg=246 guifg=#a89984
+" reflect  color change of tmux panes
+hi Normal ctermbg=NONE ctermfg=NONE guibg=NONE guifg=NONE 
+" selections
+hi Visual gui=NONE cterm=NONE ctermbg=NONE ctermfg=NONE guibg=#d5c4a1
+
+" enable cursorline to be able to show the current line
+" number
+set cursorline
+" remove all fromating form line numbers
+hi LineNr ctermbg=NONE
+" do not highlight a current line because of background disturbances
+hi CursorLine cterm=NONE ctermbg=NONE guibg=NONE 
+" highlight the current line number with inversed colors
+hi CursorLineNR gui=bold cterm=bold ctermbg=NONE guibg=NONE ctermfg=black guifg=black
+
+" colors }}}

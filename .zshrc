@@ -88,6 +88,7 @@ fi
 
 export GOPATH=$HOME/go
 export PATH=/usr/local/bin:$PATH:$HOME/bin:$GOPATH/bin:$HOME/istio-1.2.10/bin:$HOME/google-cloud-sdk/bin
+export GREP_COLOR="01;31"
 
 
 # aliases and other stuff
@@ -136,6 +137,8 @@ if [ $commands[cloc] ]; then
   alias cloc="cloc --exclude-dir=.git,vendor"
 fi
 
+# source ~/bin/gruvbox_256palette_osx.sh
+
 if [ -f ~/.fzf.zsh ]; then
   [ $commands[fd] ] && export FZF_ALT_C_COMMAND="command fd -L -t d -t l"
   source ~/.fzf.zsh
@@ -182,6 +185,14 @@ fi
 # cd aliases
 #
 alias reporoot="cd \$(git rev-parse --show-toplevel)"
+alias rr="cd \$(git rev-parse --show-toplevel)"
+alias gst="git status"
+
+alias rfcdate='date -u +"%Y-%m-%dT%H:%M:%SZ"'
+alias unixdate='date +"%s"'
+function unixdatetorfc() {
+	date -r $1 -u +"%Y-%m-%dT%H:%M:%SZ"
+}
 
 gocd() { cd ${GOPATH}/src/$1 }
 compctl -/ -W ${GOPATH}/src/ gocd
@@ -201,6 +212,9 @@ alias remove-obsolete-branches="git fetch -p && git branch -vv| sed '/: gone] /!
 
 alias failedjobs="kubectl -n jobs get jobs -o json| jq -r '.items[]| select (.status.conditions[0].type == \"Failed\")|\"\(.status.startTime)\t\(.metadata.name)\"'|sort -n"
 
+
+
+
 function dumpjob() {
   kubectl -n jobs describe job $1
   glogs $1
@@ -212,9 +226,15 @@ function preexec() {
 
 function precmd() {
     if [ $cmd_timer ]; then
-        timer_show=$(($SECONDS - $cmd_timer))
-	RPROMPT=${RPROMPT%% *\[e *}
-	RPROMPT=${RPROMPT}" %F{white}[e ${timer_show}s]%f"
+	if (( $SECONDS - $cmd_timer > 0 )); then
+          timer_show=$(($SECONDS - $cmd_timer))
+	  RPROMPT=${RPROMPT%% *\[e *}
+	  RPROMPT=${RPROMPT}" %F{white}[e ${timer_show}s]%f"
+	else
+	  RPROMPT=${RPROMPT%% *\[e *}
+	fi
         unset cmd_timer
     fi
 }
+
+
