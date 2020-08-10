@@ -80,20 +80,37 @@ if empty(glob($HOME.'/.local/share/nvim/site/autoload/plug.vim'))
   autocmd VimEnter * PlugInstall | source $MYVIMRC
 endif
 
+
+" colors support {{
+"
+" 24 bit colors support. More details:
+"   - https://vimhelp.org/term.txt.html
+"   - https://github.com/rakr/vim-one#true-color-support
+if (has("nvim"))
+  let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+endif
+if (has("termguicolors"))
+  set termguicolors
+  let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+  let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+endif
+"
+" colors support }}
+
 call plug#begin($HOME.'/.local/share/nvim/plugged')
 Plug 'scrooloose/nerdtree'
-Plug 'lifepillar/vim-solarized8'
 Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'fatih/vim-go', {'for': 'go', 'do': ':GoInstallBinaries'}
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'kien/ctrlp.vim'
 Plug 'SirVer/ultisnips'
 Plug 'iamcco/markdown-preview.vim'
-Plug 'morhetz/gruvbox'
 Plug 'uarun/vim-protobuf'
 Plug 'airblade/vim-gitgutter'
+
+Plug 'vim-airline/vim-airline-themes'
+Plug 'rakr/vim-one'
 call plug#end()
 
 " nerdtree {{{
@@ -103,7 +120,6 @@ let NERDTreeIgnore = ['__pycache__', '\.pyc', '\.o', '\.git', '\.svn']
 " nerdtree }}}
 
 " airline {{{
-let g:airline_theme='gruvbox'
 let g:airline_powerline_fonts=1                " enable powerfonts for airline
 let g:airline#extensions#tabline#enabled=1     " Enable the list of buffers in a topline
 let g:airline#extensions#tabline#fnamemod=':t' " Show filename only in buffer list
@@ -244,8 +260,6 @@ nnoremap <leader>bp :bp<CR>
 syntax enable
 filetype plugin indent on
 
-let $NVIM_TUI_ENABLE_TRUE_COLOR=1
-set termguicolors
 set foldmethod=syntax
 
 fun! _close_all_but_current_buffer()
@@ -261,35 +275,18 @@ nnoremap <leader>bq :call _close_all_but_current_buffer()<CR>
 nnoremap <leader>id "=strftime("%x %X (%Z)")<CR>P
 
 
-"
-" GRUVBOX LIGHT color scheme
-"
 " colors {{{
+
+colorscheme one
 set background=light
-colorscheme gruvbox
+let g:airline_theme='one'
+set cursorline
 
 augroup _go_long_lines
   au!
   "au BufEnter,BufWinEnter *.go highlight OverLength guibg=black guifg=orange
-  au BufEnter,BufWinEnter *.go hi OverLength guibg=#af3a03 guifg=#fbf1c7
+  au BufEnter,BufWinEnter *.go hi OverLength guibg=red guifg=white
   au BufEnter,BufWinEnter *.go match OverLength /\%120v.*/
 augroup END
-
-" change annoing color of ~ symbols in empty file
-hi NonText ctermfg=NONE ctermfg=246 guifg=#a89984
-" reflect  color change of tmux panes
-hi Normal ctermbg=NONE ctermfg=NONE guibg=NONE guifg=NONE 
-" selections
-hi Visual gui=NONE cterm=NONE ctermbg=NONE ctermfg=NONE guibg=#d5c4a1
-
-" enable cursorline to be able to show the current line
-" number
-set cursorline
-" remove all fromating form line numbers
-hi LineNr ctermbg=NONE
-" do not highlight a current line because of background disturbances
-hi CursorLine cterm=NONE ctermbg=NONE guibg=NONE 
-" highlight the current line number with inversed colors
-hi CursorLineNR gui=bold cterm=bold ctermbg=NONE guibg=NONE ctermfg=black guifg=black
 
 " colors }}}
