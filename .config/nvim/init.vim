@@ -152,6 +152,7 @@ nnoremap <silent> <M-h> :TmuxNavigateLeft<cr>
 nnoremap <silent> <M-j> :TmuxNavigateDown<cr>
 nnoremap <silent> <M-k> :TmuxNavigateUp<cr>
 nnoremap <silent> <M-l> :TmuxNavigateRight<cr>
+
 " vim-tmux-navigator }}
 
 
@@ -287,6 +288,12 @@ augroup _go_long_lines
   "au BufEnter,BufWinEnter *.go highlight OverLength guibg=black guifg=orange
   au BufEnter,BufWinEnter *.go hi OverLength guibg=red guifg=white
   au BufEnter,BufWinEnter *.go match OverLength /\%120v.*/
+augroup END
+
+augroup BgHighlight
+    autocmd!
+    autocmd FocusGained * hi Normal guibg=15
+    autocmd FocusLost   * hi Normal guibg=255
 augroup END
 
 " colors }}}
