@@ -49,12 +49,13 @@
 	pager = less -FRXK
 [alias]
 	c = commit
-	ca = commit --amend
 	co = checkout
 	st = status
 	dh = diff HEAD
 	dc = diff --staged
-	l = log --pretty='%C(auto)%h %d %s %Cgreen(%ad) %Cblue%an <%ae>%Creset' -10
+	amend = commit --amend --no-edit
+	psuh = push
+	l = log --pretty='%C(auto)%h %d %s %Cgreen(%ai) %Cblue%an <%ae>%Creset' -10
 	ll = log --pretty='%C(auto)%h %d %Cgreen(%ad) %Cblue%an <%ae>%Creset%n%s%n%n%b' -10
 	lll = log --pretty='%C(auto)%h %d %Cgreen(%ad) %Cblue%an <%ae>%Creset%n%s%n%n%b' --stat -C -5
 	ls = log --show-signature --pretty='%C(auto)%h %d %s %Cgreen(%ad) %Cblue%an <%ae>%Creset' -10
@@ -69,11 +70,21 @@
 	enabled = true
 [push]
 	default = simple
-[url "git@gitlab.com:"]
-	insteadOf = https://gitlab.com/
 [pull]
 	rebase = true
 [github]
 	user = weirdgiraffe
+
+[gitlab]
+	user = weirdgiraffe
 [url "git@github.com:"]
 	insteadOf = https://github.com/
+[url "git@gitlab.com:"]
+	insteadOf = https://gitlab.com/
+[credential]
+	helper = osxkeychain
+[filter "lfs"]
+	required = true
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process

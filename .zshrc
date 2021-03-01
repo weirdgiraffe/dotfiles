@@ -77,17 +77,24 @@ bindkey '^N' down-line-or-search-local-history
 # prevent terminal suspend on CTRL+S
 stty -ixon
 
-if [ "$TERM" = "xterm" ]; then
+if [ "$TERM" = "tmux" -o "$TERM" = "tmux-256color" ]; then
+    export TERM=tmux-256color
+fi
+
+if [ "$TERM" = "xterm" -o "$TERM" = "xterm-256color" ]; then
     export TERM=xterm-256color
 fi
 
 if [ "$TERM" = "screen" -o "$TERM" = "screen-256color" ]; then
-    #export TERM=screen-256color
-    #unset TERMCAP
+    export TERM=screen-256color
 fi
 
 export GOPATH=$HOME/go
-export PATH=/usr/local/bin:$PATH:$HOME/bin:$GOPATH/bin:$HOME/istio-1.2.10/bin:$HOME/google-cloud-sdk/bin
+
+path+=("$HOME/bin" "$GOPATH/bin" "$HOME/google-cloud-sdk/bin")
+typeset -U path
+export PATH
+
 export GREP_COLOR="01;31"
 
 
@@ -118,7 +125,10 @@ alias kgn="kubectl --namespace=glassnode"
 alias kjn="kubectl --namespace=jobs"
 alias kbn="kubectl --namespace=blockchain"
 alias kdn="kubectl --namespace=database"
+
 alias ls="gnu_ls --color=auto --group-directories-first -F"
+alias ll="gnu_ls --color=auto --group-directories-first --time-style=long-iso -Fl"
+alias la="gnu_ls --color=auto --group-directories-first --time-style=long-iso -Fla"
 alias lah="gnu_ls --color=auto --group-directories-first --time-style=long-iso -Flah"
 
 function plantuml()
@@ -140,7 +150,6 @@ fi
 # source ~/bin/gruvbox_256palette_osx.sh
 
 if [ -f ~/.fzf.zsh ]; then
-  [ $commands[fd] ] && export FZF_ALT_C_COMMAND="command fd -L -t d -t l"
   source ~/.fzf.zsh
 fi
 
@@ -206,13 +215,22 @@ compctl -/ -W ${GOPATH}/src/github.com/glassnode/ github
 datazoo() { cd ${HOME}/projects/datazoo/$1 }
 compctl -/ -W ${HOME}/projects/datazoo/ datazoo
 
+projects() { cd ~/projects/$1 }
+compctl -/ -W ~/projects projects
+
 autoload -U colors; colors
 
 alias remove-obsolete-branches="git fetch -p && git branch -vv| sed '/: gone] /!d;s/^[ ]*\([^ ]*\) .*$/\1/' | xargs git branch -D"
 
 alias failedjobs="kubectl -n jobs get jobs -o json| jq -r '.items[]| select (.status.conditions[0].type == \"Failed\")|\"\(.status.startTime)\t\(.metadata.name)\"'|sort -n"
+alias runningjobs="kubectl -n jobs get jobs -o json| jq -r '.items[]| select (.status.active > 0)|\"\(.status.startTime)\t\(.metadata.name)\"'|sort -n"
 
 
+function mdserve() {
+	mkdir -p ./rendered
+	find ./ -iname "*.md" -type f -exec sh -c 'pandoc "${0}" -f gfm -t html --self-contained -o "rendered/${0%.md}"' {} \;
+	devd ./rendered
+}
 
 
 function dumpjob() {
@@ -237,4 +255,8 @@ function precmd() {
     fi
 }
 
+bindkey -s "^v" "vim **\t"
 
+export CLOUDSDK_PYTHON=python3.8
+export GOPRIVATE=gitlab.com/glassnode
+alias tf='terraform'

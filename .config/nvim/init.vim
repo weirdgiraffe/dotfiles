@@ -72,6 +72,7 @@ set wildignore+=*.tar,*.gz,*.bz,*.lzma,*.tgz,*.tbz,*.zip,*.rar,*.iso
 
 set wildmode=full,list:full " autocompleting files: full, don't autopick.
 
+
 " install vim-plug ( https://github.com/junegunn/vim-plug )
 if empty(glob($HOME.'/.local/share/nvim/site/autoload/plug.vim'))
   silent !curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs
@@ -103,14 +104,19 @@ Plug 'vim-airline/vim-airline'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'fatih/vim-go', {'for': 'go', 'do': ':GoInstallBinaries'}
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'kien/ctrlp.vim'
 Plug 'SirVer/ultisnips'
 Plug 'iamcco/markdown-preview.vim'
 Plug 'uarun/vim-protobuf'
 Plug 'airblade/vim-gitgutter'
+Plug 'tomlion/vim-solidity'
+
+Plug 'junegunn/fzf'
+Plug 'junegunn/fzf.vim'
+" Plug 'kien/ctrlp.vim'
 
 Plug 'vim-airline/vim-airline-themes'
 Plug 'rakr/vim-one'
+Plug 'reedes/vim-colors-pencil'
 call plug#end()
 
 " nerdtree {{{
@@ -177,7 +183,9 @@ let g:go_code_completion_enabled = 1
 " let g:go_debug = ['lsp']
 
 let g:go_template_autocreate = 0
-let g:go_addtags_transform = "camelcase"
+" let g:go_addtags_transform = 'camelcase'
+let g:go_addtags_transform = 'snakecase'
+let g:go_test_timeout = '60s'
 au FileType go nmap <leader>a :GoAlternate<CR>
 au FileType go nmap <leader>q <Plug>(go-build)
 au FileType go nmap <leader>w <Plug>(go-test)
@@ -219,14 +227,31 @@ let g:deoplete#sources#go#auto_goos = 1
 let g:deoplete#sources#go#source_importer = 1
 " deocomplete }}
 
+" fzf.vim {{{
+
+" Empty value to disable preview window altogether
+let g:fzf_preview_window = []
+let g:fzf_layout = { 'down': '40%' }
+
+function! s:find_git_root()
+  return system('git rev-parse --show-toplevel 2> /dev/null')[:-2]
+endfunction
+
+command! ProjectFiles execute 'Files' s:find_git_root()
+
+nmap <C-P> :ProjectFiles<CR>
+nmap <C-I> :Buffers<CR>
+
+" fzf.vim }}}
+
 
 " ctrlp.vim {{{
 
 " Filenames and directory names to ignore in ctrlp plugin
-let g:ctrlp_custom_ignore = {
-  \ 'dir':  '\v[\/](\.git|\.svn|\.ropeproject|\.cache|__pycache__|vendor)$',
-  \ 'file': '\v(\.exe|\.lib|\.so|\.dll|\.pyc|\~)$',
-  \ }
+" let g:ctrlp_custom_ignore = {
+"   \ 'dir':  '\v[\/](\.git|node_modules|\.svn|\.ropeproject|\.cache|__pycache__|vendor)$',
+"   \ 'file': '\v(\.exe|\.lib|\.so|\.dll|\.pyc|\~)$',
+"   \ }
 
 " Use fd for ctrlp.
 " if executable('fd')
@@ -234,7 +259,7 @@ let g:ctrlp_custom_ignore = {
 "     let g:ctrlp_use_caching = 0
 " endif
 
-nmap <C-I> :<C-U>CtrlPBuffer<CR>
+" nmap <C-I> :<C-U>CtrlPBuffer<CR>
 
 " ctrlp.vim }}}
 
@@ -242,6 +267,14 @@ nmap <C-I> :<C-U>CtrlPBuffer<CR>
 
 " vim-gitgutter {{{
 let g:gitgutter_grep='ggrep --color=never'
+
+" Your vimrc
+function! GitStatus()
+  let [a,m,r] = GitGutterGetHunkSummary()
+  return printf('+%d ~%d -%d', a, m, r)
+endfunction
+set statusline+=%{GitStatus()}
+
 " vim-gitgutter }}}
 
 " custom key mappings
@@ -278,10 +311,23 @@ nnoremap <leader>id "=strftime("%x %X (%Z)")<CR>P
 
 " colors {{{
 
-colorscheme one
+" colorscheme one
+" let g:airline_theme='one'
+
+colorscheme pencil
+
+let g:pencil_higher_contrast_ui = 0   " 0=low (def), 1=high
+let g:pencil_neutral_code_bg = 1      " 0=gray (def), 1=normal
+let g:pencil_gutter_color = 1         " 0=mono (def), 1=color
+let g:pencil_terminal_italics = 1
+
+let g:airline_theme = 'pencil'
+
 set background=light
-let g:airline_theme='one'
 set cursorline
+
+
+
 
 augroup _go_long_lines
   au!
@@ -296,4 +342,14 @@ augroup BgHighlight
     autocmd FocusLost   * hi Normal guibg=255
 augroup END
 
+"hi SpellBad guibg=none
+
 " colors }}}
+
+function! XTermPasteBegin()
+  set pastetoggle=<Esc>[201~
+  set paste
+  return ""
+endfunction
+inoremap <special> <expr> <Esc>[200~ XTermPasteBegin(
+
