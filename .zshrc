@@ -242,21 +242,37 @@ function preexec() {
     cmd_timer=${cmd_timer:-$SECONDS}
 }
 
-function precmd() {
-    if [ $cmd_timer ]; then
-	if (( $SECONDS - $cmd_timer > 0 )); then
-          timer_show=$(($SECONDS - $cmd_timer))
-	  RPROMPT=${RPROMPT%% *\[e *}
-	  RPROMPT=${RPROMPT}" %F{white}[e ${timer_show}s]%f"
-	else
-	  RPROMPT=${RPROMPT%% *\[e *}
-	fi
-        unset cmd_timer
-    fi
+function print_seconds {
+  local T=$1
+  local D=$((T/60/60/24))
+  local H=$((T/60/60%24))
+  local M=$((T/60%60))
+  local S=$((T%60))
+  (( $D > 0 )) && printf '%d d ' $D
+  (( $H > 0 )) && printf '%d h ' $H
+  (( $M > 0 )) && printf '%d m ' $M
+  (( $D > 0 || $H > 0 || $M > 0 )) && printf ' '
+  printf '%d s' $S
 }
+
+function precmd() {
+  if [ $cmd_timer ]; then
+    RPROMPT=${RPROMPT%% %F{white}*\[* s\]%f}
+    if (( $SECONDS - $cmd_timer > 0 )); then
+          elapsed=$(($SECONDS - $cmd_timer))
+          display_elapsed=$(print_seconds ${elapsed})
+          RPROMPT=${RPROMPT}" %F{white}[${display_elapsed}]%f"
+    fi
+    unset cmd_timer
+  fi
+}
+
+# remove rprompt of previous commands
+setopt transient_rprompt
 
 bindkey -s "^v" "vim **\t"
 
 export CLOUDSDK_PYTHON=python3.8
 export GOPRIVATE=gitlab.com/glassnode
 alias tf='terraform'
+
