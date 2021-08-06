@@ -2,6 +2,8 @@
 [user]
 	email = giraffe@cyberzoo.xyz
 	name = weirdgiraffe
+[init]
+	defaultBranch = master
 [diff]
 	tool = meld-macos
 [difftool]

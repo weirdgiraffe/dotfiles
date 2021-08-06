@@ -17,15 +17,23 @@ if [[ ! -d ${ZDOTDIR:-${HOME}}/.zim ]]; then
 fi
 
 if [[ "$(uname)" = "Darwin" ]]; then
-  [[ -d /usr/local/Cellar/coreutils ]] || brew install coreutils
-  [[ -d /usr/local/Cellar/tmux ]] || brew install tmux
-  [[ -d /usr/local/Cellar/reattach-to-user-namespace ]] || brew install reattach-to-usernamespace
-  [[ -d /usr/local/Cellar/neovim ]] || brew install neovim
-  [[ -d /usr/local/Cellar/kubernetes-cli ]] || brew install kubectl
-  [[ -d /usr/local/Cellar/fzf ]] || ( brew install fzf && $(brew --prefix)/opt/fzf/install )
-  [[ -d /usr/local/Cellar/fd ]] || brew install fd
-  [[ -d /usr/local/Cellar/node ]] || brew install node
-  [[ -d /usr/local/Cellar/yarn ]] || brew install yarn
+  # if homebrew is already being installed
+  _BREW_PREFIX=$(brew --prefix)
+  [[ -f ${_BREW_PREFIX}/bin/rg ]] || brew install rg
+  [[ -f ${_BREW_PREFIX}/bin/python3 ]] || brew install python3
+  [[ -f ${_BREW_PREFIX}/bin/go ]] || brew install go
+  [[ -f ${_BREW_PREFIX}/bin/jq ]] || brew install jq
+  [[ -f ${_BREW_PREFIX}/bin/http ]] || brew install httpie
+
+  [[ -d ${_BREW_PREFIX}/Cellar/coreutils ]] || brew install coreutils
+  [[ -d ${_BREW_PREFIX}/Cellar/tmux ]] || brew install tmux
+  [[ -d ${_BREW_PREFIX}/Cellar/neovim ]] || brew install neovim
+  [[ -d ${_BREW_PREFIX}/Cellar/kubernetes-cli ]] || brew install kubectl
+  [[ -d ${_BREW_PREFIX}/Cellar/fzf ]] || ( brew install fzf && $(brew --prefix)/opt/fzf/install )
+  [[ -d ${_BREW_PREFIX}/Cellar/fd ]] || brew install fd
+  [[ -d ${_BREW_PREFIX}/Cellar/node ]] || brew install node
+  [[ -d ${_BREW_PREFIX}/Cellar/yarn ]] || brew install yarn
+  [[ -d ${_BREW_PREFIX}/Cellar/reattach-to-user-namespace ]] || brew install reattach-to-usernamespace
 fi
 
 # Source zim
@@ -119,7 +127,7 @@ function vim() {
 }
 
 alias vi=vim
-alias dc="docker-compose"
+alias dc="docker compose"
 alias k="kubectl"
 alias kgn="kubectl --namespace=glassnode"
 alias kjn="kubectl --namespace=jobs"
@@ -151,6 +159,17 @@ fi
 
 if [ -f ~/.fzf.zsh ]; then
   source ~/.fzf.zsh
+  if [ $commands[fd] ]; then
+    export FZF_ALT_C_COMMAND="fd --type d --hidden --follow --exclude '{.git,.svn,.ropeproject,__pycache__,vendor,node_modules}'"
+    export FZF_DEFAULT_COMMAND="fd --type f --hidden --follow --exclude '{.git,.svn,.ropeproject,__pycache__,vendor,node_modules}'"
+    export FZF_CTRL_T_COMMAND=$FZF_DEFAULT_COMMAND
+    _fzf_compgen_dir() {
+      fd --type d --hidden --follow --exclude '{.git,.svn,.ropeproject,__pycache__,vendor,node_modules}'
+    }
+    _fzf_compgen_path() {
+      fd --type f --hidden --follow --exclude '{.git,.svn,.ropeproject,__pycache__,vendor,node_modules}'
+    }
+  fi
 fi
 
 if [ -d /usr/local/share/zsh/site-functions ]; then
@@ -193,10 +212,6 @@ fi
 #
 # cd aliases
 #
-alias reporoot="cd \$(git rev-parse --show-toplevel)"
-alias rr="cd \$(git rev-parse --show-toplevel)"
-alias gst="git status"
-
 alias rfcdate='date -u +"%Y-%m-%dT%H:%M:%SZ"'
 alias unixdate='date +"%s"'
 function unixdatetorfc() {
@@ -206,24 +221,24 @@ function unixdatetorfc() {
 gocd() { cd ${GOPATH}/src/$1 }
 compctl -/ -W ${GOPATH}/src/ gocd
 
-gitlab() { cd ${GOPATH}/src/gitlab.com/glassnode/$1 }
-compctl -/ -W ${GOPATH}/src/gitlab.com/glassnode/ gitlab
-
-github() { cd ${GOPATH}/src/github.com/glassnode/$1 }
-compctl -/ -W ${GOPATH}/src/github.com/glassnode/ github
-
 datazoo() { cd ${HOME}/projects/datazoo/$1 }
 compctl -/ -W ${HOME}/projects/datazoo/ datazoo
 
 projects() { cd ~/projects/$1 }
 compctl -/ -W ~/projects projects
 
-autoload -U colors; colors
+
+
+
+
 
 alias remove-obsolete-branches="git fetch -p && git branch -vv| sed '/: gone] /!d;s/^[ ]*\([^ ]*\) .*$/\1/' | xargs git branch -D"
 
 alias failedjobs="kubectl -n jobs get jobs -o json| jq -r '.items[]| select (.status.conditions[0].type == \"Failed\")|\"\(.status.startTime)\t\(.metadata.name)\"'|sort -n"
 alias runningjobs="kubectl -n jobs get jobs -o json| jq -r '.items[]| select (.status.active > 0)|\"\(.status.startTime)\t\(.metadata.name)\"'|sort -n"
+
+alias alljobs="kubectl -n jobs get jobs -o json | \
+	jq -r '.items[]|\"\(.status.startTime)\t\(.metadata.name)\t\(.status.completionTime)\t\(.status.conditions[0].type)\"'|sort -n"
 
 
 function mdserve() {
@@ -272,7 +287,68 @@ setopt transient_rprompt
 
 bindkey -s "^v" "vim **\t"
 
-export CLOUDSDK_PYTHON=python3.8
-export GOPRIVATE=gitlab.com/glassnode
+export CLOUDSDK_PYTHON=python3.9
+export GOPRIVATE=github.com/weirdgiraffe,gitlab.com/glassnode
 alias tf='terraform'
 
+
+_git_repo_root() {
+  git rev-parse --show-toplevel 2>/dev/null
+}
+
+rr() { 
+  local _CURRENT_REPO_ROOT=$(_git_repo_root)
+  if [[ -n ${_CURRENT_REPO_ROOT} ]] 
+  then
+    cd ${_CURRENT_REPO_ROOT}/$1
+  fi
+}
+
+_fzf_complete_rr() {
+  local _CURRENT_REPO_ROOT=$(_git_repo_root)
+  if [[ -n ${_CURRENT_REPO_ROOT} ]]
+  then
+    _fzf_complete --reverse --prompt="repo:cd> " -- "$@" < <(
+	cd ${_CURRENT_REPO_ROOT} && fd -td
+    )
+  fi
+}
+
+github() { 
+  cd ${GOPATH}/src/github.com/$1
+}
+
+_fzf_complete_github() {
+  _fzf_complete --preview 'ls -1 ${GOPATH}/src/github.com/{}' --reverse --prompt="github> " -- "$@" < <(
+    cd ${GOPATH}/src/github.com/
+    fd -I -H '^\.git$' | sed 's#/\.git$##'
+  )
+}
+
+gitlab() { 
+  cd ${GOPATH}/src/gitlab.com/$1
+}
+
+_fzf_complete_gitlab() {
+  _fzf_complete --preview 'ls -1 ${GOPATH}/src/gitlab.com/{}' --reverse --prompt="gitlab> " -- "$@" < <(
+    cd ${GOPATH}/src/gitlab.com/
+    fd -I -H '^\.git$' | sed 's#/\.git$##'
+  )
+}
+
+
+fzf-no-prefix-completion() {
+  setopt localoptions noshwordsplit noksh_arrays noposixbuiltins
+  local tokens cmd no_trigger
+  tokens=(${(z)LBUFFER})
+  cmd=${tokens[1]}
+  no_trigger=(rr github gitlab)
+  if [[ -n "${no_trigger[(r)${cmd}]}" ]]; then
+    FZF_COMPLETION_TRIGGER="" fzf-completion
+  else
+    fzf-completion
+  fi
+}
+
+zle -N fzf-no-prefix-completion
+bindkey '^I' fzf-no-prefix-completion

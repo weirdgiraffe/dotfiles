@@ -59,7 +59,8 @@ set foldlevel=20          " do not fold first 20 levels when open a file
 set guicursor=            " use block cursor shape always
 set synmaxcol=160         " turn off syntax coloring after 160 symbols
 set scrolloff=20          " min number of lines to keep above/bellow current line
-set number                " show line numbers
+set norelativenumber      " do not show relative line numbers
+set rnu                   " show relative line numbers
 set noshowmode            " don't show modeline because of airline
 let mapleader = ','       " set the leader button
 
@@ -97,6 +98,10 @@ if (has("termguicolors"))
 endif
 "
 " colors support }}
+"
+
+
+
 
 call plug#begin($HOME.'/.local/share/nvim/plugged')
 Plug 'scrooloose/nerdtree'
@@ -114,9 +119,13 @@ Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
 " Plug 'kien/ctrlp.vim'
 
+" themes {{{
 Plug 'vim-airline/vim-airline-themes'
-Plug 'rakr/vim-one'
+" Plug 'rakr/vim-one'
 Plug 'reedes/vim-colors-pencil'
+Plug 'kyoz/purify', { 'rtp': 'vim' }
+" themes }}}
+
 call plug#end()
 
 " nerdtree {{{
@@ -163,6 +172,23 @@ nnoremap <silent> <M-l> :TmuxNavigateRight<cr>
 
 
 " vim-go {{{
+let g:go_metalinter_command='golangci-lint'
+let g:go_metalinter_enabled=[
+  \ 'revive',
+  \ 'deadcode',
+  \ 'errcheck',
+  \ 'gosimple',
+  \ 'govet',
+  \ 'staticcheck',
+  \ 'typecheck',
+  \ 'unused',
+  \ 'varcheck'
+  \ ]
+let g:go_metalinter_deadline = "30s"
+let g:go_jump_to_error = 0
+let g:go_metalinter_autosave = 1
+let g:go_metalinter_autosave_enabled = ['vet']
+
 " let g:go_gopls_enabled = 1
 let g:go_gopls_complete_unimported = 1
 let g:go_gopls_deep_completion = 1
@@ -187,25 +213,35 @@ let g:go_template_autocreate = 0
 let g:go_addtags_transform = 'snakecase'
 let g:go_test_timeout = '60s'
 au FileType go nmap <leader>a :GoAlternate<CR>
-au FileType go nmap <leader>q <Plug>(go-build)
-au FileType go nmap <leader>w <Plug>(go-test)
-au FileType go nmap <leader>wf <Plug>(go-test-func)
-au FileType go nmap <leader>e <Plug>(go-coverage)
 au FileType go nmap <leader>r <Plug>(go-referrers)
 au FileType go nmap <leader>i :GoImplements<CR>
-au FileType go nmap <leader>t <Plug>(go-def-vertical)
+au FileType go nmap <leader>b <Plug>(go-build)
+au FileType go nmap <leader>t <Plug>(go-test)
+au FileType go nmap <leader>tf <Plug>(go-test-func)
+au FileType go nmap <leader>tc <Plug>(go-coverage)
+au FileType go nmap <leader>l  <Plug>(go-metalinter)
 au FileType go nmap <leader>d :GoDecls<CR>
+
 " vim-go }}}
 
-" deocomplete {{
+
+
+
+" deoplete {{
 set completeopt+=noinsert
 set completeopt+=noselect
 set completeopt-=preview
 if has("patch-7.4.314")
   set shortmess+=c
 endif
-let g:python3_host_prog  = '/usr/local/bin/python3'
+
+
+let g:python3_host_prog = "/opt/homebrew/bin/python3"
 let g:python3_host_skip_check = 1
+" if executable("python3")
+"   let g:python3_host_prog = exepath("python3")
+"   let g:python3_host_skip_check = 1
+" endif
 
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#complete_method = "omnifunc"
@@ -225,13 +261,14 @@ call deoplete#custom#source('ultisnips', 'rank', 1)
 let g:deoplete#sources#go#sort_class = ['func', 'var', 'const', 'type', 'package']
 let g:deoplete#sources#go#auto_goos = 1
 let g:deoplete#sources#go#source_importer = 1
-" deocomplete }}
+" deoplete }}
 
 " fzf.vim {{{
 
 " Empty value to disable preview window altogether
-let g:fzf_preview_window = []
-let g:fzf_layout = { 'down': '40%' }
+let g:fzf_preview_window = ['right', 'ctrl-/']
+let g:fzf_layout = {'down': '40%'}
+let g:fzf_buffers_jump = 1
 
 function! s:find_git_root()
   return system('git rev-parse --show-toplevel 2> /dev/null')[:-2]
@@ -266,15 +303,7 @@ nmap <C-I> :Buffers<CR>
 
 
 " vim-gitgutter {{{
-let g:gitgutter_grep='ggrep --color=never'
-
-" Your vimrc
-function! GitStatus()
-  let [a,m,r] = GitGutterGetHunkSummary()
-  return printf('+%d ~%d -%d', a, m, r)
-endfunction
-set statusline+=%{GitStatus()}
-
+" let g:gitgutter_grep='grep --color=never'
 " vim-gitgutter }}}
 
 " custom key mappings
@@ -313,35 +342,38 @@ nnoremap <leader>id "=strftime("%x %X (%Z)")<CR>P
 
 " colorscheme one
 " let g:airline_theme='one'
+" set background=light
 
-colorscheme pencil
+" colorscheme pencil
+" let g:pencil_higher_contrast_ui = 0   " 0=low (def), 1=high
+" let g:pencil_neutral_code_bg = 1      " 0=gray (def), 1=normal
+" let g:pencil_gutter_color = 1         " 0=mono (def), 1=color
+" let g:pencil_terminal_italics = 1
+" let g:airline_theme = 'pencil'
+" set background=light
+" set cursorline
+" augroup BgHighlight
+"     autocmd!
+"     autocmd FocusGained * setlocal cursorline
+"     autocmd FocusLost   * setlocal nocursorline
+" augroup END
 
-let g:pencil_higher_contrast_ui = 0   " 0=low (def), 1=high
-let g:pencil_neutral_code_bg = 1      " 0=gray (def), 1=normal
-let g:pencil_gutter_color = 1         " 0=mono (def), 1=color
-let g:pencil_terminal_italics = 1
-
-let g:airline_theme = 'pencil'
-
-set background=light
-set cursorline
+colorscheme purify
+let g:airline_theme='purify'
 
 
-
-
+set synmaxcol=130
 augroup _go_long_lines
   au!
   "au BufEnter,BufWinEnter *.go highlight OverLength guibg=black guifg=orange
   au BufEnter,BufWinEnter *.go hi OverLength guibg=red guifg=white
-  au BufEnter,BufWinEnter *.go match OverLength /\%120v.*/
+  "au BufEnter,BufWinEnter *.go match OverLength /\%130v.*/
+  au BufEnter,BufWinEnter *.go match OverLength /\%131v[^`]*$/
+  au BufLeave,BufWinLeave *.go call clearmatches()
 augroup END
 
-augroup BgHighlight
-    autocmd!
-    autocmd FocusGained * hi Normal guibg=15
-    autocmd FocusLost   * hi Normal guibg=255
-augroup END
 
+hi Normal guibg=terminal guifg=terminal
 "hi SpellBad guibg=none
 
 " colors }}}
@@ -352,4 +384,3 @@ function! XTermPasteBegin()
   return ""
 endfunction
 inoremap <special> <expr> <Esc>[200~ XTermPasteBegin(
-
