@@ -6,9 +6,9 @@ local M = {
 	"ibhagwan/fzf-lua",
 	lazy = false,
 	requires = {
+		"junegunn/fzf",
 		"nvim-tree/nvim-web-devicons",
 	},
-	build = "./install --bin",
 }
 
 local function git_relative_files(fzf)
@@ -52,4 +52,11 @@ function M.config()
 	keymap(fzf)
 end
 
-return M
+return {
+	{
+		"junegunn/fzf",
+		build = "./install --bin",
+		lazy = false,
+	},
+	M,
+}

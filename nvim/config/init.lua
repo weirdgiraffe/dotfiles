@@ -53,4 +53,4 @@ require("lazy").setup("plugins", {
 	},
 })
 
-require("colors").setup()
+require("config").setup()

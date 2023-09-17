@@ -1,15 +1,14 @@
 FROM alpine:3.18
 
 RUN apk add --no-cache \
+    bash \
     build-base\
     curl \
     git \
     go \
-    fzf \
     neovim \
     neovim-doc \
-    openssh \
-    ripgrep
+    openssh
 
 WORKDIR /root/go/github.com/cockroachdb
 
