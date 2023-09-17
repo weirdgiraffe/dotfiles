@@ -56,6 +56,7 @@ function M.export_kitty_colors(filename)
 end
 
 function M.setup()
+	print("settting up colors")
 	vim.api.nvim_create_user_command("ExportColorsFzf", function(opts)
 		M.export_fzf_colors(opts.args)
 	end, { nargs = 1, force = true })

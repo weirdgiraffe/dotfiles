@@ -46,7 +46,7 @@ function M.config()
 	local fzf = require("fzf-lua")
 	fzf.setup({
 		fzf_opts = {
-			["--color"] = require("colors").fzf_colors(),
+			["--color"] = require("config.colors").fzf_colors(),
 		},
 	})
 	keymap(fzf)

@@ -1,7 +1,8 @@
 local M = {}
 
 function M.setup()
-	require("config.options") -- set up default editor options
+	print("Loading config module")
+	require("config.options").setup() -- set up default editor options
 	require("config.colors").setup() -- set up colors functions
 end
 

@@ -1,104 +1,111 @@
--- Disable Ex mode, i.e compatibility mode with ex editor
--- reference: https://vimdoc.sourceforge.net/htmldoc/intro.html#Ex
-vim.api.nvim_set_keymap("n", "Q", "<Nop>", { noremap = true, silent = true })
-vim.api.nvim_set_keymap("n", "gQ", "<Nop>", { noremap = true, silent = true })
+local M = {}
 
--- disable mouse in all modes
-vim.opt.mouse = ""
+function M.setup()
+	print("settting up options")
+	-- Disable Ex mode, i.e compatibility mode with ex editor
+	-- reference: https://vimdoc.sourceforge.net/htmldoc/intro.html#Ex
+	vim.api.nvim_set_keymap("n", "Q", "<Nop>", { noremap = true, silent = true })
+	vim.api.nvim_set_keymap("n", "gQ", "<Nop>", { noremap = true, silent = true })
 
--- disable cursor styling, i.e. always use block shaped cursor
-vim.opt.guicursor = ""
+	-- disable mouse in all modes
+	vim.opt.mouse = ""
 
--- set leader key to ,
-vim.g.mapleader = ","
+	-- disable cursor styling, i.e. always use block shaped cursor
+	vim.opt.guicursor = ""
 
--- allow switch off from modified buffers. that allows to use buffers instead of tabs
-vim.opt.hidden = true
+	-- set leader key to ,
+	vim.g.mapleader = ","
 
--- setup tmux colors compatibility, i.e. allow 256 colors
-vim.go.termguicolors = true
+	-- allow switch off from modified buffers. that allows to use buffers instead of tabs
+	vim.opt.hidden = true
 
--- configure clipboard to not use registers but to use system clipboard instead.
--- here is the good explanation how vim/nvim clipboard works:
---   https://stackoverflow.com/a/30691754/1208553
-vim.opt_global.clipboard = { "unnamed", "unnamedplus" }
+	-- setup tmux colors compatibility, i.e. allow 256 colors
+	vim.go.termguicolors = true
 
--- configure search
-vim.opt.ignorecase = true -- ignore case if search with /,? etc.
-vim.opt.smartcase = true -- make search case sensitive if uppercase in search pattern
-vim.opt.showmatch = true -- show matching bracets
-vim.opt.hlsearch = true -- highlight all search results by default (to clean use :noh)
+	-- configure clipboard to not use registers but to use system clipboard instead.
+	-- here is the good explanation how vim/nvim clipboard works:
+	--   https://stackoverflow.com/a/30691754/1208553
+	vim.opt_global.clipboard = { "unnamed", "unnamedplus" }
 
--- configure special characters
-vim.opt.listchars = {
-	eol = "↴",
-	tab = ">-",
-	trail = ".",
-	extends = ">",
-	precedes = "<",
-	space = "⋅",
-	nbsp = "%",
-}
-vim.opt.showbreak = "^"
+	-- configure search
+	vim.opt.ignorecase = true -- ignore case if search with /,? etc.
+	vim.opt.smartcase = true -- make search case sensitive if uppercase in search pattern
+	vim.opt.showmatch = true -- show matching bracets
+	vim.opt.hlsearch = true -- highlight all search results by default (to clean use :noh)
 
--- configure filename pattern to ignore for filename completion
-vim.opt.wildignore = {
-	".DS_Store",
-	"*.jpg",
-	"*.jpeg",
-	"*.gif",
-	"*.png",
-	"*.psd",
-	"*.o",
-	"*.obj",
-	"*.min.js",
-	"*.pyc",
-	"*/__pycache_/*",
-	"*/.git/*",
-	"*/.hg/*",
-	"*/.svn/*",
-	"*.gz",
-	"*.bz",
-	"*.tar",
-	"*.tar.gz",
-	"*.tar.bz",
-	"*.tgz",
-	"*.tbz",
-	"*.lzma",
-	"*.zip",
-	"*.rar",
-	"*.iso",
-}
+	-- configure special characters
+	vim.opt.listchars = {
+		eol = "↴",
+		tab = ">-",
+		trail = ".",
+		extends = ">",
+		precedes = "<",
+		space = "⋅",
+		nbsp = "%",
+	}
+	vim.opt.showbreak = "^"
 
--- autocomplete full file names, don't pick anything automatically
-vim.opt.wildmode = {
-	"full",
-	"list:full",
-}
+	-- configure filename pattern to ignore for filename completion
+	vim.opt.wildignore = {
+		".DS_Store",
+		"*.jpg",
+		"*.jpeg",
+		"*.gif",
+		"*.png",
+		"*.psd",
+		"*.o",
+		"*.obj",
+		"*.min.js",
+		"*.pyc",
+		"*/__pycache_/*",
+		"*/.git/*",
+		"*/.hg/*",
+		"*/.svn/*",
+		"*.gz",
+		"*.bz",
+		"*.tar",
+		"*.tar.gz",
+		"*.tar.bz",
+		"*.tgz",
+		"*.tbz",
+		"*.lzma",
+		"*.zip",
+		"*.rar",
+		"*.iso",
+	}
 
--- min number of lines to keep above/bellow current line
-vim.opt.scrolloff = 20
+	-- autocomplete full file names, don't pick anything automatically
+	vim.opt.wildmode = {
+		"full",
+		"list:full",
+	}
 
--- ensure that syntax highlighting is enabled
-vim.opt.syntax = "enable"
+	-- min number of lines to keep above/bellow current line
+	vim.opt.scrolloff = 20
 
--- turn off syntax coloring after 300 symbols in one line
-vim.opt.synmaxcol = 300
+	-- ensure that syntax highlighting is enabled
+	vim.opt.syntax = "enable"
 
--- enable intendation based on filetype plugins
-vim.cmd("filetype plugin indent on")
+	-- turn off syntax coloring after 300 symbols in one line
+	vim.opt.synmaxcol = 300
 
--- do not fold first 20 levels when open a file
-vim.opt.foldlevel = 20
+	-- enable intendation based on filetype plugins
+	vim.cmd("filetype plugin indent on")
 
--- do folding based on syntax
-vim.opt.foldmethod = "syntax"
+	-- do not fold first 20 levels when open a file
+	vim.opt.foldlevel = 20
 
--- vertical split focus on the right pane
-vim.opt.splitright = true
+	-- do folding based on syntax
+	vim.opt.foldmethod = "syntax"
 
--- horisontal split focus on the bottom pane
-vim.opt.splitbelow = true
+	-- vertical split focus on the right pane
+	vim.opt.splitright = true
 
--- automaticaly indent based of filetype
-vim.opt.autoindent = true
+	-- horisontal split focus on the bottom pane
+	vim.opt.splitbelow = true
+
+	-- automaticaly indent based of filetype
+	vim.opt.autoindent = true
+end
+
+return M
