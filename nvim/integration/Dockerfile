@@ -4,11 +4,13 @@ RUN apk add --no-cache \
     bash \
     build-base\
     curl \
+    fd \
     git \
     go \
     neovim \
     neovim-doc \
-    openssh
+    openssh \
+    ripgrep
 
 WORKDIR /root/go/github.com/cockroachdb
 
