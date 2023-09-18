@@ -27,6 +27,11 @@ RUN cd neovim \
   && cpack -G DEB \
   && dpkg -i nvim-linux64.deb
 
+RUN curl -Ls https://github.com/golangci/golangci-lint/releases/download/v1.54.2/golangci-lint-1.54.2-linux-arm64.deb --output golangci-lint.deb
+RUN ls -la
+RUN dpkg -i golangci-lint.deb
+
+
 
 WORKDIR /root/go/github.com/cockroachdb
 
