@@ -1,16 +1,32 @@
-FROM alpine:3.18
+FROM debian:stable-slim
 
-RUN apk add --no-cache \
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && apt-get upgrade -y
+RUN apt-get install -y \
     bash \
-    build-base\
+    build-essential \
     curl \
-    fd \
+    fd-find \
     git \
-    go \
-    neovim \
-    neovim-doc \
-    openssh \
-    ripgrep
+    golang \
+    openssh-client \
+    ripgrep \
+    unzip
+
+# build dependencies for neovim
+ RUN apt-get install -y \
+    cmake \
+    gettext \
+    libtool-bin
+
+RUN git clone --depth=1 --branch=v0.8.3 https://github.com/neovim/neovim
+RUN cd neovim \
+  && make CMAKE_BUILD_TYPE=RelWithDebInfo \
+  && cd build \
+  && cpack -G DEB \
+  && dpkg -i nvim-linux64.deb
+
 
 WORKDIR /root/go/github.com/cockroachdb
 
