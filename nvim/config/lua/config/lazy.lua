@@ -39,7 +39,10 @@ function M.setup()
 			notify = true, -- get a notification when changes are found
 		},
 		defaults = { lazy = true },
-		install = { missing = true },
+		install = {
+      missing = true,
+      colorscheme = { "rose-pine" },
+    },
 		performance = {
 			rtp = {
 				disabled_plugins = {
