@@ -1,12 +1,4 @@
 return {
-	{
-		"mfussenegger/nvim-lint",
-		config = function()
-			require("lint").linters_by_ft = {
-				go = { "golangcilint" },
-			}
-		end,
-	},
 	-- NOTE: require bash
 	-- NOTE: require git
 	-- NOTE: require curl (or wget)
