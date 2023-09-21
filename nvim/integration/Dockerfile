@@ -20,7 +20,7 @@ RUN apt-get install -y \
     gettext \
     libtool-bin
 
-RUN git clone --depth=1 --branch=v0.8.3 https://github.com/neovim/neovim
+RUN git clone --depth=1 --branch=v0.9.1 https://github.com/neovim/neovim
 RUN cd neovim \
   && make CMAKE_BUILD_TYPE=RelWithDebInfo \
   && cd build \
