@@ -8,7 +8,6 @@ return {
 		event = { "CmdlineEnter" },
 		ft = { "go", "gomod" },
 		build = ':lua require("go.install").install_all_sync()',
-		priority = 100, -- should be loaded after mason, to have gopls installed
 		config = function()
 			require("go").setup({
         -- <logging>
