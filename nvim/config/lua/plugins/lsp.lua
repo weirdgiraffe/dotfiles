@@ -34,4 +34,35 @@ return {
 			})
 		end,
 	},
+	-- NOTE: require tar
+	-- NOTE: require curl
+	{
+		"nvim-treesitter/nvim-treesitter",
+		lazy = false,
+		config = function()
+			require("nvim-treesitter.configs").setup({
+				ensure_installed = {
+					"go",
+					"gomod",
+					"gosum",
+					"gowork",
+					"html",
+					"json",
+					"jq",
+					"lua",
+					"luadoc",
+					"make",
+					"markdown",
+					"dockerfile",
+					"vim",
+					"vimdoc",
+					"sql",
+					"python",
+					"bash",
+				},
+				auto_install = true,
+        sync_install = true,
+			})
+		end,
+	},
 }
