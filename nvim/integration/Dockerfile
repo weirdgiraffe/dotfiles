@@ -8,6 +8,7 @@ RUN apt-get install -y \
     build-essential \
     curl \
     fd-find \
+    fzf \
     git \
     golang \
     openssh-client \
@@ -27,15 +28,15 @@ RUN cd neovim \
   && cpack -G DEB \
   && dpkg -i nvim-linux64.deb
 
-RUN curl -Ls https://github.com/golangci/golangci-lint/releases/download/v1.54.2/golangci-lint-1.54.2-linux-arm64.deb --output golangci-lint.deb
-RUN ls -la
-RUN dpkg -i golangci-lint.deb
+RUN curl -Ls https://github.com/golangci/golangci-lint/releases/download/v1.54.2/golangci-lint-1.54.2-linux-arm64.deb --output golangci-lint.deb \
+  && dpkg -i golangci-lint.deb \
+  && rm golangci-lint.deb
 
 
-
-WORKDIR /root/go/github.com/cockroachdb
+WORKDIR /root/go/ginuerzh
 
 # clone whichever project written in go, so all go features
 # may be tested in this container
-RUN git clone https://github.com/cockroachdb/pebble.git
-WORKDIR /root/go/github.com/cockroachdb/pebble
+RUN git clone https://github.com/ginuerzh/gost.git
+WORKDIR /root/go/ginuerzh/gost
+RUN go build
