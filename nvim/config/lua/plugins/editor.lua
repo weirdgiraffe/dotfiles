@@ -31,7 +31,6 @@ return {
 		"ibhagwan/fzf-lua",
 		lazy = false,
 		requires = {
-			"junegunn/fzf",
 			"nvim-tree/nvim-web-devicons",
 		},
 		config = function()
@@ -42,11 +41,6 @@ return {
 				},
 			})
 		end,
-	},
-	{
-		-- NOTE: require bash
-		"junegunn/fzf",
-		build = "./install --bin",
 	},
 	{
 		"nvim-tree/nvim-web-devicons",
