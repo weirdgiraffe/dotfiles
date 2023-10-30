@@ -11,19 +11,19 @@ alias urlencode='python -c "import sys, urllib as ul; print ul.quote_plus(sys.ar
 rfcdate() {
   local gdate=$(command -v gdate)
   local input=$1
-  if [ -z ${input} ];then
-    TZ=UTC ${gdate:=date} --date='@'${input}
-  else 
+  if [ -z "${input}" ];then
     TZ=UTC ${gdate:=date}
+  else 
+    TZ=UTC ${gdate:=date} --date='@'${input}
   fi
 }
 
-unixddate() {
+unixdate() {
   local gdate=$(command -v gdate)
   local input=$1
-  if [ -z ${input} ];then
-    ${gdate:=date} --date=${input} +%s
-  else 
+  if [ -z "${input}" ];then
     ${gdate:=date} +%s
+  else 
+    ${gdate:=date} --date=${input} +%s
   fi
 }
