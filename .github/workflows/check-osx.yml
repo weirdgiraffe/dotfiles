@@ -1,5 +1,5 @@
 name: Check OSX configuration
-run-name: ${{ github.actor }} is testing OSX configuration
+run-name: Test OSX dotfiles
 on: [push]
 jobs:
   Explore-GitHub-Actions:
