@@ -27,3 +27,11 @@ unixdate() {
     ${gdate:=date} --date=${input} +%s
   fi
 }
+
+function cloc() { # count lines of code
+	[ -x "$(command -v docker)" ] || ( echo "docker not installed"; exit)
+	docker run --rm -v $PWD:/tmp aldanial/cloc --exclude-dir=.git,vendor $@
+}
+
+
+alias rg='rg --ignore-file=${HOME}/.config/rg/ignore'

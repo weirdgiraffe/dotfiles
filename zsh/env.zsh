@@ -21,12 +21,6 @@ export EDITOR="nvim"
 export VISUAL="nvim"
 export GREP_COLOR="01;31" # use red color for grep matches to match rg
 
-source ~/.fzf.zsh
-
-
-export FZF_DEFAULT_OPTS='--color=fg:#575279,bg:#faf4ed,hl:#9893a5,fg+:#9893a5,bg+:#f4ede8,hl+:#286983,info:#907aa9,prompt:#286983,pointer:#286983,marker:#286983,spinner:#56949f,header:#9893a5,gutter:#faf4ed'
-
-
 # set up global ignore for fd
 [ -d ${HOME}/.config/fd/ ] || mkdir -p ${HOME}/.config/fd/
 if [ ! -f ${HOME}/.config/fd/ignore ]; then
@@ -40,6 +34,26 @@ vendor
 node_modules
 EOF
 fi
+
+# set up global ignore for rg
+[ -d ${HOME}/.config/rg/ ] || mkdir -p ${HOME}/.config/rg/
+if [ ! -f ${HOME}/.config/rg/ignore ]; then
+cat << EOF >| ${HOME}/.config/fd/ignore
+.git
+.svn
+.ropeproject
+.terraform
+__pycache__
+vendor
+node_modules
+EOF
+fi
+
+source ~/.fzf.zsh
+
+
+export FZF_DEFAULT_OPTS='--color=fg:#575279,bg:#faf4ed,hl:#9893a5,fg+:#9893a5,bg+:#f4ede8,hl+:#286983,info:#907aa9,prompt:#286983,pointer:#286983,marker:#286983,spinner:#56949f,header:#9893a5,gutter:#faf4ed'
+
 
 _fzf_compgen_dir() {
   fd --type d \
@@ -181,3 +195,7 @@ bindkey '^I' fzf-no-prefix-completion
 
 # CTRL+v will fuzzy open file with vim
 bindkey -s "^v" "vim **\t"
+
+# needed to allow to work work with GPG
+# reference: https://gist.github.com/troyfontaine/18c9146295168ee9ca2b30c00bd1b41e
+export GPG_TTY=$(tty)
