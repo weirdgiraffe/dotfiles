@@ -12,4 +12,4 @@ jobs:
           cd ./zsh
           zsh setup.zsh
       - name: output resuting config
-        run: cat zsh/zshrc
+        run: cat ~/.zshrc
