@@ -5,3 +5,8 @@ fi
 if [ ! -f ${HOME}/.zimrc ]; then
   curl -fsSL https://raw.githubusercontent.com/zimfw/install/master/install.zsh | zsh
 fi
+
+# install powerlevel10k
+# https://github.com/romkatv/powerlevel10k
+echo "zmodule romkatv/powerlevel10k --use degit" >> ~/.zimrc
+zimfw install

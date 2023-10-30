@@ -1,8 +1,10 @@
 if [[ $(uname) == "Darwin" ]]; then
     source os/mac/packages.zsh
     source packages.zsh
-    cat env.zsh > zshrc
-    cat os/mac/aliases.zsh >> zshrc
-    cat aliases.zsh >> zshrc
+    cp p10k.zsh ~/.p10k.zsh
+    cat env.zsh >> ~./zshrc
+    cat os/mac/aliases.zsh >> ~/.zshrc
+    cat aliases.zsh >> ~/.zshrc
+    echo "[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh" >> ~/.zshrc
 fi
 
