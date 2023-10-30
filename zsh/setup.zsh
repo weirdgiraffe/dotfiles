@@ -1,5 +1,4 @@
 # vim: ft=zsh ts=2 sw=2 sts=2 et
-set -x
 
 if [[ $(uname) == "Darwin" ]]; then
     source os/mac/packages.zsh
