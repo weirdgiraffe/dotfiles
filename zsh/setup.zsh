@@ -13,16 +13,20 @@ EOF
 
 if [[ $(uname) == "Darwin" ]]; then
     source os/mac/packages.zsh
-    source packages.zsh
 fi
 
-cp p10k.zsh ~/.p10k.zsh
+source packages.zsh
+
 cat env.zsh >> ~/.zshrc
-cat os/mac/aliases.zsh >> ~/.zshrc
+
+if [[ $(uname) == "Darwin" ]]; then
+  cat os/mac/aliases.zsh >> ~/.zshrc
+fi
+
 cat aliases.zsh >> ~/.zshrc
 
+cp p10k.zsh ~/.p10k.zsh
 cat << \EOF >> ~/.zshrc
-
 [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
 EOF
 
