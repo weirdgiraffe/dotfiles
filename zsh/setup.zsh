@@ -23,6 +23,6 @@ cat aliases.zsh >> ~/.zshrc
 
 cat << \EOF >> ~/.zshrc
 
-[[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh"
+[[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
 EOF
 
