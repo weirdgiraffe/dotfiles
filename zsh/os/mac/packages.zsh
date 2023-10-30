@@ -30,6 +30,9 @@ set -aU packages
 [ -x "$(command -v helm)" ]      || packages+=( helm )
 [ -x "$(command -v kubectl)" ]   || packages+=( kubectl )
 [ -x "$(command -v go)" ]        || packages+=( go )
-[ -x "$(command -v rust)" ]      || packages+=( rust )
+[ -x "$(command -v rustc)" ]     || packages+=( rust )
 
-brew install "${packages[@]}"
+
+if [[ -n "${array[@]}" ]]; then
+  brew install "${packages[@]}"
+fi

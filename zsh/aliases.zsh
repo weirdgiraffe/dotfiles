@@ -8,11 +8,8 @@ alias myip='curl -s http://ip-api.com/json| python -m json.tool'
 alias urldecode='python -c "import sys, urllib as ul; print ul.unquote_plus(sys.argv[1])"'
 alias urlencode='python -c "import sys, urllib as ul; print ul.quote_plus(sys.argv[1])"'
 
-alias rfcdate='date -u +"%Y-%m-%dT%H:%M:%SZ"'
-alias unixdate='date +"%s"'
-
 rfcdate() {
-  local date=$(command -v gdate)
+  local gdate=$(command -v gdate)
   local input=$1
   if [ -z ${input} ];then
     TZ=UTC ${gdate:=date} --date='@'${input}
@@ -22,6 +19,7 @@ rfcdate() {
 }
 
 unixddate() {
+  local gdate=$(command -v gdate)
   local input=$1
   if [ -z ${input} ];then
     ${gdate:=date} --date=${input} +%s
