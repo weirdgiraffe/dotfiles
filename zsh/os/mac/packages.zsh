@@ -9,7 +9,7 @@ set -aU packages
 packages = ()
 
 [ -x "$(command -v gls)" ] || packages += ( gls )
-[ -x "$(command -v ggrep)" ] || packages +=( grep )
+[ -x "$(command -v ggrep)" ] || packages += ( grep )
 [ -x "$(command -v rg)" ] || packages += ( ripgrep )
 [ -x "$(command -v fd)" ] || packages += ( fd )
 [ -x "$(command -v jq)" ] || packages += ( jq )
