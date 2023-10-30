@@ -1,0 +1,13 @@
+name: Check OSX configuration
+run-name: ${{ github.actor }} is testing OSX configuration
+on: [push]
+jobs:
+  Explore-GitHub-Actions:
+    runs-on: macos-13
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: configure zsh
+        run: |
+          cd ./zsh
+          zsh setup.zsh
