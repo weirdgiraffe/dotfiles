@@ -27,6 +27,8 @@ cat aliases.zsh >> ~/.zshrc
 
 cp p10k.zsh ~/.p10k.zsh
 cat << \EOF >> ~/.zshrc
+[ -x "$(command -v kubectl)" ] && source <(kubectl completion zsh)
+[ -x "$(command -v helm)" ] && source <(kubectl completion zsh)
 [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
 EOF
 
