@@ -9,4 +9,4 @@ fi
 # install powerlevel10k
 # https://github.com/romkatv/powerlevel10k
 echo "zmodule romkatv/powerlevel10k --use degit" >> ~/.zimrc
-zimfw install
+zsh -c "zimfw install"

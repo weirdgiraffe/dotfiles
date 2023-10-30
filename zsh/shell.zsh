@@ -1,5 +1,5 @@
 # prevent terminal suspend on CTRL+S
-stty -ixon
+[ -t 0 ] && stty -ixon
 [ -z "$LANG" ] && export LANG='en_US.UTF-8'
 
 # ensure terminal is 256 colors
