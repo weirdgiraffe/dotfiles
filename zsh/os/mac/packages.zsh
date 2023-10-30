@@ -1,5 +1,3 @@
-# vim: ft=zsh ts=2 sw=2 sts=2 et
-
 # install Homebrew if it is not installed (https://brew.sh/)
 if [ ! -x "$(command -v brew)" ]; then
   curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh | bash
@@ -30,6 +28,7 @@ set -aU packages
 [ -x "$(command -v psql)" ]      || packages+=( postgresql )
 [ -x "$(command -v terraform)" ] || packages+=( terraform )
 [ -x "$(command -v helm)" ]      || packages+=( helm )
+[ -x "$(command -v kubectl)" ]   || packages+=( kubectl )
 [ -x "$(command -v go)" ]        || packages+=( go )
 [ -x "$(command -v rust)" ]      || packages+=( rust )
 
