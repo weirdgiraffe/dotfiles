@@ -21,36 +21,7 @@ export EDITOR="nvim"
 export VISUAL="nvim"
 export GREP_COLOR="01;31" # use red color for grep matches to match rg
 
-# set up global ignore for fd
-[ -d ${HOME}/.config/fd/ ] || mkdir -p ${HOME}/.config/fd/
-if [ ! -f ${HOME}/.config/fd/ignore ]; then
-cat << EOF >| ${HOME}/.config/fd/ignore
-.git
-.svn
-.ropeproject
-.terraform
-__pycache__
-vendor
-node_modules
-EOF
-fi
-
-# set up global ignore for rg
-[ -d ${HOME}/.config/rg/ ] || mkdir -p ${HOME}/.config/rg/
-if [ ! -f ${HOME}/.config/rg/ignore ]; then
-cat << EOF >| ${HOME}/.config/fd/ignore
-.git
-.svn
-.ropeproject
-.terraform
-__pycache__
-vendor
-node_modules
-EOF
-fi
-
 source ~/.fzf.zsh
-
 
 export FZF_DEFAULT_OPTS='--color=fg:#575279,bg:#faf4ed,hl:#9893a5,fg+:#9893a5,bg+:#f4ede8,hl+:#286983,info:#907aa9,prompt:#286983,pointer:#286983,marker:#286983,spinner:#56949f,header:#9893a5,gutter:#faf4ed'
 
