@@ -17,6 +17,34 @@ fi
 
 source packages.zsh
 
+# set up global ignore for fd
+mkdir -p ${HOME}/.config/fd
+cat << EOF >| ${HOME}/.config/fd/ignore
+.git
+.svn
+.ropeproject
+.terraform
+__pycache__
+vendor
+node_modules
+EOF
+
+# set up global ignore for rg
+mkdir -p ${HOME}/.config/rg
+cat << EOF >| ${HOME}/.config/fd/ignore
+.git
+.svn
+.ropeproject
+.terraform
+__pycache__
+vendor
+node_modules
+EOF
+
+# set up config form fzf
+mkdir -p ${HOME}/.config/fzf
+cp -f fzf.zsh ${HOME}/.config/fzf
+
 cat env.zsh >> ~/.zshrc
 
 if [[ $(uname) == "Darwin" ]]; then

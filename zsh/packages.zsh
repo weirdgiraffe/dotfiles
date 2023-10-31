@@ -11,29 +11,3 @@ fi
 echo "zmodule romkatv/powerlevel10k --use degit" >> ~/.zimrc
 source ~/.zshrc
 zimfw install
-
-# set up global ignore for fd
-mkdir -p ${HOME}/.config/fd
-cat << EOF >| ${HOME}/.config/fd/ignore
-.git
-.svn
-.ropeproject
-.terraform
-__pycache__
-vendor
-node_modules
-EOF
-fi
-
-# set up global ignore for rg
-mkdir -p ${HOME}/.config/rg
-cat << EOF >| ${HOME}/.config/fd/ignore
-.git
-.svn
-.ropeproject
-.terraform
-__pycache__
-vendor
-node_modules
-EOF
-fi
