@@ -20,6 +20,7 @@ source packages.zsh
 cat env.zsh >> ~/.zshrc
 
 if [[ $(uname) == "Darwin" ]]; then
+  cat os/mac/env.zsh >> ~/.zshrc
   cat os/mac/aliases.zsh >> ~/.zshrc
 fi
 
