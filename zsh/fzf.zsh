@@ -42,18 +42,19 @@ _fzf_complete_rr() {
 # fzf completion for vim command
 _fzf_complete_vim() {
   local _workdir=$(__git_repo_root)
+  local _currdir=$(pwd)
+
   _fzf_complete \
-    --preview "bat ${_workdir:=.}/{}" \
+    --preview "bat {}" \
     --reverse \
     --prompt="vim ❯ " \
     -- "$@" < <(
 
-      fd --type f \
+      fd --type=f \
         --hidden \
         --base-directory=${_workdir} \
-        --strip-cwd-prefix \
-        .
-
+        . \
+        --exec realpath --relative-to=${_currdir} {}
   )
 }
 
