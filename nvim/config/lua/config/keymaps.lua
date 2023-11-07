@@ -18,7 +18,11 @@ function M.setup()
     vim.api.nvim_set_keymap("n", "<leader>" .. i, "", {
       silent = true,
       callback = function()
-        require("lualine.components.buffers").buffer_jump(i, "<bang>")
+          -- we need to pass "!" instead of "<bang>" here to actually
+          -- pass the bang sign to the underlying function, otherwise
+          -- it will panic if we would try to switch to the buffer
+          -- which not exists
+          require("lualine.components.buffers").buffer_jump(i, "!")
       end,
     })
   end

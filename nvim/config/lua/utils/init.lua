@@ -22,15 +22,16 @@ function M.git_relative_files()
 	return fzf.files(opts)
 end
 
-local function delete_buffer(buffer_number)
-	-- skip all kind of special buffers
-	if vim.fn.buflisted(curr_buffer) == 0 then
+local function delete_buffer(bufnr)
+	if vim.fn.buflisted(bufnr) == 0 then
+    -- skip bufnr if it's a special kind of a buffer
+    -- i.e. if it is not listed
 		return
 	end
 
-	-- skip all modified buffers
-	if vim.fn.getbufvar(curr_buffer, "&modified") == 0 then
-		vim.cmd.bdel(curr_buffer)
+	if vim.fn.getbufvar(bufnr, "&modified") == 0 then
+    -- delete only not modified buffers
+		vim.cmd.bdel(bufnr)
 	end
 end
 
@@ -40,12 +41,12 @@ function M.close_other_buffers()
 	local this_buffer = vim.fn.bufnr("%")
 	local last_buffer = vim.fn.bufnr("$")
 
-	local curr_buffer = 1
-	while curr_buffer <= last_buffer do
-		if curr_buffer ~= this_buffer then
-			delete_buffer(cur_buffer)
+	local bufnr = 1
+	while bufnr <= last_buffer do
+		if bufnr ~= this_buffer then
+			delete_buffer(bufnr)
 		end
-		curr_buffer = curr_buffer + 1
+		bufnr = bufnr + 1
 	end
 end
 
