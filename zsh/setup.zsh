@@ -53,6 +53,7 @@ if [[ $(uname) == "Darwin" ]]; then
 fi
 
 cat aliases.zsh >> ~/.zshrc
+cat completions.zsh >> ~/.zshrc
 
 cp p10k.zsh ~/.p10k.zsh
 cat << \EOF >> ~/.zshrc
