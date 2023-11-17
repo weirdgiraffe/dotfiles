@@ -1,33 +1,53 @@
 return {
-	{
-		"ray-x/go.nvim",
-		dependencies = {
-			"nvim-treesitter/nvim-treesitter",
-			"ray-x/guihua.lua",
-		},
-		event = { "CmdlineEnter" },
-		ft = { "go", "gomod" },
-		build = ':lua require("go.install").install_all_sync()',
-		config = function()
-			require("go").setup({
-        -- <logging>
-				verbose = false,
-				log_path = "/tmp/nvimgo.log",
-        -- </logging>
-        -- <lsp>
-				lsp_cfg = true, -- let nvim.go to configure gopls
-				lsp_keymaps = false, -- disable default lsp keymaps
+  {
+    "ray-x/go.nvim",
+    dependencies = {
+      "neovim/nvim-lspconfig",
+      "nvim-treesitter/nvim-treesitter",
+    },
+    ft = {
+      "go",
+      "gomod",
+      "gosum",
+      "gotmpl",
+      "gohtmltmpl",
+      "gotexttmp",
+    },
+    build = function()
+      require("go.install").install_all_sync()
+    end,
+    config = function()
+      require("go").setup({
+        verbose = false,
+        -- this plugin has a weird default log path, so fix it
+        log_path = vim.fn.stdpath('cache') .. "/gonvim.log",
+
+        lsp_cfg = true,                 -- let nvim.go to configure gopls
+        lsp_keymaps = false,            -- disable default lsp keymaps, we have our own in user.lsp
+        lsp_document_formatting = true, -- just configure lsp capability
         lsp_codelens = true,
-				lsp_inlay_hints = {
-					enable = true,
-				},
-        -- </lsp>
-				comment_placeholder = "", -- let coments be clean initially
-				run_in_floaterm = false,
-				trouble = false,
-				auto_lint = false,
-				auto_format = false,
-			})
-		end
-	}
+        lsp_inlay_hints = { enable = true, },
+        textobjects = false, -- do not use theirs definition
+
+        -- call our common lsp handler afer go.nvim default handler
+        lsp_on_client_start = function(client, bufnr)
+          require("user.lsp").on_attach(client, bufnr)
+        end,
+
+        gofmt = 'gofumpt',
+        -- max line length in golines format
+        max_line_len = 120,
+        -- [snakecase, camelcase, lispcase, pascalcase, titlecase, keep]
+        -- check -transform of gomodifytags
+        tag_transform = "snakecase",
+        -- check -add-options of gomodifytags
+        tag_options = 'json=omitempty',
+        -- placeholder for require("go.comment").gen()
+        comment_placeholder = "",
+
+        run_in_floaterm = false,
+        trouble = true,
+      })
+    end
+  }
 }

@@ -16,7 +16,7 @@ run: build
 
 .PHONY: build
 build:
-	docker build -t $(IMAGE_NAME) $(THIS_DIR)
+	docker buildx build --load -t $(IMAGE_NAME) $(THIS_DIR)
 
 .PHONY: clean
 clean:
