@@ -22,7 +22,9 @@ return {
         -- this plugin has a weird default log path, so fix it
         log_path = vim.fn.stdpath('cache') .. "/gonvim.log",
 
-        lsp_cfg = true,                 -- let nvim.go to configure gopls
+        lsp_cfg = {
+          capabilities = require('cmp_nvim_lsp').default_capabilities(),
+        },
         lsp_keymaps = false,            -- disable default lsp keymaps, we have our own in user.lsp
         lsp_document_formatting = true, -- just configure lsp capability
         lsp_codelens = true,
