@@ -71,9 +71,6 @@ function M.setup()
   vim.api.nvim_create_user_command("ExportColorsKitty", function(opts)
     export_kitty_colors(opts.args)
   end, { nargs = 1, force = true })
-
-  vim.cmd([[set background=light]])
-  vim.cmd([[colorscheme rose-pine]])
 end
 
 return M

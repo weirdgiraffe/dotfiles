@@ -1,13 +1,23 @@
 local prequire = require("util.prequire")
 
-local tmux = prequire("nvim-tmux-navigation")
-if tmux then
+local function having(module)
+  local has_module = require(module) ~= nil
+  return function(fn)
+    if has_module then
+      fn()
+    end
+  end
+end
+
+
+having("nvim-tmux-navigation")(function()
+  local tmux = require("nvim-tmux-navigation")
   local opts = { silent = true, noremap = true }
   vim.keymap.set("n", "<M-h>", tmux.NvimTmuxNavigateLeft, opts)
   vim.keymap.set("n", "<M-j>", tmux.NvimTmuxNavigateDown, opts)
   vim.keymap.set("n", "<M-k>", tmux.NvimTmuxNavigateUp, opts)
   vim.keymap.set("n", "<M-l>", tmux.NvimTmuxNavigateRight, opts)
-end
+end)
 
 
 -- close_all_buffers will close all the buffers but the current one
@@ -27,8 +37,8 @@ end
 
 vim.keymap.set("n", "<leader>bq", close_other_buffers, { silent = true, noremap = true })
 
-local lualine_buffers = prequire("lualine.components.buffers")
-if lualine_buffers then
+having("lualine.components.buffers")(function()
+  local lualine_buffers = require("lualine.components.buffers")
   -- configure mapping for buffers: <Leader>1 will switch to buffer 1,
   -- <Leader>2 to buffer 2 and so on up to buffer 9
   for i = 1, 9, 1 do
@@ -41,10 +51,11 @@ if lualine_buffers then
     end
     vim.keymap.set("n", "<leader>" .. i, jump, { silent = true, noremap = true })
   end
-end
+end)
 
-local fzf = prequire("fzf-lua")
-if fzf then
+having("fzf-lua")(function()
+  local fzf = require("fzf-lua")
+
   local files = function()
     local git_root = fzf.path.git_root({}, true)
     if not git_root then
@@ -80,13 +91,18 @@ if fzf then
   vim.keymap.set("n", "<leader>fb", fzf.buffers, {})                   -- grep buffers
   vim.keymap.set("n", "<leader>fg", fzf.live_grep_glob, {})            -- live grep
   vim.keymap.set({ "n", "v" }, "<leader>ca", fzf.lsp_code_actions, {}) -- code actions
-end
+end)
 
 
-local trouble = prequire("trouble")
-if trouble then
+having("trouble")(function()
+  local trouble = require("trouble")
   local opts = { silent = true, noremap = true }
   vim.keymap.set("n", "<leader>xx", function() trouble.toggle() end, opts)
   vim.keymap.set("n", "<leader>xw", function() trouble.toggle("workspace_diagnostics") end, opts)
   vim.keymap.set("n", "<leader>xd", function() trouble.toggle("document_diagnostics") end, opts)
-end
+end)
+
+having("oil")(function()
+  local oil = require("oil")
+  vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
+end)
