@@ -1,7 +1,9 @@
 return {
   {
-    "ray-x/go.nvim",
+    "weirdgiraffe/go.nvim",
     dependencies = {
+      'hrsh7th/nvim-cmp',
+      "hrsh7th/cmp-nvim-lsp",
       "neovim/nvim-lspconfig",
       "nvim-treesitter/nvim-treesitter",
     },
@@ -14,14 +16,13 @@ return {
       "gotexttmp",
     },
     build = function()
-      require("go.install").install_all_sync()
+      require("go.install").install_all()
     end,
     config = function()
       require("go").setup({
         verbose = false,
         -- this plugin has a weird default log path, so fix it
         log_path = vim.fn.stdpath('cache') .. "/gonvim.log",
-
         lsp_cfg = {
           capabilities = require('cmp_nvim_lsp').default_capabilities(),
         },
