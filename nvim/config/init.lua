@@ -3,8 +3,8 @@
 vim.api.nvim_set_keymap("n", "Q", "<Nop>", { noremap = true, silent = true })
 vim.api.nvim_set_keymap("n", "gQ", "<Nop>", { noremap = true, silent = true })
 
--- disable mouse in all modes
-vim.opt.mouse = ""
+-- enable mouse in all modes
+vim.opt.mouse = "a"
 
 -- disable cursor styling, i.e. always use block shaped cursor
 vim.opt.guicursor = ""
@@ -103,8 +103,7 @@ vim.opt.splitbelow = true
 -- automaticaly indent based of filetype
 vim.opt.autoindent = true
 
--- do not display "-- MORE" where there is a lot of text in message
-vim.o.more = false
+vim.o.more = true
 
 require("user.lazy")
 require("user.colors").setup()
