@@ -75,6 +75,7 @@ return {
       end, { "i", "s" }),
     }
 
+    ---@diagnostic disable-next-line: missing-fields
     cmp.setup({
       completion = {
         completeopt = "menu,menuone,preview,noselect",

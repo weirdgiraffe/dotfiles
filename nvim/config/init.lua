@@ -105,6 +105,12 @@ vim.opt.autoindent = true
 
 vim.o.more = true
 
+-- workaround to not loose window position on buffer switch
+vim.cmd([[
+  au BufLeave * let b:winview = winsaveview()
+  au BufEnter * if(exists('b:winview')) | call winrestview(b:winview) | endif
+]])
+
 require("user.lazy")
 require("user.colors").setup()
 require("user.keybindings")
