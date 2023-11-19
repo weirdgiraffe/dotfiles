@@ -5,11 +5,14 @@ local function append_file(filename, text)
 end
 
 local function fmt_attr_color(name, hlID, what)
+  if not string.find(what, "gui", 1, true) then
+    return fmt_attr_color(name, hlID, "gui" .. what)
+  end
   return name .. vim.fn.synIDattr(vim.fn.hlID(hlID), what)
 end
 
 local function fzf_colors()
-  return fmt_attr_color("fg:", "Normal", "fg")
+  local colors = fmt_attr_color("fg:", "Normal", "fg")
       .. fmt_attr_color(",bg:", "Normal", "bg")
       .. fmt_attr_color(",hl:", "Comment", "fg")
       .. fmt_attr_color(",fg+:", "LineNr", "fg")
@@ -22,6 +25,7 @@ local function fzf_colors()
       .. fmt_attr_color(",spinner:", "Label", "fg")
       .. fmt_attr_color(",header:", "Comment", "fg")
       .. fmt_attr_color(",gutter:", "Normal", "bg")
+  return colors
 end
 
 local function export_fzf_colors(filename)
