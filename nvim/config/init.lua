@@ -105,6 +105,9 @@ vim.opt.autoindent = true
 
 vim.o.more = true
 
+vim.o.number = true
+vim.o.relativenumber = true
+
 -- workaround to not loose window position on buffer switch
 vim.cmd([[
   au BufLeave * let b:winview = winsaveview()
