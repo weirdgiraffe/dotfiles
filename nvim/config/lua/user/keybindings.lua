@@ -128,3 +128,13 @@ having("go")(function()
   vim.keymap.set("n", "<Leader>b", "<cmd>GoBuild<cr>", opts)
   vim.keymap.set("n", "<leader>cc", require("go.comment").gen, opts)
 end)
+
+-- show diagnostics for the current line in the floating term window
+vim.keymap.set("n", "<leader>sd", function()
+  vim.diagnostic.open_float({
+    scope = "line",
+    source = "true",
+    border = "rounded", -- values as for border in vim.api.nvim_open_win()
+
+  })
+end, { silent = true, noremap = true })
