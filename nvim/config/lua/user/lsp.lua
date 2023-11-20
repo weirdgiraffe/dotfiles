@@ -42,11 +42,26 @@ local function go_codel_lens(bufnr)
     end
   end, {
     buffer = bufnr,
-    desc = "run lsp codelens for go file",
+    desc = "run lsp codelens for go this file",
     silent = true,
     noremap = true
   })
 end
+
+local function go_inlay_hints(bufnr)
+  -- gopls provides codelens only for the 0,0 cursor position and to invoke
+  -- them from the random line we would need to change position first, then
+  -- invoke, and then jump back where we were
+  vim.keymap.set("n", "<leader>ci", function()
+    require('go.inlay').toggle_inlay_hints()
+  end, {
+    buffer = bufnr,
+    desc = "toggle lsp inlay hints for this go file",
+    silent = true,
+    noremap = true
+  })
+end
+
 
 local function set_lsp_on_save(client, bufnr)
   if client.supports_method("textDocument/formatting") then
@@ -59,9 +74,8 @@ local function set_lsp_on_save(client, bufnr)
       group = augroup,
       buffer = bufnr,
       callback = function()
-        if vim.bo.filetype == "go" then
+        if client.name == "gopls" then
           go_orgnize_imports()
-          go_codel_lens()
         end
         -- remove trailing whitespaces
         vim.cmd(":%s/\\s\\+$//ge")
@@ -80,6 +94,7 @@ function M.on_attach(client, bufnr)
   local ft = vim.api.nvim_buf_get_option(bufnr, "filetype")
   if client.name == "gopls" then
     go_codel_lens(bufnr)
+    go_inlay_hints(bufnr)
   end
 
   set_lsp_on_save(client, bufnr)
