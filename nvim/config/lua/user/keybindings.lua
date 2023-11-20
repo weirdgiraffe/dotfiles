@@ -53,6 +53,11 @@ having("lualine.components.buffers")(function()
   end
 end)
 
+
+
+
+
+
 having("fzf-lua")(function()
   local fzf = require("fzf-lua")
 
@@ -87,6 +92,10 @@ having("fzf-lua")(function()
   end
 
   local opts = { silent = true, noremap = true }
+
+  vim.keymap.set("n", "<leader>d", fzf.lsp_document_symbols, opts)
+  vim.keymap.set("n", "<leader>r", fzf.lsp_references, opts)
+  vim.keymap.set("n", "<leader>i", fzf.lsp_implementations, opts)
 
   vim.keymap.set("n", "<C-p>", files, opts)
   vim.keymap.set("n", "<leader>ff", files_in_current_file_dir, opts)
