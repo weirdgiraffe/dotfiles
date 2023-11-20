@@ -27,6 +27,27 @@ local function go_orgnize_imports()
   end
 end
 
+local function go_codel_lens(bufnr)
+  -- gopls provides codelens only for the 0,0 cursor position and to invoke
+  -- them from the random line we would need to change position first, then
+  -- invoke, and then jump back where we were
+  vim.keymap.set("n", "<leader>cl", function()
+    local lens = vim.lsp.codelens.get(0)
+    if lens then
+      local pos = vim.api.nvim_win_get_cursor(0)
+      vim.print("current position=" .. vim.inspect(pos))
+      vim.api.nvim_win_set_cursor(0, { 1, 0 })
+      vim.lsp.codelens.run()
+      vim.api.nvim_win_set_cursor(0, pos)
+    end
+  end, {
+    buffer = bufnr,
+    desc = "run lsp codelens for go file",
+    silent = true,
+    noremap = true
+  })
+end
+
 local function set_lsp_on_save(client, bufnr)
   if client.supports_method("textDocument/formatting") then
     local group_name = "lsp_on_save_" .. bufnr
@@ -40,6 +61,7 @@ local function set_lsp_on_save(client, bufnr)
       callback = function()
         if vim.bo.filetype == "go" then
           go_orgnize_imports()
+          go_codel_lens()
         end
         -- remove trailing whitespaces
         vim.cmd(":%s/\\s\\+$//ge")
@@ -55,15 +77,13 @@ local M = {}
 function M.on_attach(client, bufnr)
   local bufopts = { noremap = true, silent = true, buffer = bufnr }
 
+  local ft = vim.api.nvim_buf_get_option(bufnr, "filetype")
+  if client.name == "gopls" then
+    go_codel_lens(bufnr)
+  end
+
   set_lsp_on_save(client, bufnr)
   vim.keymap.set("n", "gd", vim.lsp.buf.definition, bufopts)
-
-  local fzf = prequire("fzf-lua")
-  if fzf then
-    vim.keymap.set("n", "<leader>d", fzf.lsp_document_symbols, bufopts)
-    vim.keymap.set("n", "<leader>r", fzf.lsp_references, bufopts)
-    vim.keymap.set("n", "<leader>i", fzf.lsp_implementations, bufopts)
-  end
 end
 
 return M
