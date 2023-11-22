@@ -35,7 +35,6 @@ local function go_codel_lens(bufnr)
     local lens = vim.lsp.codelens.get(0)
     if lens then
       local pos = vim.api.nvim_win_get_cursor(0)
-      vim.print("current position=" .. vim.inspect(pos))
       vim.api.nvim_win_set_cursor(0, { 1, 0 })
       vim.lsp.codelens.run()
       vim.api.nvim_win_set_cursor(0, pos)
@@ -91,7 +90,6 @@ local M = {}
 function M.on_attach(client, bufnr)
   local bufopts = { noremap = true, silent = true, buffer = bufnr }
 
-  local ft = vim.api.nvim_buf_get_option(bufnr, "filetype")
   if client.name == "gopls" then
     go_codel_lens(bufnr)
     go_inlay_hints(bufnr)
