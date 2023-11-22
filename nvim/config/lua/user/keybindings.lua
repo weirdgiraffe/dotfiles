@@ -144,6 +144,54 @@ vim.keymap.set("n", "<leader>sd", function()
     scope = "line",
     source = "true",
     border = "rounded", -- values as for border in vim.api.nvim_open_win()
-
   })
 end, { silent = true, noremap = true })
+
+
+local function visual_selection_range()
+  local unpack = unpack or table.unpack
+
+  -- based on https://neovim.io/doc/user/builtin.html#mode()
+  local function is_in_visual_mode()
+    local visual_modes = {
+      ["v"] = true,
+      ["vs"] = true,
+      ["V"] = true,
+      ["Vs"] = true,
+      ["CTRL-V"] = true,
+      ["CTRL-Vs"] = true,
+    }
+    return visual_modes[vim.api.nvim_get_mode().mode] or false
+  end
+
+  if is_in_visual_mode() then
+    local selection_start = { unpack(vim.fn.getpos('v'), 2, 3) }
+    -- NOTE: getpos's column is 1-based, and we need 0-based
+    selection_start[2] = selection_start[2] - 1
+
+    local selection_end = vim.api.nvim_win_get_cursor(0)
+
+    -- NOTE: handle "reverse" selection (the cursor is at the start of the
+    -- selection, not the end)
+    -- Flip based on lines
+    if selection_start[1] > selection_end[1] then
+      local temp_selection_end = selection_end
+      selection_end = selection_start
+      selection_start = temp_selection_end
+    end
+
+    -- Flip based on columns
+    if selection_start[2] > selection_end[2] then
+      local temp_selection_end = selection_end[2]
+      selection_end[2] = selection_start[2]
+      selection_start[2] = temp_selection_end
+    end
+
+    return { selection_start, selection_end }
+  else
+    error("not in the visual mode")
+  end
+end
+
+-- comment out/ uncomment selected lines
+vim.keymap.set({ "n", "v" }, "<leader>co", require("util.comments").toggle, { silent = true, noremap = true })
