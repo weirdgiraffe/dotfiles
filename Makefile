@@ -6,5 +6,6 @@ all:
 
 .PHONY: zsh
 zsh:
-	@sh init.sh
-	@cd zsh && brew bundle
+	@sh ./init.sh
+	brew bundle
+	$(MAKE) -C cd zsh
