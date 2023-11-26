@@ -4,3 +4,4 @@
 all: 
 	brew bundle
 	echo PATH=$(brew --prefix)"/opt/coreutils/libexec/gnubin:$$PATH" >> ~/.zshrc
+    sudo dscl . -create /Users/$USER UserShell $(brew --prefix)/bin/zsh

@@ -8,4 +8,4 @@ all:
 zsh:
 	@sh ./init.sh
 	brew bundle
-	$(MAKE) -C cd zsh
+	$(MAKE) -C zsh
