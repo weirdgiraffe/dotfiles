@@ -9,7 +9,6 @@ jobs:
         uses: actions/checkout@v4
       - name: configure zsh
         run: |
-          cd ./zsh
-          zsh setup.zsh
+          make zsh
       - name: output resuting config
         run: cat ~/.zshrc
