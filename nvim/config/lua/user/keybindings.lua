@@ -1,5 +1,3 @@
-local prequire = require("util.prequire")
-
 local function having(module)
   local has_module = require(module) ~= nil
   return function(fn)
@@ -195,3 +193,23 @@ end
 
 -- comment out/ uncomment selected lines
 vim.keymap.set({ "n", "v" }, "<leader>co", require("util.comments").toggle, { silent = true, noremap = true })
+
+
+vim.api.nvim_create_user_command("Sh", function(opts)
+  if #opts.args == 0 then
+    error("no command provided")
+  end
+  local cmd = "split term://sh -c '" .. opts.args .. "'"
+  vim.print("cmd=" .. cmd)
+
+  local height = math.max(3, math.floor(vim.api.nvim_win_get_height(0) * 0.3))
+  vim.cmd(cmd)
+  local win = vim.api.nvim_get_current_win() -- should be a terminal now
+  vim.api.nvim_win_set_height(win, height)
+  local bufnr = vim.api.nvim_win_get_buf(win)
+  -- delete this buffer if it's hidden, i.e. when window is closed
+  vim.api.nvim_buf_set_option(bufnr, "bufhidden", "delete") -- delete this buffer if it's hidden
+end, {
+  desc = "quickly run a shell command is a split",
+  nargs = "*",
+})

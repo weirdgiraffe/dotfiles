@@ -74,6 +74,8 @@ return {
 
     ---@diagnostic disable-next-line: missing-fields
     cmp.setup({
+      enabled = true,
+      ---@diagnostic disable-next-line: missing-fields
       completion = {
         completeopt = "menu,menuone,preview,noselect",
       },
@@ -108,7 +110,10 @@ return {
       }, {
         { name = 'buffer' },
       }),
+      -- the only working option having multiple sources
+      preselect = cmp.PreselectMode.None,
 
+      ---@diagnostic disable-next-line: missing-fields
       formatting = {
         fields = { "kind", "abbr", "menu" },
         format = make_formatting_function(),
