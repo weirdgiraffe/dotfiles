@@ -1,0 +1,13 @@
+# reference: https://github.com/Homebrew/homebrew-bundle#usage
+
+brew "gnu-grep" if OS.mac?
+brew "gnu-sed" if OS.mac?
+brew "tree"
+brew "ripgrep"
+brew "fd"
+brew "jq"
+brew "yq"
+brew "bat"
+brew "ranger"
+brew "httpie"
+brew "reattach-to-user-namespace" if OS.mac?

@@ -9,3 +9,17 @@ techinque to manage dotfiles:
 - Those subcommands are replacing files in the system using symlinks
 
 I like this idea, and this repository tries to follow the same concept.
+
+
+
+Usefull commands:
+
+
+Check if symlink command is already registered as git subcommand
+
+```sh
+git --list-cmds=main,others,alias | grep link || echo link: OK
+git --list-cmds=main,others,alias | grep unlink || echo unlink: OK
+```
+
+
