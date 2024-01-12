@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+# set -eu -o pipefail
+
+function replace() {
+  local SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+  local TARGET=$(realpath --no-symlinks ${1})
+  local SOURCE=$(echo "${SCRIPT_DIR}/${TARGET}" | sed "s#^${HOME}#home#")
+  echo "source: ${SOURCE}"
+  echo "target: ${TARGET}"
+  if [[ ! -e "${SOURCE}" ]]; then
+    echo "replace: source ${SOURCE} does not exist"
+    return 1
+  fi
+  if [[ -f "${TARGET}" ]]; then
+    echo "replace: created ${TARGET}.backup"
+    mv "${TARGET}" "${TARGET}.backup"
+  elif [[ -d "${TARGET}" ]]; then
+    echo "replace: created ${TARGET}.backup"
+    mv "${TARGET}" "${TARGET}.backup"
+  elif [[ -L "${TARGET}" ]]; then
+    echo "replace: created ${TARGET}.backup"
+    mv "${TARGET}" "${TARGET}.backup"
+  elif [[ -e "${TARGET}" ]]; then
+    echo "replace: cannot replace special file: ${TARGET}"
+    return 1
+  fi
+  mkdir -p "$(dirname "${TARGET}")"
+  ln -s "${SOURCE}" "${TARGET}"
+}
+
+replace ~/.zshrc
+replace ~/.zimrc
+replace ~/.p10k.zsh
+replace ~/.config/bat
+replace ~/.config/fd
+replace ~/.config/git
+replace ~/.config/kitty
+replace ~/.config/tmux
+replace ~/.config/zsh
+replace ~/.config/nvim

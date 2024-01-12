@@ -1,0 +1,15 @@
+name: Check OSX configuration
+run-name: Test OSX dotfiles
+on: [push]
+jobs:
+  Explore-GitHub-Actions:
+    runs-on: macos-13
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: install dotfiles
+        run: zsh install
+      - name: output config folder
+        run: tree -I "~/config/gcloud/*" ~/.config
+      - name: output home folder
+        run: ls -lad ~/.*
