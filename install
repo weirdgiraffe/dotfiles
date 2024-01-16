@@ -5,4 +5,11 @@ if [[ $(uname) == "Darwin" ]]; then
   source install-darwin
 fi
 
+if [[ ! -x "$(command -v rustup)" ]]; then
+  curl --proto '=https' \
+    --tlsv1.2 \
+    -sSf \
+    https://sh.rustup.rs | bash -s - -y -q
+fi
+
 source replace

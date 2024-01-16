@@ -27,7 +27,6 @@ local function with_defaults(defaults)
   }
 end
 
-
 return {
   "williamboman/mason.nvim",
   lazy = false,
@@ -41,7 +40,15 @@ return {
     "williamboman/mason-lspconfig.nvim",
   },
   config = function()
-    require("mason").setup()
+    require("mason").setup({
+      ui = {
+        icons = {
+          package_installed = "",
+          package_pending = "",
+          package_uninstalled = "",
+        },
+      }
+    })
     local lspconfig = with_defaults(function()
       return {
         on_attach = require('user.lsp').on_attach,
@@ -80,8 +87,8 @@ return {
       ensure_installed = {
         "lua_ls",
         "gopls",
-        "rust_analyzer",
         "yamlls",
+        "rust_analyzer",
       },
       handlers = {
         -- The first entry (without a key) will be the default handler

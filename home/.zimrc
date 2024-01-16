@@ -15,10 +15,10 @@ fi
 zmodule completion # enable completions
 
 # ------------------ modules to be initialized last ---------------------------
-
 zmodule zsh-users/zsh-syntax-highlighting # syntax highlighting.
 zmodule zsh-users/zsh-history-substring-search
 zmodule romkatv/powerlevel10k --use degit
 # handle fzf as a zim module
 zmodule junegunn/fzf --on-pull "./install --no-bash --xdg --no-update-rc"
+
 zmodule zsh-users/zsh-autosuggestions # should be last

@@ -43,7 +43,7 @@
 	quotepath = false
 	autocrlf = input
 	editor = nvim
-	pager = less -FRXK
+	pager = bat --style=plain --color=always --wrap=character
 	sshCommand = "ssh -i ~/.ssh/git"
 [alias]
 	c = commit

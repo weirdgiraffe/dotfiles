@@ -2,6 +2,12 @@ export EDITOR="nvim"
 export VISUAL="nvim"
 export GREP_COLORS="mt=01;31" # use red color for grep matches to match rg
 
+if [ -x "$(command -v brew)" ]; then
+  # google cloud sdk calls compinit and breaks my own completions
+  # so this one should be added at the end of the initialisation
+  source "$(brew --prefix)/share/google-cloud-sdk/completion.zsh.inc"
+fi
+
 # needed to allow to work work with GPG
 # reference: https://gist.github.com/troyfontaine/18c9146295168ee9ca2b30c00bd1b41e
 export GPG_TTY=$(tty)

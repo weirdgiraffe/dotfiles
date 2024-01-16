@@ -22,7 +22,6 @@ brew "tree"
 brew "git"
 brew "git-lfs"
 brew "ranger"
-brew "rust"
 
 # casks
 cask "kitty"
