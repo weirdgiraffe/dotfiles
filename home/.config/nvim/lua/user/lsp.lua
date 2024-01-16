@@ -1,11 +1,3 @@
-local function not_empty_augroup(groupname, bufnr)
-  local cmds = vim.api.nvim_get_autocmds({
-    group = groupname,
-    bugger = bufnr,
-  })
-  return next(cmds) == nil
-end
-
 local function go_orgnize_imports()
   local params = vim.lsp.util.make_range_params()
   params.context = { only = { "source.organizeImports" } }
