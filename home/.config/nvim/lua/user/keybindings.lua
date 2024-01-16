@@ -54,8 +54,8 @@ having("fzf-lua", function()
     local relative = fzf.path.relative(vim.loop.cwd(), git_root)
     local opts = {
       fd_opts = table.concat({
+        "--hidden",
         "--type=f",
-        "--exclude={.git,vendor,node_modules}",
       }, " "),
       fzf_opts = {
         ["--query"] = git_root ~= relative and relative or nil,
@@ -69,6 +69,7 @@ having("fzf-lua", function()
     local dir = fzf.path.basename(vim.api.nvim_buf_get_name(0))
     local opts = {
       fd_opts = table.concat({
+        "--hidden",
         "--type=f",
       }, " "),
       cwd = dir,
@@ -104,21 +105,6 @@ end)
 
 having("oil", function()
   vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
-end)
-
-having("go", function()
-  local opts = { noremap = true, silent = true }
-  vim.keymap.set("n", "<leader>a", function()
-    require("go.alternate").switch("", "")
-  end, opts)
-
-  vim.keymap.set("n", "<Leader>t", function()
-    vim.cmd("GoTest" .. vim.fn.expand('%:p:h') .. "/...")
-  end, opts)
-  vim.keymap.set("n", "<Leader>tf", "<cmd>GoTestFunc<cr>", opts)
-  vim.keymap.set("n", "<Leader>tc", "<cmd>GoCoverage -p<cr>", opts)
-  vim.keymap.set("n", "<Leader>b", "<cmd>GoBuild<cr>", opts)
-  vim.keymap.set("n", "<leader>cc", require("go.comment").gen, opts)
 end)
 
 -- show diagnostics for the current line in the floating term window
