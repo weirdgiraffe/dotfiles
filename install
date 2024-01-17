@@ -5,11 +5,15 @@ if [[ $(uname) == "Darwin" ]]; then
   source install-darwin
 fi
 
+# install rustup if not installed already
 if [[ ! -x "$(command -v rustup)" ]]; then
   curl --proto '=https' \
     --tlsv1.2 \
     -sSf \
     https://sh.rustup.rs | bash -s - -y -q
+  mkdir -p ~/.local/share/zsh/completion
+  rustup completions zsh >| ~/.local/share/zsh/completion/_rustup
+  rustup completions zsh cargo >| ~/.local/share/zsh/completion/_cargo
 fi
 
 source replace
