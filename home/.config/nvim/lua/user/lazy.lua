@@ -57,7 +57,7 @@ require("lazy").setup("plugins", {
   },
   dev = {
     -- directory where you store your local plugin projects
-    path = "~/go/src/github.com/weirdgiraffe",
+    path = "~/code/github.com/weirdgiraffe",
     patterns = {},
     fallback = false, -- Fallback to git when local plugin doesn't exist
   },
