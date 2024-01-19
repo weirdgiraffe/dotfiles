@@ -24,7 +24,17 @@ return {
     },
     sections = {
       lualine_a = { 'mode' },
-      lualine_b = { 'branch', 'diff', 'diagnostics' },
+      lualine_b = {
+        'branch', 'diff',
+        {
+          'diagnostics',
+          sources = { 'nvim_workspace_diagnostic' },
+          sections = { 'error', 'warn' },
+          colored = true,
+          update_in_insert = false,
+          symbols = { error = '🔴 ', warn = '🟡 ' },
+        }
+      },
       lualine_c = {
         {
           'filename',
