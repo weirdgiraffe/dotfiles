@@ -46,33 +46,16 @@ end)
 having("fzf-lua", function()
   local fzf = require("fzf-lua")
 
+  -- files will search for files in the current git repository_url
+  -- or in a current dir if current path is not within a git
+  -- repository
   local files = function()
-    local git_root = fzf.path.git_root({}, true)
-    if not git_root then
-      return fzf.files()
-    end
-    local relative = fzf.path.relative(vim.loop.cwd(), git_root)
     local opts = {
       fd_opts = table.concat({
         "--hidden",
         "--type=f",
       }, " "),
-      fzf_opts = {
-        ["--query"] = git_root ~= relative and relative or nil,
-      },
-      cwd = git_root,
-    }
-    return fzf.files(opts)
-  end
-
-  local files_in_current_file_dir = function()
-    local dir = fzf.path.basename(vim.api.nvim_buf_get_name(0))
-    local opts = {
-      fd_opts = table.concat({
-        "--hidden",
-        "--type=f",
-      }, " "),
-      cwd = dir,
+      cwd = fzf.path.git_root({}, true),
     }
     return fzf.files(opts)
   end
@@ -84,7 +67,7 @@ having("fzf-lua", function()
   vim.keymap.set("n", "<leader>i", fzf.lsp_implementations, opts)
 
   vim.keymap.set("n", "<C-p>", files, opts)
-  vim.keymap.set("n", "<leader>ff", files_in_current_file_dir, opts)
+  vim.keymap.set("n", "<leader>ff", files, opts)
   vim.keymap.set("n", "<leader>fb", fzf.buffers, opts)                   -- grep buffers
   vim.keymap.set("n", "<leader>fg", fzf.live_grep_glob, opts)            -- live grep
   vim.keymap.set({ "n", "v" }, "<leader>ca", fzf.lsp_code_actions, opts) -- code actions
