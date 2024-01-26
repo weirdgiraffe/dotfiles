@@ -22,6 +22,7 @@ brew "tree"
 brew "git"
 brew "git-lfs"
 brew "ranger"
+brew "pyenv"
 
 # casks
 cask "kitty"
