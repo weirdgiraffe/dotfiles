@@ -6,6 +6,10 @@ if [ -x "$(command -v brew)" ]; then
   # google cloud sdk calls compinit and breaks my own completions
   # so this one should be added at the end of the initialisation
   source "$(brew --prefix)/share/google-cloud-sdk/completion.zsh.inc"
+  # pyenv
+  source "$(brew --prefix pyenv)/completions/pyenv.zsh"
+  eval "$(pyenv init -)"
+  eval "$(pyenv virtualenv-init -)"
 fi
 
 # needed to allow to work work with GPG
@@ -28,6 +32,7 @@ alias rg='rg --ignore-file=${HOME}/.config/fd/ignore'
 alias myip='curl -s http://ip-api.com/json| python -m json.tool'
 alias urldecode='python -c "import sys, urllib as ul; print ul.unquote_plus(sys.argv[1])"'
 alias urlencode='python -c "import sys, urllib as ul; print ul.quote_plus(sys.argv[1])"'
+
 
 rfcdate() {
   local input=$1
@@ -55,7 +60,7 @@ local function _must_have_docker() {
   fi
 }
 
-function cloc() { # count lines of code
+cloc() { # count lines of code
   _must_have_docker
 
 	docker run --rm \
