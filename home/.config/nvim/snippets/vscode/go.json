@@ -124,7 +124,7 @@
     "description": "Error return wrap",
     "body": [
       "if err != nil {",
-      "\treturn errors.Wrap(err, \"${1:message}\")",
+      "\treturn fmt.Errorf(\"${1:message}: %w\", err)",
       "\\}",
       "$0"
     ]

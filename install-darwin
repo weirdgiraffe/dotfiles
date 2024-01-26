@@ -33,3 +33,8 @@ if [[ ! -d ~/.gnupg ]]; then
   echo 'use-agent' >| ~/.gnupg/gpg.conf
   chmod 700 ~/.gnupg
 fi
+
+# setup python
+pyenv install 3.11
+pyenv global 3.11
+
