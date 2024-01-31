@@ -23,6 +23,7 @@ brew "git"
 brew "git-lfs"
 brew "ranger"
 brew "pyenv"
+brew "bitwarden-cli"
 
 # casks
 cask "kitty"
@@ -32,5 +33,3 @@ cask "amethyst"
 cask "brave-browser"
 cask "bitwarden"
 cask "google-cloud-sdk"
-
-

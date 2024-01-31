@@ -10,6 +10,7 @@ if [ -x "$(command -v brew)" ]; then
   source "$(brew --prefix pyenv)/completions/pyenv.zsh"
   eval "$(pyenv init -)"
   eval "$(pyenv virtualenv-init -)"
+
 fi
 
 # needed to allow to work work with GPG
@@ -33,6 +34,9 @@ alias myip='curl -s http://ip-api.com/json| python -m json.tool'
 alias urldecode='python -c "import sys, urllib as ul; print ul.unquote_plus(sys.argv[1])"'
 alias urlencode='python -c "import sys, urllib as ul; print ul.quote_plus(sys.argv[1])"'
 
+# Temp workaround to disable punycode deprecation logging to stderr
+# https://github.com/bitwarden/clients/issues/6689
+alias bw='NODE_OPTIONS="--no-deprecation" bw'
 
 rfcdate() {
   local input=$1
