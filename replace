@@ -38,3 +38,4 @@ replace ~/.config/kitty
 replace ~/.config/tmux
 replace ~/.config/zsh
 replace ~/.config/nvim
+replace ~/.config/hammerspoon

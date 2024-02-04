@@ -24,6 +24,7 @@ brew "git-lfs"
 brew "ranger"
 brew "pyenv"
 brew "bitwarden-cli"
+brew "hammerspoon"
 
 # casks
 cask "kitty"

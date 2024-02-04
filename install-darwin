@@ -2,6 +2,9 @@
 
 brew bundle
 
+# adjust the place for hammerspoon config 
+defaults write org.hammerspoon.Hammerspoon MJConfigFile "~/.config/hammerspoon/init.lua"
+
 # install Homebrew if it is not installed (https://brew.sh/)
 if [ ! -x "$(command -v brew)" ]; then
   curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh | bash
