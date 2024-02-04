@@ -23,7 +23,6 @@ local function go_codel_lens(bufnr)
   -- invoke, and then jump back where we were
   vim.keymap.set("n", "<leader>cl", function()
     local lens = vim.lsp.codelens.get(0)
-    vim.print("lens=" .. vim.inspect(lens))
     if #lens == 1 then
       local lens_range = lens[1].range
       local pos = vim.api.nvim_win_get_cursor(0)
