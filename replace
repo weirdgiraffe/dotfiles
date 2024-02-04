@@ -4,20 +4,25 @@
 function replace() {
   local SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
   local TARGET=$(realpath --no-symlinks ${1})
-  local SOURCE=$(echo "${SCRIPT_DIR}/${TARGET}" | sed "s#^${HOME}#home#")
+  local SOURCE="${SCRIPT_DIR}/$(echo ${TARGET} | sed s#^${HOME}#home#)"
   echo "source: ${SOURCE}"
   echo "target: ${TARGET}"
   if [[ ! -e "${SOURCE}" ]]; then
     echo "replace: source ${SOURCE} does not exist"
     return 1
   fi
-  if [[ -f "${TARGET}" ]]; then
+  if [[ -L "${TARGET}" ]]; then
+    local previous_source=$(readlink "${TARGET}")
+    if [[ "${previous_source}" == "${SOURCE}" ]]; then
+      echo "replace: ${TARGET} already points to ${SOURCE}"
+      return 0
+    fi
     echo "replace: created ${TARGET}.backup"
     mv "${TARGET}" "${TARGET}.backup"
   elif [[ -d "${TARGET}" ]]; then
     echo "replace: created ${TARGET}.backup"
     mv "${TARGET}" "${TARGET}.backup"
-  elif [[ -L "${TARGET}" ]]; then
+  elif [[ -f "${TARGET}" ]]; then
     echo "replace: created ${TARGET}.backup"
     mv "${TARGET}" "${TARGET}.backup"
   elif [[ -e "${TARGET}" ]]; then
