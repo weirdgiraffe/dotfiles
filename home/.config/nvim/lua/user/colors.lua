@@ -5,9 +5,6 @@ local function append_file(filename, text)
 end
 
 local function fmt_attr_color(name, hlID, what)
-  if not string.find(what, "gui", 1, true) then
-    return fmt_attr_color(name, hlID, "gui" .. what)
-  end
   return name .. vim.fn.synIDattr(vim.fn.hlID(hlID), what)
 end
 
