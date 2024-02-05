@@ -1,6 +1,6 @@
 source ${XDG_CONFIG_HOME:-$HOME/.config}/fzf/fzf.zsh
-
-export FZF_DEFAULT_OPTS='--color=fg:#575279,bg:#faf4ed,hl:#9893a5,fg+:#9893a5,bg+:#f4ede8,hl+:#286983,info:#907aa9,prompt:#286983,pointer:#286983,marker:#286983,spinner:#56949f,header:#9893a5,gutter:#faf4ed'
+export FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS} --color=16"
+export FZF_ALT_C_COMMAND="fd --type d --hidden --follow"
 export FZF_ALT_C_COMMAND="fd --type d --hidden --follow"
 export FZF_DEFAULT_COMMAND="fd --type f --hidden --follow"
 export FZF_CTRL_T_COMMAND=$FZF_DEFAULT_COMMAND
