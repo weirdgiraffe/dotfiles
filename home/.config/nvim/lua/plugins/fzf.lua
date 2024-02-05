@@ -7,9 +7,5 @@ return {
     "nvim-tree/nvim-web-devicons",
     "rose-pine/neovim",
   },
-  opts = {
-    fzf_opts = {
-      ["--color"] = require("user.colors").fzf(),
-    },
-  }
+  opts = {}
 }
