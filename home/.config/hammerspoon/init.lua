@@ -2,6 +2,9 @@ hs.autoLaunch(true)
 hs.menuIcon(false)
 hs.automaticallyCheckForUpdates(true)
 
+-- to reload the config, one should use
+-- open -a HammerSpoon
+
 require("lua.system-style").config({
   on_style_change = function(style)
     hs.alert.show("changing style to " .. style)

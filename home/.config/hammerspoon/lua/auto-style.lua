@@ -21,7 +21,8 @@ local M = {}
 ---@param background string style "light" or "dark"
 function M.set_nvim_style(background)
   local pipes = nvim_server_pipe()
-  local nvim_command = ([[<cmd>set background=%s<CR>]]):format(background)
+  local nvim_command = ([[<cmd>SetBackground %s<CR>]]):format(background)
+  print("command: " .. nvim_command)
   for _, pipe in pairs(pipes) do
     local command = ([[nvim --server "%s" --remote-send "%s"]]):format(pipe, nvim_command)
     pcall(function() cmd(command) end)

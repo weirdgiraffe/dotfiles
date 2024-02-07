@@ -77,6 +77,20 @@ function M.fzf()
   return fzf_colors()
 end
 
+-- this function is called by hammerspoon
+local function set_background(background)
+  vim.cmd("set background=" .. background)
+  having("fzf-lua", function(fzf)
+    fzf.setup({
+      fzf_opts = {
+        ["--color"] = fzf_colors(),
+      },
+    })
+  end)
+  vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
+  vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
+end
+
 function M.setup()
   having("rose-pine", function()
     vim.cmd([[colorscheme rose-pine]])
@@ -95,16 +109,12 @@ function M.setup()
       background = "dark"
     end
   end
-  vim.cmd("set background=" .. background)
 
-  having("fzf-lua", function(fzf)
-    fzf.setup({
-      fzf_opts = {
-        ["--color"] = require("user.colors").fzf(),
-      },
-    })
-  end)
+  set_background(background)
 
+  vim.api.nvim_create_user_command("SetBackground", function(opts)
+    set_background(opts.args)
+  end, { nargs = 1, force = true })
   vim.api.nvim_create_user_command("ExportColorsFzf", function(opts)
     export_fzf_colors(opts.args)
   end, { nargs = 1, force = true })
