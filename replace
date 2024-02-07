@@ -40,8 +40,9 @@ replace ~/.config/bat
 replace ~/.config/fd
 replace ~/.config/fzf
 replace ~/.config/git
-replace ~/.config/kitty
-replace ~/.config/tmux
-replace ~/.config/zsh
-replace ~/.config/nvim
 replace ~/.config/hammerspoon
+replace ~/.config/kitty
+replace ~/.config/nvim
+replace ~/.config/tmux
+replace ~/.config/yazi
+replace ~/.config/zsh

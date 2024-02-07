@@ -1,0 +1,8 @@
+# https://yazi-rs.github.io/docs/configuration/yazi
+[manager]
+ratio = [2,3,3]
+
+[preview]
+tab_size = 3
+max_width = 3840
+max_height = 2160
