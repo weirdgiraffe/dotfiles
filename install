@@ -25,4 +25,4 @@ ln -sf themes/rose-pine-dawn.sh current-theme.zsh
 )
 
 # set initial kitty colorsheme to be light
-kitty +kitten themes --reload-in=all Rosé Pine Dawn
+kitty +kitten themes --config-file-name=themes.conf --reload-in=all Rosé Pine Dawn

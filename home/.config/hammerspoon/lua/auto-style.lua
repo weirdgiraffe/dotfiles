@@ -56,10 +56,11 @@ end
 --- set background for FZF
 ---@param background string style "light" or "dark"
 function M.set_kitty_style(background)
-  local command = [[kitty +kitten themes --reload-in=all Rosé Pine Dawn]]
+  local theme = [[Rosé Pine Dawn]]
   if background == "dark" then
-    command = [[kitty +kitten themes --reload-in=all Rosé Pine]]
+    theme = [[Rosé Pine]]
   end
+  local command = ([[kitty +kitten themes --config-file-name=themes.conf --reload-in=all %s]]):format(theme)
   pcall(function() cmd(command) end)
 end
 
