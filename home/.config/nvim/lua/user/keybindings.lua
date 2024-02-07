@@ -1,7 +1,6 @@
 local having = require("util.modules").having
 
-having("nvim-tmux-navigation", function()
-  local tmux = require("nvim-tmux-navigation")
+having("nvim-tmux-navigation", function(tmux)
   local opts = { silent = true, noremap = true }
   vim.keymap.set("n", "<M-h>", tmux.NvimTmuxNavigateLeft, opts)
   vim.keymap.set("n", "<M-j>", tmux.NvimTmuxNavigateDown, opts)
@@ -27,8 +26,7 @@ end
 
 vim.keymap.set("n", "<leader>bq", close_other_buffers, { silent = true, noremap = true })
 
-having("lualine.components.buffers", function()
-  local lualine_buffers = require("lualine.components.buffers")
+having("lualine.components.buffers", function(lualine_buffers)
   -- configure mapping for buffers: <Leader>1 will switch to buffer 1,
   -- <Leader>2 to buffer 2 and so on up to buffer 9
   for i = 1, 9, 1 do
@@ -43,9 +41,7 @@ having("lualine.components.buffers", function()
   end
 end)
 
-having("fzf-lua", function()
-  local fzf = require("fzf-lua")
-
+having("fzf-lua", function(fzf)
   -- files will search for files in the current git repository_url
   -- or in a current dir if current path is not within a git
   -- repository
@@ -78,8 +74,7 @@ having("fzf-lua", function()
 end)
 
 
-having("trouble", function()
-  local trouble = require("trouble")
+having("trouble", function(trouble)
   local opts = { silent = true, noremap = true }
   vim.keymap.set("n", "<leader>xx", function() trouble.toggle() end, opts)
   vim.keymap.set("n", "<leader>xw", function() trouble.toggle("workspace_diagnostics") end, opts)
