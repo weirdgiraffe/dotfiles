@@ -8,9 +8,5 @@ return {
     name = "rose-pine",
     lazy = false,
     priority = 1000,
-    config = function()
-      vim.cmd([[set background=light]])
-      vim.cmd([[colorscheme rose-pine]])
-    end
   },
 }

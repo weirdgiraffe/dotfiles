@@ -1,7 +1,13 @@
+local having = require("util.modules").having
+
 local function append_file(filename, text)
-  local out = io.open(vim.fn.expand(filename), "a+")
-  out:write(text)
-  out:close()
+  local out, err = io.open(vim.fn.expand(filename), "a+")
+  if out then
+    out:write(text)
+    out:close()
+  else
+    error("failed to open file " .. filename .. " for writing: " .. err)
+  end
 end
 
 local function fmt_attr_color(name, hlID, what)
@@ -9,20 +15,22 @@ local function fmt_attr_color(name, hlID, what)
 end
 
 local function fzf_colors()
-  local colors = fmt_attr_color("fg:", "Normal", "fg")
-      .. fmt_attr_color(",bg:", "Normal", "bg")
-      .. fmt_attr_color(",hl:", "Comment", "fg")
-      .. fmt_attr_color(",fg+:", "LineNr", "fg")
-      .. fmt_attr_color(",bg+:", "CursorLine", "bg")
-      .. fmt_attr_color(",hl+:", "Statement", "fg")
-      .. fmt_attr_color(",info:", "PreProc", "fg")
-      .. fmt_attr_color(",prompt:", "Conditional", "fg")
-      .. fmt_attr_color(",pointer:", "Exception", "fg")
-      .. fmt_attr_color(",marker:", "Keyword", "fg")
-      .. fmt_attr_color(",spinner:", "Label", "fg")
-      .. fmt_attr_color(",header:", "Comment", "fg")
-      .. fmt_attr_color(",gutter:", "Normal", "bg")
-  return colors
+  local colors = {
+    fmt_attr_color("fg:", "Normal", "fg"),
+    fmt_attr_color("bg:", "Normal", "bg"),
+    fmt_attr_color("hl:", "Comment", "fg"),
+    fmt_attr_color("fg+:", "LineNr", "fg"),
+    fmt_attr_color("bg+:", "CursorLine", "bg"),
+    fmt_attr_color("hl+:", "Statement", "fg"),
+    fmt_attr_color("info:", "PreProc", "fg"),
+    fmt_attr_color("prompt:", "Conditional", "fg"),
+    fmt_attr_color("pointer:", "Exception", "fg"),
+    fmt_attr_color("marker:", "Keyword", "fg"),
+    fmt_attr_color("spinner:", "Label", "fg"),
+    fmt_attr_color("header:", "Comment", "fg"),
+    fmt_attr_color("gutter:", "Normal", "bg"),
+  }
+  return table.concat(colors, ",")
 end
 
 local function export_fzf_colors(filename)
@@ -33,22 +41,27 @@ local function export_fzf_colors(filename)
 end
 
 local function kitty_colors()
-  local text = fmt_attr_color("background ", "Normal", "bg") .. "\n"
-      .. fmt_attr_color("foreground ", "Normal", "fg") .. "\n"
-      .. fmt_attr_color("selection_background ", "Normal", "fg") .. "\n"
-      .. fmt_attr_color("selection_foreground ", "Normal", "bg") .. "\n"
-      .. "cursor " .. vim.api.nvim_get_var("terminal_color_2") .. "\n"
-      .. "\n\n"
+  local base = {
+    fmt_attr_color("background ", "Normal", "bg"),
+    fmt_attr_color("foreground ", "Normal", "fg"),
+    fmt_attr_color("selection_background ", "Normal", "fg"),
+    fmt_attr_color("selection_foreground ", "Normal", "bg"),
+    fmt_attr_color("cursor ", "Cursor", "bg"),
+    fmt_attr_color("cursor_text_color ", "Cursor", "fg"),
+  }
 
   local count = 0
+  local colors = {}
   while count < 16 do
-    local var = "terminal_color_" .. count
-    local value = vim.api.nvim_get_var(var)
-    text = text .. "color" .. count .. " " .. value .. "\n"
+    local value = vim.api.nvim_get_var(("terminal_color_%d"):format(count))
+    table.insert(colors, ("color%d %s"):format(count, value))
     count = count + 1
   end
 
-  return text
+  return "# basic colors\n\n" ..
+      table.concat(base, "\n") ..
+      "\n\n# base16 colors\n\n" ..
+      table.concat(colors, "\n")
 end
 
 
@@ -65,10 +78,22 @@ function M.fzf()
 end
 
 function M.setup()
+  having("rose-pine", function()
+    vim.cmd([[set background=light]])
+    vim.cmd([[colorscheme rose-pine]])
+  end)
+
+  having("fzf-lua", function(fzf)
+    fzf.setup({
+      fzf_opts = {
+        ["--color"] = require("user.colors").fzf(),
+      },
+    })
+  end)
+
   vim.api.nvim_create_user_command("ExportColorsFzf", function(opts)
     export_fzf_colors(opts.args)
   end, { nargs = 1, force = true })
-
   vim.api.nvim_create_user_command("ExportColorsKitty", function(opts)
     export_kitty_colors(opts.args)
   end, { nargs = 1, force = true })
