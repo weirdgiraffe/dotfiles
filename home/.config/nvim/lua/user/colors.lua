@@ -91,26 +91,41 @@ local function set_background(background)
   vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
 end
 
+local function set_background_macos(defaultBackground)
+  local command = [[osascript -e '
+  tell application "System Events"
+    tell appearance preferences
+      return dark mode
+    end tell
+  end tell']]
+  local job = vim.fn.jobstart(command, {
+    on_stdout = function(_, data, _)
+      if data[1] == "true" then
+        set_background("dark")
+      else
+        set_background("light")
+      end
+    end
+  })
+  local timeoutMs = 300
+  local status = vim.fn.jobwait({ job }, timeoutMs)
+  if status[1] ~= 0 then
+    set_background(defaultBackground)
+  end
+end
+
+
 function M.setup()
   having("rose-pine", function()
     vim.cmd([[colorscheme rose-pine]])
   end)
 
-  local background = "light"
+  local defaultBackground = "light"
   if vim.fn.has('macunix') then
-    -- set initial theme backgroud based on the system appearance
-    local dark_mode = vim.fn.system([[osascript -e '
-    tell application "System Events"
-      tell appearance preferences
-        return dark mode
-      end tell
-    end tell']])
-    if dark_mode == "true\n" then
-      background = "dark"
-    end
+    set_background_macos(defaultBackground)
+  else
+    set_background(defaultBackground)
   end
-
-  set_background(background)
 
   vim.api.nvim_create_user_command("SetBackground", function(opts)
     set_background(opts.args)
