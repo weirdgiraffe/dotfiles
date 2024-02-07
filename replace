@@ -38,6 +38,7 @@ replace ~/.zimrc
 replace ~/.p10k.zsh
 replace ~/.config/bat
 replace ~/.config/fd
+replace ~/.config/fzf
 replace ~/.config/git
 replace ~/.config/kitty
 replace ~/.config/tmux

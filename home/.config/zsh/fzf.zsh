@@ -72,8 +72,6 @@ _fzf_complete_vim() {
     --reverse \
     --prompt="vim ❯ " \
     -- "$@" < <(
-      set -x
-
       fd --type=f \
         --hidden \
         --base-directory=${_workdir} \

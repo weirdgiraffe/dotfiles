@@ -79,9 +79,23 @@ end
 
 function M.setup()
   having("rose-pine", function()
-    vim.cmd([[set background=light]])
     vim.cmd([[colorscheme rose-pine]])
   end)
+
+  local background = "light"
+  if vim.fn.has('macunix') then
+    -- set initial theme backgroud based on the system appearance
+    local dark_mode = vim.fn.system([[osascript -e '
+    tell application "System Events"
+      tell appearance preferences
+        return dark mode
+      end tell
+    end tell']])
+    if dark_mode == "true\n" then
+      background = "dark"
+    end
+  end
+  vim.cmd("set background=" .. background)
 
   having("fzf-lua", function(fzf)
     fzf.setup({

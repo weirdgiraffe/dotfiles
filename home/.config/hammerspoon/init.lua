@@ -1,3 +1,7 @@
+hs.autoLaunch(true)
+hs.menuIcon(false)
+hs.automaticallyCheckForUpdates(true)
+
 require("lua.system-style").config({
   on_style_change = function(style)
     hs.alert.show("changing style to " .. style)
@@ -6,7 +10,3 @@ require("lua.system-style").config({
     require("lua.auto-style").set_nvim_style(style)
   end
 })
-
-hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "W", function()
-  hs.alert.show("Hello World!")
-end)

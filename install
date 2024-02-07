@@ -3,6 +3,7 @@
 
 if [[ $(uname) == "Darwin" ]]; then
   source install-darwin
+  # TODO: need to start hammerspoon somehow after the installation
 fi
 
 # install rustup if not installed already
@@ -17,3 +18,11 @@ if [[ ! -x "$(command -v rustup)" ]]; then
 fi
 
 source replace
+
+( # set initial fzf colorscheme to be light
+cd ~/.config/fzf
+ln -sf themes/rose-pine-dawn.sh current-theme.zsh
+)
+
+# set initial kitty colorsheme to be light
+kitty +kitten themes --reload-in=all Rosé Pine Dawn
