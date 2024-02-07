@@ -29,7 +29,7 @@ brew "hammerspoon"
 # casks
 cask "kitty"
 cask "stats" 
-cask "podman-desktop" 
+cask "docker" 
 cask "amethyst"
 cask "brave-browser"
 cask "bitwarden"
