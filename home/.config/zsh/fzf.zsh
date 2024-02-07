@@ -1,9 +1,19 @@
 source ${XDG_CONFIG_HOME:-$HOME/.config}/fzf/fzf.zsh
-export FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS} --color=16"
+
+
 export FZF_ALT_C_COMMAND="fd --type d --hidden --follow"
 export FZF_ALT_C_COMMAND="fd --type d --hidden --follow"
 export FZF_DEFAULT_COMMAND="fd --type f --hidden --follow"
 export FZF_CTRL_T_COMMAND=$FZF_DEFAULT_COMMAND
+
+# this wrapper allows to apply colors dynamically to support automatic
+# switch to dark mode, by sourcing the theme file right before the actual
+# binary execution.
+# NOTE: run in a subshell to not pollute top level shell environment
+function fzf() {(
+    source ${XDG_CONFIG_HOME:-$HOME/.config}/fzf/current-theme.zsh
+    $(whence -p fzf) "$@"
+)}
 
 _fzf_compgen_dir() {
   fd --type d \
