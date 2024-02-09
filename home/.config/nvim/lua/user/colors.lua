@@ -98,18 +98,18 @@ local function set_background_macos(defaultBackground)
       return dark mode
     end tell
   end tell']]
+  local systemBackground = ""
   local job = vim.fn.jobstart(command, {
     on_stdout = function(_, data, _)
-      if data[1] == "true" then
-        set_background("dark")
-      else
-        set_background("light")
+      if systemBackground == "" then
+        systemBackground = data[1] == "true" and "dark" or "light"
+        set_background(systemBackground)
       end
     end
   })
   local timeoutMs = 300
   local status = vim.fn.jobwait({ job }, timeoutMs)
-  if status[1] ~= 0 then
+  if status[1] ~= 0 and systemBackground == "" then
     set_background(defaultBackground)
   end
 end
