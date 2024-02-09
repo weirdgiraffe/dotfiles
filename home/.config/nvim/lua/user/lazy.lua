@@ -39,7 +39,10 @@ require("lazy").setup("plugins", {
   defaults = { lazy = true },
   install = {
     missing = true,
-    colorscheme = { "rose-pine" },
+    colorscheme = {
+      "rose-pine",
+      "rose-pine-dawn",
+    },
   },
   performance = {
     rtp = {
