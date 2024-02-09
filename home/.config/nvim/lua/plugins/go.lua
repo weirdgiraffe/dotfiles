@@ -1,6 +1,6 @@
 return {
   {
-    "weirdgiraffe/go.nvim",
+    "ray-x/go.nvim",
     dependencies = {
       -- "ray-x/guihua.lua",
       "neovim/nvim-lspconfig",
