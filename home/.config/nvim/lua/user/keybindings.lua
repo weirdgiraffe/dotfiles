@@ -116,3 +116,12 @@ end, {
   desc = "quickly run a shell command is a split",
   nargs = "*",
 })
+
+having("obsidian", function(obsidian)
+  local opts = { silent = true, noremap = true }
+  vim.keymap.set("n", "<leader>obs", "<cmd>ObsidianQuickSwitch<CR>")
+  vim.keymap.set("n", "<leader>obe", function()
+    local title = vim.fn.input("Title: ")
+    vim.cmd("ObsidianNew " .. title)
+  end)
+end)
