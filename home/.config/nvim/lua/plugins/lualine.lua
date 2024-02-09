@@ -8,7 +8,7 @@ return {
   opts = {
     options = {
       icons_enabled = true,
-      theme = "rose-pine",
+      theme = "auto",
     },
     -- in the tabline I would like to show the list of open buffers
     -- at the same time I would like to show buffer numbers for the
