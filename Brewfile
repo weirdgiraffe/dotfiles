@@ -29,6 +29,7 @@ brew "ffmpegthumbnailer"
 brew "unar" 
 brew "poppler"
 brew "ripgrep"
+brew "pngpaste"
 
 # casks
 cask "kitty"

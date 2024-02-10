@@ -114,6 +114,8 @@ vim.cmd([[
   au BufEnter * if(exists('b:winview')) | call winrestview(b:winview) | endif
 ]])
 
+vim.o.conceallevel = 2
+
 require("user.lazy")
 require("user.colors").setup()
 require("user.keybindings")

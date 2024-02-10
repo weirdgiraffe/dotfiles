@@ -87,6 +87,9 @@ local function set_background(background)
       },
     })
   end)
+  -- to ensure the focus switch I need to drop the
+  -- background color for the normal and float windows
+  -- and rely on the terminal colors
   vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
   vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
 end

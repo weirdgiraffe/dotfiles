@@ -16,6 +16,7 @@ return {
         "luadoc",
         "make",
         "markdown",
+        "markdown_inline",
         "dockerfile",
         "vim",
         "vimdoc",
