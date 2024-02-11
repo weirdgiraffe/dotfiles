@@ -26,3 +26,11 @@ ln -sf themes/rose-pine-dawn.sh current-theme.zsh
 
 # set initial kitty colorsheme to be light
 kitty +kitten themes --config-file-name=themes.conf --reload-in=all Rosé Pine Dawn
+
+( # set up the virtual environment for neovim
+  pyenv virtualenv 3.12.1 neovim
+  pyenv activate neovim
+  pip install pynvim
+  # additional dependencies for copilot chat
+  pip install python-dotenv requests prompt-toolkit
+)

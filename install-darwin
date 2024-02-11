@@ -46,6 +46,6 @@ if [[ ! -d ~/.gnupg ]]; then
 fi
 
 # setup python
-pyenv install 3.11
-pyenv global 3.11
-
+pyenv install 3.12.1
+pyenv global 3.12.1
+pip install --upgrade pip

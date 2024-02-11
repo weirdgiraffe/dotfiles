@@ -116,6 +116,14 @@ vim.cmd([[
 
 vim.o.conceallevel = 2
 
+-- check if we have pyenv
+if vim.fn.executable('pyenv') == 1 then
+  -- assuming that we setted everything up using
+  -- our dotfiles, so path would be predictable.
+  -- TODO: make automatic discovery to be independent from dotfiles
+  vim.g.python3_host_prog = vim.fn.expand("~/.pyenv/versions/neovim/bin/python")
+end
+
 require("user.lazy")
 require("user.colors").setup()
 require("user.keybindings")
