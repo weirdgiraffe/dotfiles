@@ -77,7 +77,7 @@ keymap = [
 	{ on = [ ":" ],         exec = "shell --block",                                        desc = "Run a shell command (block the UI until the command finishes)" },
 	{ on = [ "." ],         exec = "hidden toggle",                                        desc = "Toggle the visibility of hidden files" },
 	{ on = [ "s" ],         exec = "search fd",                                            desc = "Search files by name using fd" },
-	{ on = [ "S" ],         exec = "search rg",                                            desc = "Search files by content using ripgrep" },
+	{ on = [ "<C-s>" ],       exec = "search rg",                                            desc = "Search files by content using ripgrep" },
 	#{ on = [ "<C-s>" ],     exec = "search none",                                          desc = "Cancel the ongoing search" },
 	{ on = [ "z" ],         exec = "jump zoxide",                                          desc = "Jump to a directory using zoxide" },
 	{ on = [ "Z" ],         exec = "jump fzf",                                             desc = "Jump to a directory, or reveal a file using fzf" },
@@ -151,7 +151,7 @@ keymap = [
 	{ on = [ "~" ], exec = "help", desc = "Open help" },
 
 	# Other
-	{ on   = [ "<C-s>" ], exec = 'shell "$SHELL" --block --confirm', desc = "Open shell here" },
+	{ on   = [ "S" ], exec = 'shell "$SHELL" --block --confirm', desc = "Open shell here" },
 ]
 
 [tasks]
