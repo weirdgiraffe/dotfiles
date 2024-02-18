@@ -1,7 +1,7 @@
 return {
   "weirdgiraffe/minigo.nvim",
   dependencies = {
-    "nvim-lua/plenary.nvim",
+    "weirdgiraffe/plenary.nvim",
   },
   enable = false,
   dev = true

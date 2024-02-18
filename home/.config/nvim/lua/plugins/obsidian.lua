@@ -8,7 +8,8 @@ return {
     "BufNewFile " .. vim.fn.expand("~") .. "/Library/CloudStorage/SynologyDrive-Obsidian/**.md",
   },
   dependencies = {
-    "nvim-lua/plenary.nvim",
+    -- "nvim-lua/plenary.nvim",
+    "weirdgiraffe/plenary.nvim",
     -- see below for full list of optional dependencies 👇
   },
   config = function()

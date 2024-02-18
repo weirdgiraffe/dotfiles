@@ -117,11 +117,74 @@ end, {
   nargs = "*",
 })
 
-having("obsidian", function(obsidian)
-  local opts = { silent = true, noremap = true }
-  vim.keymap.set("n", "<leader>obs", "<cmd>ObsidianQuickSwitch<CR>")
-  vim.keymap.set("n", "<leader>obe", function()
-    local title = vim.fn.input("Title: ")
-    vim.cmd("ObsidianNew " .. title)
-  end)
+
+having("obsidian", function()
+  vim.api.nvim_set_keymap("n", "<leader>obs",
+    "<cmd>ObsidianQuickSwitch<CR>",
+    {
+      silent = true,
+      noremap = true,
+      desc = "Obsidian quick switch",
+    })
+
+  vim.api.nvim_set_keymap("n", "<leader>obe", "",
+    {
+      silent = true,
+      noremap = true,
+      callback = function()
+        local title = vim.fn.input("Title: ")
+        vim.cmd("ObsidianNew " .. title)
+      end,
+      desc = "Create new note in Obsidian",
+    })
+end)
+
+having("CopilotChat", function()
+  vim.keymap.set("x", "<leader>ccv", function()
+    local ss = vim.fn.getpos("'<")
+    local se = vim.fn.getpos("'>")
+    local prompt = vim.fn.input("Prompt: ")
+    vim.print(vim.inspect(ss))
+    vim.print(vim.inspect(vim.fn.getpos("'<")))
+    vim.print(vim.inspect(se))
+    vim.print(vim.inspect(vim.fn.getpos("'>")))
+    -- vim.fn.setpos("'<", ss)
+    -- vim.fn.setpos("'>", se)
+    -- vim.cmd("CopilotChatVisual " .. prompt)
+  end, {
+    silent = true,
+    noremap = true,
+    desc = "CopilotChat - Ask about visual selection",
+  })
+  vim.api.nvim_set_keymap("x", "<leader>ccc", "",
+    {
+      silent = true,
+      noremap = true,
+      callback = function()
+        local prompt = "Please rewrite the following text to make it more concise."
+        vim.cmd("CopilotChatVisual " .. prompt)
+      end,
+      desc = "CopilotChat - Rewrite the selection to be more concise",
+    })
+  vim.api.nvim_set_keymap("x", "<leader>cct", "",
+    {
+      silent = true,
+      noremap = true,
+      callback = function()
+        local prompt = "Please explain how the selected code works, then generate unit tests for it."
+        vim.cmd("CopilotChatVisual " .. prompt)
+      end,
+      desc = "CopilotChat - Write unit tests for the selection",
+    })
+  vim.api.nvim_set_keymap("x", "<leader>ccr", "",
+    {
+      silent = true,
+      noremap = true,
+      callback = function()
+        local prompt = "Please review the following code and provide suggestions for improvement."
+        vim.cmd("CopilotChatVisual " .. prompt)
+      end,
+      desc = "CopilotChat - Review the selection",
+    })
+  -- CopilotChatInPlace is not working
 end)
