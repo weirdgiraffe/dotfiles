@@ -82,3 +82,10 @@ function ya() {
 	rm -f -- "$tmp"
 }
 
+# make CTRL-W to remove the last word in the command line which will allow
+# to delete just last word, for example path components
+# based on https://stackoverflow.com/a/1438523/1208553
+autoload -U select-word-style
+select-word-style bash
+
+
