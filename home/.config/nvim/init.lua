@@ -9,8 +9,9 @@ vim.opt.mouse = "a"
 -- disable cursor styling, i.e. always use block shaped cursor
 vim.opt.guicursor = ""
 
--- set leader key to ,
-vim.g.mapleader = ","
+-- set leader key to space because it is the most ergonomic key (could
+-- be pressed by both of my thumbs)
+vim.g.mapleader = " "
 
 -- allow switch off from modified buffers. that allows to use buffers instead of tabs
 vim.opt.hidden = true
