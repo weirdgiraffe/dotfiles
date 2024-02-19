@@ -117,6 +117,10 @@ vim.cmd([[
 
 vim.o.conceallevel = 2
 
+-- do not display intro message and jump straight to editing
+-- for more info see `:h shortmess` and `:intro`
+vim.o.shortmess = vim.o.shortmess .. 'I'
+
 -- check if we have pyenv
 if vim.fn.executable('pyenv') == 1 then
   -- assuming that we setted everything up using
