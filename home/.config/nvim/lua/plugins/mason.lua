@@ -19,9 +19,28 @@ local function with_defaults(defaults)
       end
     end,
     setup_server = function(name)
+      local lspconfig = require("lspconfig")
+
       local default_opts = defaults() or {}
       local server_opts = configs[name] and configs[name]() or {}
       local opts = vim.tbl_extend("force", default_opts, server_opts)
+      vim.print("setting up the server using mason:" .. name)
+
+      -- check if we have any of the previous settings
+      local prev = lspconfig[name]
+      if prev ~= nil then
+        vim.print("has previous settings for: " .. name)
+        vim.print(vim.inspect(prev))
+        if prev.on_attach then
+          local on_attach = opts.on_attach
+          vim.print("wrapping pevious: " .. vim.inspect(on_attach))
+          opts.on_attach = function(client, bufnr)
+            prev.on_attach(client, bufnr)
+            on_attach(client, bufnr)
+          end
+        end
+      end
+
       require("lspconfig")[name].setup(opts)
     end
   }
@@ -39,6 +58,9 @@ return {
     "neovim/nvim-lspconfig",
     "williamboman/mason-lspconfig.nvim",
   },
+
+
+
   config = function()
     require("mason").setup({
       ui = {
