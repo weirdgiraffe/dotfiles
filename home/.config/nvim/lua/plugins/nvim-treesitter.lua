@@ -4,6 +4,7 @@ return {
   build  = ":TSUpdate",
   config = function()
     require("nvim-treesitter.configs").setup({
+      modules = {},
       ensure_installed = {
         "go",
         "gomod",
@@ -25,7 +26,9 @@ return {
         "bash",
         "rust",
       },
+      ignore_install = {},
       sync_install = false,
+      auto_install = true,
       highlight = { enable = true },
       indent = { enable = true },
     })

@@ -19,7 +19,6 @@ return {
         },
       }
     })
-
     require("mason-lspconfig").setup({
       ensure_installed = {
         "lua_ls",
@@ -28,33 +27,64 @@ return {
         "rust_analyzer",
       },
     })
-
-
-    local lspconfig = require("lspconfig")
-    require("neodev").setup()
-    lspconfig["lua_ls"].setup({
-      capabilities = require("cmp_nvim_lsp").default_capabilities(),
-      settings = {
-        Lua = {
-          workspace = {
-            -- diable annoying message about lua environment
-            checkThirdParty = false,
+    require("mason-lspconfig").setup_handlers({
+      function(server_name) -- default handler (optional)
+        require("lspconfig")[server_name].setup {}
+      end,
+      ["lua_ls"] = function()
+        require("neodev").setup()
+        require("lspconfig")["lua_ls"].setup({
+          capabilities = require("cmp_nvim_lsp").default_capabilities(),
+          settings = {
+            Lua = {
+              workspace = {
+                -- diable annoying message about lua environment
+                checkThirdParty = false,
+              },
+            },
           },
-        },
-      },
+        })
+      end,
+      ["rust_analyzer"] = function()
+        require("lspconfig")["rust_analyzer"].setup({
+          capabilities = require("cmp_nvim_lsp").default_capabilities(),
+          settings = {
+            ["rust-analyzer"] = {
+              checkOnSave = {
+                command = "clippy-driver",
+              },
+            }
+          }
+        })
+      end,
+      ["gopls"] = function()
+        require("go").setup({
+          log_path = vim.fn.stdpath('cache') .. "/gonvim.log", -- this plugin has a weird default log path, so fix it
+          lsp_cfg = false,
+          lsp_keymaps = false,                                 -- disable default lsp keymaps, we have our own in user.lsp
+          lsp_codelens = true,
+          lsp_document_formatting = true,
+          lsp_inlay_hints = { enable = true, },
+          textobjects = false, -- do not use theirs definitions
+          gofmt = 'gofumpt',
+          max_line_len = 120,  -- max line length in golines format
+          -- [snakecase, camelcase, lispcase, pascalcase, titlecase, keep]
+          -- check -transform of gomodifytags
+          tag_transform = "snakecase",
+          -- check -add-options of gomodifytags
+          tag_options = 'json=omitempty',
+          -- placeholder for require("go.comment").gen()
+          comment_placeholder = "",
+          run_in_floaterm = false,
+          trouble = true,
+        })
+        local config = require('go.lsp').config()
+        local capabilities = require("cmp_nvim_lsp").default_capabilities(config.capabilities)
+        config.capabilities = capabilities
+        require("lspconfig")["gopls"].setup(config)
+      end,
     })
 
-    lspconfig["rust_analyzer"].setup({
-      capabilities = require("cmp_nvim_lsp").default_capabilities(),
-      settings = {
-        ["rust-analyzer"] = {
-          checkOnSave = {
-            command = "clippy-driver",
-          },
-        }
-      }
-    })
-    require("go").setup()
 
     local to_install = {}
     if vim.fn.executable('yamlfmt') == 0 then
