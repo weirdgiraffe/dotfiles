@@ -3,9 +3,8 @@ return {
   dependencies = {
     "weirdgiraffe/plenary.nvim",
   },
-  enable = false,
+  enabled = false,
   dev = true,
-  lazy = true,
   config = function()
     require("copilot-chat").setup({})
   end,

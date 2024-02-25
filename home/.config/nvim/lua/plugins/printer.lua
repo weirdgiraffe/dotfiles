@@ -3,7 +3,7 @@ return {
   dependencies = {
     "weirdgiraffe/plenary.nvim",
   },
-  enable = true,
+  enabled = false,
   dev = true,
   lazy = false,
   config = function()

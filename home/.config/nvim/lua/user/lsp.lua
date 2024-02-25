@@ -79,9 +79,10 @@ local function set_lsp_on_save(client, bufnr)
   end
 end
 
-local M = {}
 
-function M.on_attach(client, bufnr)
+local function on_attach(client, bufnr)
+  vim.print("Attaching to " .. client.name)
+
   local bufopts = { noremap = true, silent = true, buffer = bufnr }
 
   if client.name == "gopls" then
@@ -93,4 +94,11 @@ function M.on_attach(client, bufnr)
   vim.keymap.set("n", "gd", vim.lsp.buf.definition, bufopts)
 end
 
-return M
+vim.api.nvim_create_autocmd('LspAttach', {
+  callback = function(event)
+    assert(event, "LspAttach event shall not be nil")
+    local bufnr = event.buf
+    local client = vim.lsp.get_client_by_id(event.data.client_id)
+    on_attach(client, bufnr)
+  end,
+})

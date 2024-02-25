@@ -129,6 +129,7 @@ if vim.fn.executable('pyenv') == 1 then
   vim.g.python3_host_prog = vim.fn.expand("~/.pyenv/versions/neovim/bin/python")
 end
 
+require("user.lsp")
 require("user.lazy")
 require("user.colors").setup()
 require("user.keybindings")
