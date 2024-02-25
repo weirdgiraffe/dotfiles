@@ -10,6 +10,8 @@ return {
       options = {
         icons_enabled = true,
         theme = 'auto',
+        section_separators = { left = '', right = '' },
+        component_separators = '|',
       },
       -- in the tabline I would like to show the list of open buffers
       -- at the same time I would like to show buffer numbers for the
@@ -24,7 +26,9 @@ return {
         lualine_z = {},
       },
       sections = {
-        lualine_a = { 'mode' },
+        lualine_a = {
+          { 'mode', separator = { left = '' }, right_padding = 2 },
+        },
         lualine_b = {
           'branch', 'diff',
           {
@@ -48,9 +52,11 @@ return {
                       ]] --
           },
         },
-        lualine_x = { 'encoding', 'fileformat', 'filetype' },
-        lualine_y = { 'progress' },
-        lualine_z = { 'location' }
+        lualine_x = {},
+        lualine_y = { 'encoding', 'fileformat', 'filetype', 'progress' },
+        lualine_z = {
+          { 'location', separator = { right = '' }, left_padding = 2 },
+        },
       },
     })
   end,
