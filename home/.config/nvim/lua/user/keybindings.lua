@@ -24,7 +24,21 @@ local function close_other_buffers()
   end
 end
 
-vim.keymap.set("n", "<leader>bq", close_other_buffers, { silent = true, noremap = true })
+vim.keymap.set("n", "<leader>n", "<cmd>bp<CR>", {
+  silent = true,
+  noremap = true,
+  desc = "Switch to previous buffer",
+})
+vim.keymap.set("n", "<leader>b", close_other_buffers, {
+  silent = true,
+  noremap = true,
+  desc = "Close all buffers but the current one",
+})
+vim.keymap.set("n", "<leader>v", "<cmd>bn<CR>", {
+  silent = true,
+  noremap = true,
+  desc = "Switch to next buffer",
+})
 
 having("lualine.components.buffers", function(lualine_buffers)
   -- configure mapping for buffers: <Leader>1 will switch to buffer 1,
@@ -58,16 +72,15 @@ having("fzf-lua", function(fzf)
 
   local opts = { silent = true, noremap = true }
 
-  vim.keymap.set("n", "<leader>d", fzf.lsp_document_symbols, opts)
-  vim.keymap.set("n", "<leader>r", fzf.lsp_references, opts)
-  vim.keymap.set("n", "<leader>i", fzf.lsp_implementations, opts)
-
   vim.keymap.set("n", "<C-p>", files, opts)
   vim.keymap.set("n", "<leader>ff", files, opts)
   vim.keymap.set("n", "<leader>fb", fzf.buffers, opts)                   -- grep buffers
   vim.keymap.set("n", "<leader>fg", fzf.live_grep_glob, opts)            -- live grep
+
   vim.keymap.set({ "n", "v" }, "<leader>ca", fzf.lsp_code_actions, opts) -- code actions
+
   vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
+
   vim.keymap.set("n", "<leader>d", fzf.lsp_document_symbols, opts)
   vim.keymap.set("n", "<leader>r", fzf.lsp_references, opts)
   vim.keymap.set("n", "<leader>i", fzf.lsp_implementations, opts)
@@ -136,6 +149,13 @@ having("obsidian", function()
         vim.cmd("ObsidianNew " .. title)
       end,
       desc = "Create new note in Obsidian",
+    })
+  vim.api.nvim_set_keymap("n", "<leader>fj",
+    "<cmd>ObsidianToday<cr>",
+    {
+      silent = true,
+      noremap = true,
+      desc = "Daily Obsidian node",
     })
 end)
 

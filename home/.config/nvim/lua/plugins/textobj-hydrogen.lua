@@ -4,5 +4,4 @@ return {
     "kana/vim-textobj-user",
   },
   ft = { "ipnb" },
-  event = "BufWinEnter",
 }

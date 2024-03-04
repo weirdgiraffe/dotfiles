@@ -5,8 +5,7 @@ local log = require("util.log").new({
 
 return {
   "hkupty/iron.nvim",
-  ft = { "py", "ipynb" },
-  event = "BufWinEnter",
+  ft = { "python", "ipynb" },
   init = function()
     local command = [[pip install ipython]]
     local output = {}

@@ -121,6 +121,9 @@ vim.o.conceallevel = 2
 -- for more info see `:h shortmess` and `:intro`
 vim.o.shortmess = vim.o.shortmess .. 'I'
 
+-- show current line
+vim.o.cursorline = true
+
 -- check if we have pyenv
 if vim.fn.executable('pyenv') == 1 then
   -- assuming that we setted everything up using

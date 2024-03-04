@@ -22,6 +22,7 @@ return {
       },
 
       log_level = vim.log.levels.INFO,
+      notes_subdir = "notes", -- where to store the notes
 
       -- customize how names/IDs for new notes are created.
       note_id_func = function(title)
