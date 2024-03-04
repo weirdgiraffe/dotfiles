@@ -24,7 +24,7 @@ local function close_other_buffers()
   end
 end
 
-vim.keymap.set("n", "<leader>n", "<cmd>bp<CR>", {
+vim.keymap.set("n", "<leader>v", "<cmd>bp<CR>", {
   silent = true,
   noremap = true,
   desc = "Switch to previous buffer",
@@ -34,7 +34,7 @@ vim.keymap.set("n", "<leader>b", close_other_buffers, {
   noremap = true,
   desc = "Close all buffers but the current one",
 })
-vim.keymap.set("n", "<leader>v", "<cmd>bn<CR>", {
+vim.keymap.set("n", "<leader>n", "<cmd>bn<CR>", {
   silent = true,
   noremap = true,
   desc = "Switch to next buffer",
@@ -70,28 +70,64 @@ having("fzf-lua", function(fzf)
     return fzf.files(opts)
   end
 
-  local opts = { silent = true, noremap = true }
+  vim.keymap.set("n", "<leader>l", files, {
+    silent = true,
+    noremap = true,
+    desc = "files for the current project dir",
+  })
+  vim.keymap.set("n", "<leader>k", fzf.buffers, {
+    silent = true,
+    noremap = true,
+    desc = "opened buffers",
+  })
+  vim.keymap.set("n", "<leader>j", fzf.live_grep_glob, {
+    silent = true,
+    noremap = true,
+    desc = "live grep over the current dir",
+  })
 
-  vim.keymap.set("n", "<C-p>", files, opts)
-  vim.keymap.set("n", "<leader>ff", files, opts)
-  vim.keymap.set("n", "<leader>fb", fzf.buffers, opts)                   -- grep buffers
-  vim.keymap.set("n", "<leader>fg", fzf.live_grep_glob, opts)            -- live grep
 
-  vim.keymap.set({ "n", "v" }, "<leader>ca", fzf.lsp_code_actions, opts) -- code actions
+  vim.keymap.set("n", "<leader>f", fzf.lsp_references, {
+    silent = true,
+    noremap = true,
+    desc = "lsp document references",
+  })
+  vim.keymap.set("n", "<leader>d", fzf.lsp_document_symbols, {
+    silent = true,
+    noremap = true,
+    desc = "lsp document symbols",
+  })
+  vim.keymap.set("n", "<leader>i", fzf.lsp_implementations, {
+    silent = true,
+    noremap = true,
+    desc = "lsp document implementations",
+  })
 
-  vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
 
-  vim.keymap.set("n", "<leader>d", fzf.lsp_document_symbols, opts)
-  vim.keymap.set("n", "<leader>r", fzf.lsp_references, opts)
-  vim.keymap.set("n", "<leader>i", fzf.lsp_implementations, opts)
+  vim.keymap.set({ "n", "v" }, "<leader>e", fzf.lsp_code_actions, {
+    silent = true,
+    noremap = true,
+    desc = "lsp code actions for the line",
+  })
 end)
 
 
 having("trouble", function(trouble)
   local opts = { silent = true, noremap = true }
-  vim.keymap.set("n", "<leader>xx", function() trouble.toggle() end, opts)
-  vim.keymap.set("n", "<leader>xw", function() trouble.toggle("workspace_diagnostics") end, opts)
-  vim.keymap.set("n", "<leader>xd", function() trouble.toggle("document_diagnostics") end, opts)
+  vim.keymap.set("n", "<leader>x", function()
+    trouble.toggle("document_diagnostics")
+  end, {
+    silent = true,
+    noremap = true,
+    desc = "Trouble: show document diagnostics",
+  })
+  vim.keymap.set("n", "<leader>c", function()
+    trouble.toggle("workspace_diagnostics")
+  end, {
+    silent = true,
+    noremap = true,
+    desc = "Trouble: show workspace diagnostics",
+  })
 end)
 
 having("oil", function()
@@ -99,13 +135,17 @@ having("oil", function()
 end)
 
 -- show diagnostics for the current line in the floating term window
-vim.keymap.set("n", "<leader>sd", function()
+vim.keymap.set("n", "<leader>a", function()
   vim.diagnostic.open_float({
     scope = "line",
     source = "true",
     border = "rounded", -- values as for border in vim.api.nvim_open_win()
   })
-end, { silent = true, noremap = true })
+end, {
+  silent = true,
+  noremap = true,
+  desc = "Show diagnostics for the current line",
+})
 
 -- comment out/ uncomment selected lines
 vim.keymap.set({ "n", "v" }, "<leader>co", require("util.comments").toggle, { silent = true, noremap = true })
@@ -132,7 +172,7 @@ end, {
 
 
 having("obsidian", function()
-  vim.api.nvim_set_keymap("n", "<leader>obs",
+  vim.api.nvim_set_keymap("n", "<leader>fk",
     "<cmd>ObsidianQuickSwitch<CR>",
     {
       silent = true,
@@ -140,7 +180,7 @@ having("obsidian", function()
       desc = "Obsidian quick switch",
     })
 
-  vim.api.nvim_set_keymap("n", "<leader>obe", "",
+  vim.api.nvim_set_keymap("n", "<leader>fl", "",
     {
       silent = true,
       noremap = true,

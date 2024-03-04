@@ -5,14 +5,36 @@ vim.o.tabstop = 4
 
 having("go", function()
   local opts = { noremap = true, silent = true }
-  vim.keymap.set("n", "<leader>a", function()
+  vim.keymap.set("n", "<leader>u", function()
     require("go.alternate").switch("", "")
-  end, opts)
-  vim.keymap.set("n", "<Leader>t", function()
+  end, {
+    silent = true,
+    noremap = true,
+    desc = "go alternate",
+  })
+  vim.keymap.set("n", "<leader>i", "<cmd>GoBuild<cr>", {
+    silent = true,
+    noremap = true,
+    desc = "go build",
+  })
+  vim.keymap.set("n", "<leader>o", function()
     vim.cmd("GoTest" .. vim.fn.expand('%:p:h') .. "/...")
-  end, opts)
-  vim.keymap.set("n", "<Leader>tf", "<cmd>GoTestFunc<cr>", opts)
-  vim.keymap.set("n", "<Leader>tc", "<cmd>GoCoverage -p<cr>", opts)
-  vim.keymap.set("n", "<Leader>b", "<cmd>GoBuild<cr>", opts)
+  end, {
+    silent = true,
+    noremap = true,
+    desc = "go test",
+  })
+  vim.keymap.set("n", "<leader>p", function()
+    require("go.coverage").toggle()
+  end, {
+    silent = true,
+    noremap = true,
+    desc = "go coverage toggle",
+  })
+  vim.keymap.set("n", "<leader>pr", "<cmd>GoCoverage -p<cr>", {
+    silent = true,
+    noremap = true,
+    desc = "go coverage for current package",
+  })
   vim.keymap.set("n", "<leader>cc", require("go.comment").gen, opts)
 end)

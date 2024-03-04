@@ -4,5 +4,7 @@ return {
   dependencies = {
     "nvim-tree/nvim-web-devicons",
   },
-  opts = {},
+  opts = {
+    mode = "document_diagnostics",
+  },
 }
