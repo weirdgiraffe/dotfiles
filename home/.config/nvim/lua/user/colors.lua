@@ -77,9 +77,17 @@ function M.fzf()
   return fzf_colors()
 end
 
--- this function is called by hammerspoon
-local function set_background(background)
-  vim.cmd("set background=" .. background)
+-- sets vim colorscheme and background
+---@param background string dark|light
+local function set_colorscheme(background)
+  if background == "dark" then
+    vim.cmd([[set background=dark]])
+  else
+    vim.cmd([[set background=light]])
+  end
+  vim.cmd([[colorscheme gruvbox]])
+
+  -- regenerate colors for fzf
   having("fzf-lua", function(fzf)
     fzf.setup({
       fzf_opts = {
@@ -87,6 +95,7 @@ local function set_background(background)
       },
     })
   end)
+
   -- to ensure the focus switch I need to drop the
   -- background color for the normal and float windows
   -- and rely on the terminal colors
@@ -94,7 +103,9 @@ local function set_background(background)
   vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
 end
 
-local function set_background_macos(defaultBackground)
+-- sets colorscheme based on system appearance
+local function set_system_colorscheme()
+  local defaultBackground = "light"
   local command = [[osascript -e '
   tell application "System Events"
     tell appearance preferences
@@ -106,32 +117,28 @@ local function set_background_macos(defaultBackground)
     on_stdout = function(_, data, _)
       if systemBackground == "" then
         systemBackground = data[1] == "true" and "dark" or "light"
-        set_background(systemBackground)
+        set_colorscheme(systemBackground)
       end
     end
   })
   local timeoutMs = 300
   local status = vim.fn.jobwait({ job }, timeoutMs)
   if status[1] ~= 0 and systemBackground == "" then
-    set_background(defaultBackground)
+    set_colorscheme(defaultBackground)
   end
 end
 
 
-function M.setup()
-  having("rose-pine", function()
-    vim.cmd([[colorscheme rose-pine]])
-  end)
 
-  local defaultBackground = "light"
+function M.setup()
   if vim.fn.has('macunix') then
-    set_background_macos(defaultBackground)
+    set_system_colorscheme()
   else
-    set_background(defaultBackground)
+    set_colorscheme("light")
   end
 
-  vim.api.nvim_create_user_command("SetBackground", function(opts)
-    set_background(opts.args)
+  vim.api.nvim_create_user_command("SetColorscheme", function(opts)
+    set_colorscheme(opts.args)
   end, { nargs = 1, force = true })
   vim.api.nvim_create_user_command("ExportColorsFzf", function(opts)
     export_fzf_colors(opts.args)

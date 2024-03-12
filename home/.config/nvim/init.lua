@@ -1,3 +1,9 @@
+-- set leader key to space because it is the most ergonomic key (could
+-- be pressed by both of my thumbs)
+--- always set leader first!
+vim.keymap.set("n", "<Space>", "<Nop>", { silent = true })
+vim.g.mapleader = " "
+
 -- Disable Ex mode, i.e compatibility mode with ex editor
 -- reference: https://vimdoc.sourceforge.net/htmldoc/intro.html#Ex
 vim.api.nvim_set_keymap("n", "Q", "<Nop>", { noremap = true, silent = true })
@@ -8,10 +14,6 @@ vim.opt.mouse = "a"
 
 -- disable cursor styling, i.e. always use block shaped cursor
 vim.opt.guicursor = ""
-
--- set leader key to space because it is the most ergonomic key (could
--- be pressed by both of my thumbs)
-vim.g.mapleader = " "
 
 -- allow switch off from modified buffers. that allows to use buffers instead of tabs
 vim.opt.hidden = true
@@ -106,8 +108,6 @@ vim.opt.autoindent = true
 
 vim.o.more = true
 
-vim.o.number = true
-vim.o.relativenumber = true
 
 -- workaround to not loose window position on buffer switch
 vim.cmd([[
@@ -121,8 +121,13 @@ vim.o.conceallevel = 2
 -- for more info see `:h shortmess` and `:intro`
 vim.o.shortmess = vim.o.shortmess .. 'I'
 
--- show current line
-vim.o.cursorline = true
+-- do not highlight current line
+vim.o.cursorline = false
+
+-- line numbers
+vim.o.number = false
+vim.o.relativenumber = true
+vim.o.signcolumn = 'auto'
 
 -- check if we have pyenv
 if vim.fn.executable('pyenv') == 1 then

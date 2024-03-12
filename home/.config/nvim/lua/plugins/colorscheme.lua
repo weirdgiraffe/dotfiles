@@ -6,7 +6,25 @@ return {
   {
     "rose-pine/neovim",
     name = "rose-pine",
+  },
+  {
+    "ellisonleao/gruvbox.nvim",
     lazy = false,
     priority = 1000,
+    opts = {
+      contrast = "hard",
+      italic = {
+        strings = false,
+        emphasis = true,
+        comments = true,
+        operators = false,
+        folds = true,
+      },
+      overrides = {
+        SignColumn = { bg = "none" } -- remove annoying highlighting for git gutter
+        -- TODO: nice to change the default magenta like color for values
+        -- and comments to something nicer like orange
+      },
+    },
   },
 }
