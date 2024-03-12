@@ -21,7 +21,7 @@ local M = {}
 ---@param background string style "light" or "dark"
 function M.set_nvim_style(background)
   local pipes = nvim_server_pipe()
-  local nvim_command = ([[<cmd>SetBackground %s<CR>]]):format(background)
+  local nvim_command = ([[<cmd>SetColorscheme %s<CR>]]):format(background)
   print("command: " .. nvim_command)
   for _, pipe in pairs(pipes) do
     local command = ([[nvim --server "%s" --remote-send "%s"]]):format(pipe, nvim_command)
@@ -29,37 +29,33 @@ function M.set_nvim_style(background)
   end
 end
 
---- set background for all existing nvim instances
----@param background string style "light" or "dark"
-function M.set_kitty_style(background)
-  local command = [[kitty +kitten themes --reload-in=all Rosé Pine Dawn]]
-  if background == "dark" then
-    command = [[kitty +kitten themes --reload-in=all Rosé Pine]]
-  end
-  pcall(function() cmd(command) end)
-end
+local fzf_theme = {
+  dark = [[themes/gruvbox-dark-hard.sh]],
+  light = [[themes/gruvbox-light-hard.sh]],
+  --   dark = [[themes/rose-pine.sh]],
+  --   light = [[themes/rose-pine-dawn.sh]],
+}
 
 --- set background for all existing fzf instances
 --- NOTE: it heavily depends on the way I wrap fzf
 ---@param background string style "light" or "dark"
 function M.set_fzf_style(background)
   local conf = os.getenv("XDG_CONFIG_HOME") or os.getenv("HOME") .. "/.config/fzf"
-  local theme = "themes/rose-pine-dawn.sh"
-  if background == "dark" then
-    theme = "themes/rose-pine.sh"
-  end
+  local theme = fzf_theme[background] or fzf_theme.light
   pcall(function()
     cmd("cd " .. conf .. " && ln -sf " .. theme .. " current-theme.zsh")
   end)
 end
 
+local kitty_theme = {
+  dark = [[Gruvbox Dark Hard]],
+  light = [[Gruvbox Light Hard]],
+}
+
 --- set background for FZF
 ---@param background string style "light" or "dark"
 function M.set_kitty_style(background)
-  local theme = [[Rosé Pine Dawn]]
-  if background == "dark" then
-    theme = [[Rosé Pine]]
-  end
+  local theme = kitty_theme[background] or kitty_theme.light
   local command = ([[kitty +kitten themes --config-file-name=themes.conf --reload-in=all %s]]):format(theme)
   pcall(function() cmd(command) end)
 end

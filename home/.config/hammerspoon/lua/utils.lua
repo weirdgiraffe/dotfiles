@@ -9,7 +9,7 @@ function M.cmd(cmd)
   if status then
     return output
   else
-    errmsg = ("failed to run %s: %s(%d)"):format(cmd, type, rc)
+    local errmsg = ("failed to run %s: %s(%d)"):format(cmd, type, rc)
     error(errmsg)
   end
 end
