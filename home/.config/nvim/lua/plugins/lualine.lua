@@ -9,7 +9,7 @@ return {
     require('lualine').setup({
       options = {
         icons_enabled = true,
-        theme = 'auto',
+        theme = 'gruvbox-material',
         section_separators = { left = '', right = '' },
         component_separators = '|',
       },
@@ -26,9 +26,7 @@ return {
         lualine_z = {},
       },
       sections = {
-        lualine_a = {
-          { 'mode', separator = { left = '' }, right_padding = 2 },
-        },
+        lualine_a = { 'mode' },
         lualine_b = {
           'branch', 'diff',
           {
@@ -54,9 +52,7 @@ return {
         },
         lualine_x = {},
         lualine_y = { 'encoding', 'fileformat', 'filetype', 'progress' },
-        lualine_z = {
-          { 'location', separator = { right = '' }, left_padding = 2 },
-        },
+        lualine_z = { 'location' },
       },
     })
   end,
