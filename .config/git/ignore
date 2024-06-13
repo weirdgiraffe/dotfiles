@@ -1,0 +1,10 @@
+.DS_Store
+ropeproject
+*.swp
+*~
+*.o
+*.pyc
+*.pyo
+__pycache__
+# code coverage for golang
+*.cov
