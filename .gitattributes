@@ -1,0 +1,2 @@
+.config/git/chronicleprotocol filter=git-crypt diff=git-crypt
+.ssh/** filter=git-crypt diff=git-crypt

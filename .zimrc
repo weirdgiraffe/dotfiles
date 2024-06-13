@@ -1,0 +1,29 @@
+# ------------------ modules to be initialized first ---------------------------
+
+zmodule environment # sane zsh built-in environment options.
+zmodule input # correct bind keys for input events.
+zmodule utility # colors for ls, grep and less.
+zmodule duration-info
+zmodule git-info
+
+# ------------------ completion -----------------------------------------------
+
+zmodule zsh-users/zsh-completions --fpath src # additional completions.
+
+# add additioncal completions from homebrew
+if [ -x "$(command -v brew)" ]; then
+  zmodule $(brew --prefix)/share/zsh --fpath site-functions
+fi
+# add additioncal local completions
+if [ -d "${HOME}/.local/share/zsh/completion" ]; then
+  zmodule ${HOME}/.local/share/zsh --fpath completion
+fi
+zmodule completion # enable completions
+
+# ------------------ modules to be initialized last ---------------------------
+zmodule zsh-users/zsh-syntax-highlighting # syntax highlighting.
+zmodule zsh-users/zsh-history-substring-search
+# handle fzf as a zim module
+zmodule junegunn/fzf --on-pull "./install --no-bash --xdg --no-update-rc"
+
+zmodule zsh-users/zsh-autosuggestions # should be last

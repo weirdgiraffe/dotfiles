@@ -1,0 +1,19 @@
+name: Check fresh install
+on: [push]
+jobs:
+  macos:
+    name: install on macos
+    runs-on: macos-13
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: install dotfiles
+        run: bash scripts/install.sh
+      - name: show ~/
+        run: ls -a ~/.*
+      - name: show ~/.ssh
+        run: tree ~/.ssh
+      - name: show ~/.config 
+        run: tree ~/.config
+      - name: show ~/Library/Fonts
+        run: tree ~/Library/Fonts

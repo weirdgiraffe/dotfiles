@@ -1,0 +1,86 @@
+# vim: ts=2 sw=2
+[user]
+	email = giraffe@cyberzoo.xyz
+	name = weirdgiraffe
+	signingkey = 9FA2370A787AEB5CBA04B0441F15F3CEAD2926CA
+[commit]
+	gpgsign = true
+[github]
+	user = weirdgiraffe
+[url "git@github.com:"]
+	insteadOf = https://github.com/
+[gitlab]
+	user = weirdgiraffe
+[url "git@gitlab.com:"]
+	insteadOf = https://gitlab.com/
+[init]
+	defaultBranch = master
+[color]
+	# ui = true is a superset of all the more specific color options
+	# as documented at http://book.git-scm.com/5_customizing_git.html
+	# When set to always, always use colors in all git commands which are capable of colored output.
+	# When false, never. When set to true or auto, use colors only when the output is to the terminal.
+	# When more specific variables of color.* are set, they always take precedence over this setting.
+	# Defaults to false.
+	ui = auto
+	# diff = auto
+	# status = auto
+	# branch = auto:set nopaste
+[color "branch"]
+	#current = yellow reverse
+	#local = yellow
+	#remote = green
+[color "diff"]
+	#meta = yellow bold
+	#frag = magenta bold
+	#old = red bold
+	#new = green bold
+[color "status"]
+	#added = yellow
+	#changed = green
+	#untracked = cyan
+[core]
+	quotepath = false
+	autocrlf = input
+	editor = nvim
+	pager = bat --style=plain --color=always --wrap=character
+	sshCommand = "ssh -i ~/.ssh/git"
+[alias]
+	c = commit
+	cam = !git add --all && git commit --message
+	cm = commit --message
+	co = checkout
+	st = status
+	dh = diff HEAD
+	dc = diff --staged
+	amend = commit --amend --no-edit
+	psuh = push
+	l = log --pretty='%C(auto)%h %d %s %Cgreen(%ai) %Cblue%an <%ae>%Creset' -10
+	ll = log --pretty='%C(auto)%h %d %Cgreen(%ad) %Cblue%an <%ae>%Creset%n%s%n%n%b' -10
+	lll = log --pretty='%C(auto)%h %d %Cgreen(%ad) %Cblue%an <%ae>%Creset%n%s%n%n%b' --stat -C -5
+	ls = log --show-signature --pretty='%C(auto)%h %d %s %Cgreen(%ad) %Cblue%an <%ae>%Creset' -10
+	lls = log --show-signature --pretty='%C(auto)%h %d %Cgreen(%ad) %Cblue%an <%ae>%Creset%n%s%n%n%b' -10
+	llls = log --show-signature --pretty='%C(auto)%h %d %Cgreen(%ad) %Cblue%an <%ae>%Creset%n%s%n%n%b' --stat -C -5
+	tree = log --pretty='%C(auto)%h %d %s %Cgreen(%ad) %Cblue%an <%ae>%Creset' --graph --all
+	br = branch -a
+[log]
+	date=relative
+[push]
+	default = simple
+[pull]
+	rebase = true
+[credential]
+	helper = osxkeychain
+[filter "lfs"]
+	required = true
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+[gpg]
+	program = /opt/homebrew/bin/gpg
+
+# [includeIf "gitdir:**/gitlab.com/glassnode/"]
+# 	path = ~/.config/git/glassnode
+# 
+[includeIf "gitdir:**/github.com/chronicleprotocol/"]
+	path = chronicleprotocol
