@@ -30,7 +30,13 @@ alias rg='rg --ignore-file=${HOME}/.config/fd/ignore'
 alias myip='curl -s http://ip-api.com/json| python -m json.tool'
 alias urldecode='python -c "import sys, urllib as ul; print ul.unquote_plus(sys.argv[1])"'
 alias urlencode='python -c "import sys, urllib as ul; print ul.quote_plus(sys.argv[1])"'
-alias gclone='clone-to-code'
+
+# clone the repo and cd to it
+gclone() {
+  local binary=$(whence -p gclone)
+  local dst=$(${binary} ${@})
+  [[ -d "${dst}" ]] && cd ${dst}
+}
 
 # Temp workaround to disable punycode deprecation logging to stderr
 # https://github.com/bitwarden/clients/issues/6689

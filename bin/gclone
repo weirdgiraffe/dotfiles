@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+
+# This script will clone input that looks like a git repository into
+# the appropriate location inside of your code dir and print this
+# location.
+#
+# Right now the following inputs are supported:
+#
+# - https://{ORIGIN}/{USERNAME}/{REPO}.git
+# - git@{ORIGIN}:{USERNAME}/{REPO}.git
+#
+# Example: if you are trying to clone git@github.com:username/repo.git then
+# it will get cloned into ${YOUR_CODE_DIRECTORY}/github.com/username/repo
+
+YOUR_CODE_DIRECTORY=~/code
+
+print_usage_and_exit() {
+  >&2 echo "Usage: $0 <http or git repo url>"
+  exit 1
+}
+
+if [[ $# -ne 1 ]]; then
+  print_usage_and_exit
+fi
+
+case ${1} in
+  https://*)
+    REPO_DIR=${1##https://}
+    REPO_DIR=${REPO_DIR%.git}
+  ;;
+  git@*)
+    REPO_DIR=${1##git@}
+    REPO_DIR=${REPO_DIR/:/\/}
+    REPO_DIR=${REPO_DIR%.git}
+  ;;
+  *)
+    >&2 echo "${1} doesn't look like git repository"
+    print_usage_and_exit
+  ;;
+esac
+
+TARGET_DIR=${YOUR_CODE_DIRECTORY}/${REPO_DIR}
+mkdir -p ${TARGET_DIR}
+[[ -d ${TARGET_DIR} ]] || git clone ${1} ${TARGET_DIR}
+echo ${TARGET_DIR}
