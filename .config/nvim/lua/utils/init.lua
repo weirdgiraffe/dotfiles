@@ -38,9 +38,7 @@ function M.cfcd(what)
 
   return function()
     local curdir = vim.fn.chdir(dstdir)
-    vim.print("cd front: " .. dstdir)
     what()
-    vim.print("cd back: " .. curdir)
     vim.fn.chdir(curdir)
   end
 end
