@@ -7,7 +7,7 @@ path+=(
 export GOPRIVATE=github.com/weirdgiraffe
 
 [[ -d "${HOME}/.cargo" ]] && source "$HOME/.cargo/env"
-[[ -x "$(command -v brew)" ]] && path=("$(brew --prefix)/opt/coreutils/libexec/gnubin:${PATH}" path)
+[[ -x "$(command -v brew)" ]] && path=("$(brew --prefix)/opt/coreutils/libexec/gnubin:${PATH}" $path)
 
 # needed to keep mac os version instead of the gnu one for oh-my-posh
 stty() { /bin/stty $@ }
