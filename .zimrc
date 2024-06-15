@@ -26,4 +26,8 @@ zmodule zsh-users/zsh-history-substring-search
 # handle fzf as a zim module
 zmodule junegunn/fzf --on-pull "./install --no-bash --xdg --no-update-rc"
 
+# https://github.com/aloxaf/fzf-tab 
+# use fzf for tab completion
+zmodule Aloxaf/fzf-tab --source "fzf-tab.plugin.zsh"
+
 zmodule zsh-users/zsh-autosuggestions # should be last
