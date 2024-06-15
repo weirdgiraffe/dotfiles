@@ -42,6 +42,17 @@ type = 'rprompt'
 overflow = 'hidden'
 
 [[blocks.segments]]
+type = 'text'
+style = 'plain'
+foreground = 'yellow'
+background = 'transparent'
+template = """
+{{- if .Env.YAZI_LEVEL -}}
+yazi:{{ .Env.YAZI_LEVEL }}
+{{- end -}}
+"""
+
+[[blocks.segments]]
 type = 'executiontime'
 style = 'plain'
 foreground = 'yellow'
