@@ -1,9 +1,15 @@
+local Path = require("plenary.path")
+
 ---@type table
 local workspaces = {
   {
-    name = "shared",
-    path = vim.fn.expand("~") .. "/Library/CloudStorage/SynologyDrive-Obsidian/**.md",
-  }
+    name = "Obsidian",
+    path = Path:new("~/Obsidian/unsorted"):expand(),
+  },
+  {
+    name = "Obsidian",
+    path = Path:new("~/Obsidian/crypto"):expand(),
+  },
 }
 
 local function workspaces_paths()
