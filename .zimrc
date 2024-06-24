@@ -7,9 +7,8 @@ zmodule duration-info
 zmodule git-info
 
 # ------------------ completion -----------------------------------------------
-
-zmodule zsh-users/zsh-completions --fpath src # additional completions.
-
+# additional zsh completions.
+zmodule zsh-users/zsh-completions --fpath src
 # add additioncal completions from homebrew
 if [ -x "$(command -v brew)" ]; then
   zmodule $(brew --prefix)/share/zsh --fpath site-functions
