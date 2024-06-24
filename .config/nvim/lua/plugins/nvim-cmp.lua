@@ -102,6 +102,7 @@ return {
 
         ['<C-e>'] = cmp.mapping.abort(),
         ['<C-l>'] = cmp.mapping.confirm(), -- pick a selected entry only
+        ['<cr>'] = cmp.mapping.confirm(),  -- pick a selected entry only
       }),
       sources = cmp.config.sources({
         { name = 'nvim_lsp',  keyword_length = 3 },
