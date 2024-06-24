@@ -168,3 +168,5 @@ vim.api.nvim_create_user_command("CopyPath", function()
 end, {})
 
 nnoremap("<leader>cp", "<cmd>CopyPath<cr>", "coppy current buffer path to clipboard")
+
+nnoremap("<leader>gb", "<cmd>Gitsigns blame_line<cr>", "git blame current line")
