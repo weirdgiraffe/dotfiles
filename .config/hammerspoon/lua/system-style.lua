@@ -39,7 +39,13 @@ return {
       if timer then
         timer:stop()
       else
-        timer = hs.timer.new(M.interval, M.check_style)
+        local check = function()
+          local ok, err = pcall(M.check_style)
+          if not ok then
+            print("failed to check system style: " .. err)
+          end
+        end
+        timer = hs.timer.new(M.interval, check)
       end
       M.on_style_change = opts.on_style_change
       timer:start()
