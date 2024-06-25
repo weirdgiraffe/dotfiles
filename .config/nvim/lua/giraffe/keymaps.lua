@@ -1,6 +1,5 @@
 local nnoremap = require("utils").nnoremap
 local vnoremap = require("utils").vnoremap
-local cfcd = require("utils").cfcd
 
 local tmux = require("nvim-tmux-navigation")
 local fzf = require("fzf-lua")
@@ -13,39 +12,39 @@ nnoremap("<M-k>", tmux.NvimTmuxNavigateUp, "navigate to the window or tmux pane 
 nnoremap("<M-l>", tmux.NvimTmuxNavigateRight, "navigate to the right window or tmux pane")
 
 
----fzf_files lists all of the files in the current git repository or in a current dir
--- if current path is not within a git repository.
-local function fzf_files()
-  local opts = {
+nnoremap("<leader>J", function()
+  return fzf.files({
+    winopts = { preview = { layout = "vertical" } },
     fd_opts = table.concat({
-      -- fd respects global ingore settings, so it is ok to list hidden files
-      -- to be able to edit something like .gitignore
       "--hidden",
       "--type=f",
     }, " "),
     cwd = fzf.path.git_root({}, true)
-  }
-  return fzf.files(opts)
-end
+  })
+end, "find files with respect to current git repo")
 
-local function live_grep()
-  local opts = {
-    cwd = fzf.path.git_root({}, true)
-  }
-  return fzf.live_grep(opts)
-end
-
-nnoremap("<leader>J", fzf_files, "find files for current git repo or <cwd>")
-nnoremap("<leader>j", cfcd(function(cwd)
+nnoremap("<leader>j", function()
   return fzf.files({
     fd_opts = table.concat({
       "--hidden",
       "--type=f",
     }, " "),
-    cwd = cwd,
+    cwd = vim.fn.expand("%:h"),
   })
-end), "find files with respect to the current file git repo or basedir")
-nnoremap("<leader>g", cfcd(live_grep), "live grep with respect to the current file git repo or basedir")
+end, "find files with respect to the current file dir")
+
+nnoremap("<leader>g", function()
+  return fzf.live_grep({
+    cwd = vim.fn.expand("%:h"),
+  })
+end, "live grep with respect to the current file dir")
+
+nnoremap("<leader>G", function()
+  return fzf.live_grep({
+    winopts = { preview = { layout = "vertical" } },
+    cwd     = fzf.path.git_root({}, true)
+  })
+end, "live grep with respect to current git repo")
 
 nnoremap("<leader>k", function()
   local opts = require("telescope.themes").get_dropdown()
