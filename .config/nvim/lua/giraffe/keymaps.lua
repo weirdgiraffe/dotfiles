@@ -66,14 +66,27 @@ nnoremap("gd", function()
   return require("telescope.builtin").lsp_definitions(opts)
 end, "LSP go to definition")
 
-nnoremap("<leader>d", fzf.lsp_document_symbols, "LSP: document symbols")
+nnoremap("<leader>d", function()
+  return fzf.lsp_document_symbols({
+    winopts = { preview = { layout = "vertical" } },
+  })
+end, "LSP: document symbols")
+
 nnoremap("<leader>D", function()
   local opts = require("telescope.themes").get_dropdown()
   return require("telescope.builtin").lsp_document_symbols(opts)
 end, "LSP: document symbols")
 
-nnoremap("<leader>r", fzf.lsp_references, "LSP: references")
-nnoremap("<leader>i", fzf.lsp_implementations, "LSP: implementations")
+nnoremap("<leader>r", function()
+  return fzf.lsp_references({
+    winopts = { preview = { layout = "vertical" } },
+  })
+end, "LSP: references")
+
+nnoremap("<leader>i", function()
+  local opts = require("telescope.themes").get_dropdown()
+  return require("telescope.builtin").lsp_implementations(opts)
+end, "LSP: implementations")
 
 
 vnoremap("<leader>q", fzf.lsp_code_actions, "LSP: code actions")
