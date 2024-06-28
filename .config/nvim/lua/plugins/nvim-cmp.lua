@@ -78,7 +78,7 @@ return {
       enabled = true,
       ---@diagnostic disable-next-line: missing-fields
       completion = {
-        -- autocomplete = false,
+        autocomplete = false,
         completeopt = "menu,menuone,preview,noselect",
       },
       snippet = {
@@ -101,12 +101,11 @@ return {
         ['<C-j>'] = cmp.mapping.scroll_docs(4),
 
         ['<C-e>'] = cmp.mapping.abort(),
-        ['<C-l>'] = cmp.mapping.confirm(), -- pick a selected entry only
-        ['<cr>'] = cmp.mapping.confirm(),  -- pick a selected entry only
+        ['<cr>'] = cmp.mapping.confirm(), -- pick a selected entry only
       }),
       sources = cmp.config.sources({
         { name = 'nvim_lsp',  keyword_length = 3 },
-        { name = 'luasnip',   keyword_length = 4 },
+        { name = 'luasnip',   keyword_length = 2 },
         { name = 'async_path' },
       }, {
         { name = 'buffer', keyword_length = 3 },
