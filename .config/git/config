@@ -43,7 +43,7 @@
 	quotepath = false
 	autocrlf = input
 	editor = nvim
-	pager = bat --style=plain --color=always --wrap=character
+	pager = delta
 	sshCommand = "ssh -i ~/.ssh/git"
 [alias]
 	c = commit
@@ -78,6 +78,9 @@
 	process = git-lfs filter-process
 [gpg]
 	program = /opt/homebrew/bin/gpg
+[delta]
+	navigate = true
+	# side-by-side = true
 
 # [includeIf "gitdir:**/gitlab.com/glassnode/"]
 # 	path = ~/.config/git/glassnode
