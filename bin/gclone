@@ -40,6 +40,5 @@ case ${1} in
 esac
 
 TARGET_DIR=${YOUR_CODE_DIRECTORY}/${REPO_DIR}
-mkdir -p ${TARGET_DIR}
 [[ -d ${TARGET_DIR} ]] || git clone ${1} ${TARGET_DIR}
 echo ${TARGET_DIR}
