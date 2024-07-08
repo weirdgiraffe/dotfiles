@@ -30,6 +30,7 @@ brew "poppler"
 brew "ripgrep"
 brew "pngpaste"
 brew "oh-my-posh"
+brew "git-delta"
 
 # casks
 cask "bitwarden"
