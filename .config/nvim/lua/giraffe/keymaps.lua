@@ -139,12 +139,26 @@ nnoremap("<leader>y", function()
 end, "close all but the current buffer")
 
 
-nnoremap("<leader>o", "<cmd>ObsidianQuickSwitch<cr>", "obsidian: quick switch")
+nnoremap("<leader>o", function()
+  vim.cmd([[ObsidianWorkspace default]])
+  vim.cmd([[ObsidianQuickSwitch]])
+end, "obsidian: quick switch for default workspace")
+
+nnoremap("<leader>oc", function()
+  vim.cmd([[ObsidianWorkspace crypto]])
+  vim.cmd([[ObsidianQuickSwitch]])
+end, "obsidian: quick switch for crypto workspace")
+
 nnoremap("<leader>on", function()
   local title = vim.fn.input("Title: ")
+  vim.cmd([[ObsidianWorkspace default]])
   vim.cmd("ObsidianNew " .. title)
 end, "obsidian: new note")
-nnoremap("<leader>ot", "<cmd>ObsidianToday<cr>", "obsidian: today note")
+
+nnoremap("<leader>ot", function()
+  vim.cmd([[ObsidianWorkspace default]])
+  vim.cmd([[ObsidianToday]])
+end, "obsidian: today note")
 
 nnoremap("<leader>;", require("giraffe.harpoon").add_mark, "add item to harpoon")
 nnoremap("<leader>h", require("giraffe.harpoon").telescope, "open harpoon window")
