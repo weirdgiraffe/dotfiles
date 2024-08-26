@@ -3,11 +3,11 @@ local Path = require("plenary.path")
 ---@type table
 local workspaces = {
   {
-    name = "Obsidian",
+    name = "default",
     path = Path:new("~/Obsidian/unsorted"):expand(),
   },
   {
-    name = "Obsidian",
+    name = "crypto",
     path = Path:new("~/Obsidian/crypto"):expand(),
   },
 }
@@ -36,6 +36,7 @@ return {
     -- TODO: maybe somehow set conceallevel only for the windows with
     -- obsidian documents.
     vim.o.conceallevel = 2 -- required for the obsidian ui
+    --lint:ignore
     require("obsidian").setup({
       workspaces = workspaces,
       log_level = vim.log.levels.INFO,
