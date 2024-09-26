@@ -8,6 +8,19 @@ local capabilities = vim.tbl_deep_extend(
 
 lspconfig["bashls"].setup({})
 
+local configs = require('lspconfig.configs')
+configs.solidity = {
+  default_config = {
+    cmd = { 'nomicfoundation-solidity-language-server', '--stdio' },
+    filetypes = { 'solidity' },
+    root_dir = lspconfig.util.find_git_ancestor,
+    single_file_support = true,
+  },
+}
+lspconfig["solidity"].setup({
+  capabilities = capabilities,
+})
+
 lspconfig["lua_ls"].setup({
   capabilities = capabilities,
   settings = {
@@ -18,9 +31,24 @@ lspconfig["lua_ls"].setup({
   },
 })
 
-lspconfig["gopls"].setup({
-  capabilities = capabilities,
-})
+-- FIXME: workaround for https://github.com/neovim/neovim/issues/28058
+-- based on https://github.com/neovim/neovim/issues/28058#issuecomment-2210490506
+local gopls_config = vim.tbl_deep_extend("force",
+  { require('go.lsp').config() },
+  { capabilities = capabilities },
+  {
+    capabilities = {
+      workspace = {
+        didChangeWatchedFiles = {
+          dynamicRegistration = false,
+          relativePatternSupport = false,
+        }
+      }
+    }
+  })
+lspconfig["gopls"].setup(gopls_config)
+
+
 
 lspconfig["taplo"].setup({
   capabilities = capabilities,
