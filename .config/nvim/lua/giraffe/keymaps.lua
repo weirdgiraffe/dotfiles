@@ -12,7 +12,7 @@ nnoremap("<M-k>", tmux.NvimTmuxNavigateUp, "navigate to the window or tmux pane 
 nnoremap("<M-l>", tmux.NvimTmuxNavigateRight, "navigate to the right window or tmux pane")
 
 
-nnoremap("<leader>J", function()
+nnoremap("<leader>j", function()
   return fzf.files({
     winopts = { preview = { layout = "vertical" } },
     fd_opts = table.concat({
@@ -23,7 +23,7 @@ nnoremap("<leader>J", function()
   })
 end, "find files with respect to current git repo")
 
-nnoremap("<leader>j", function()
+nnoremap("<leader>J", function()
   return fzf.files({
     fd_opts = table.concat({
       "--hidden",
