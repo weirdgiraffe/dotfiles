@@ -31,6 +31,7 @@ brew "ripgrep"
 brew "pngpaste"
 brew "oh-my-posh"
 brew "git-delta"
+brew "pre-commit"
 
 # casks
 cask "bitwarden"

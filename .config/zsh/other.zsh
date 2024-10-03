@@ -38,6 +38,7 @@ gclone() {
   local binary=$(whence -p gclone)
   local dst=$(${binary} ${@})
   [[ -d "${dst}" ]] && cd ${dst}
+  pre-commit install --allow-missing-config
 }
 
 # Temp workaround to disable punycode deprecation logging to stderr
