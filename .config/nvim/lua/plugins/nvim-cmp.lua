@@ -12,11 +12,16 @@ local function make_formatting_function()
     ellipsis_char = "...",
   })
 
+  local floors = {}
   return function(entry, item)
     -- Get the width of the current window.
     local win_width = vim.api.nvim_win_get_width(0)
     -- Set the max content to a percentage of the window width, in this case 20%.
-    local max_content_width = math.floor(win_width * 0.2)
+    local max_content_width = floors[win_width]
+    if not max_content_width then
+      max_content_width = math.floor(win_width * 0.2)
+      floors[win_width] = max_content_width
+    end
     -- Truncate the completion entry text if it's longer than the
     -- max content width. We subtract 3 from the max content width
     -- to account for the "..." that will be appended to it.
@@ -55,7 +60,6 @@ return {
         elseif luasnip.expand_or_jumpable() then
           luasnip.expand_or_jump()
         elseif has_words_before() then
-          vim.print("has words before: trigger completion")
           cmp.complete()
         else
           fallback()
