@@ -9,13 +9,13 @@ local function attr_color(what, hlID)
   end
 end
 
-local function fzf_colors()
+local function fzf_colors(opts)
   local colors = {
     "fg:" .. attr_color("fg", "Normal"),
     "bg:" .. attr_color("bg", "Normal"),
     "hl:" .. attr_color("fg", "Comment"),
     "fg+:" .. attr_color("fg", { "CursorLine", "CursorColumn", "Normal" }),
-    "bg+:" .. attr_color("bg", { "CursorLine", "CursorColumn" }),
+    "bg+:" .. attr_color("bg", { "Normal", "CursorLine", "CursorColumn" }),
     "hl+:" .. attr_color("fg", "Statement"),
     "info:" .. attr_color("fg", "PreProc"),
     "border:" .. attr_color("fg", "Ignore"),
@@ -28,9 +28,9 @@ local function fzf_colors()
   return vim.o.background .. "," .. table.concat(colors, ",")
 end
 
-vim.api.nvim_create_user_command("FzfColors", function(opts)
+vim.api.nvim_create_user_command("FzfColors", function()
   vim.print([[export FZF_DEFAULT_OPTS="]])
-  vim.print("--color=" .. fzf_colors())
+  vim.print("--color=" .. fzf_colors({ export = true }))
   vim.print([["]])
 end, { nargs = 0, force = true })
 
