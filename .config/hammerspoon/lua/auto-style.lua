@@ -30,12 +30,16 @@ function M.set_nvim_style(background)
 end
 
 local fzf_theme = {
-  -- dark = [[themes/gruvbox-dark-hard.sh]],
-  -- light = [[themes/gruvbox-light-hard.sh]],
-  -- dark = [[themes/rose-pine.sh]],
-  -- light = [[themes/rose-pine-dawn.sh]],
-  dark = [[themes/kanagawa-wave.sh]],
-  light = [[themes/kanagawa-lotus.sh]],
+  --  dark = [[themes/gruvbox-dark-hard.sh]],
+  --  light = [[themes/gruvbox-light-hard.sh]],
+  --
+  --  dark = [[themes/rose-pine.sh]],
+  --  light = [[themes/rose-pine-dawn.sh]],
+  --
+  --   dark = [[themes/kanagawa-wave.sh]],
+  --   light = [[themes/kanagawa-lotus.sh]],
+  dark = [[themes/everforest-dark-hard.sh]],
+  light = [[themes/everforest-light-medium.sh]],
 }
 
 --- set background for all existing fzf instances
@@ -50,12 +54,17 @@ function M.set_fzf_style(background)
 end
 
 local kitty_theme = {
-  -- dark = [[Gruvbox Dark Hard]],
-  -- light = [[Gruvbox Light Hard]],
+  --   dark = [[Gruvbox Dark Hard]],
+  --   light = [[Gruvbox Light Hard]],
+  --
   --   dark = [[Rosé Pine]],
   --   light = [[Rosé Pine Dawn]],
-  dark = [[Kanagawa-wave]],
-  light = [[Kanagawa-lotus]],
+  --
+  --   dark = [[Kanagawa-wave]],
+  --   light = [[Kanagawa-lotus]],
+  --
+  dark = [[Everforest Dark Hard]],
+  light = [[Everforest Light Medium]],
 }
 
 --- set background for FZF
