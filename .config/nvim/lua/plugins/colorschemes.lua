@@ -7,7 +7,7 @@ return {
   },
   {
     "rebelot/kanagawa.nvim",
-    priority = 999,
+    lazy = true,
     config = function()
       require('kanagawa').setup({
         compile = false,  -- enable compiling the colorscheme
@@ -42,7 +42,13 @@ return {
           light = "lotus"
         },
       })
-      vim.cmd([[colorscheme kanagawa]])
+    end,
+  },
+  {
+    'sainnhe/everforest',
+    priority = 999,
+    config = function()
+      vim.cmd([[colorscheme everforest]])
     end,
   }
 }
