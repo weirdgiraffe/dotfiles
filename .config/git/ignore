@@ -8,3 +8,4 @@ ropeproject
 __pycache__
 # code coverage for golang
 *.cov
+.env
