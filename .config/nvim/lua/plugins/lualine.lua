@@ -1,7 +1,9 @@
 local function theme()
   local auto = require("lualine.utils.loader").load_theme("auto")
-  auto.normal.c.bg = "none"
-  auto.inactive.a.bg = "none"
+  if vim.g.colors_name == "everforest" then
+    -- prevent constant background changes
+    auto.insert.b.bg = auto.normal.b.bg
+  end
   return auto
 end
 
