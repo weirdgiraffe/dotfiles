@@ -2,13 +2,13 @@
 ---@param background string? dark|light
 local function set_colorscheme(background)
   if background == "dark" then
-    -- need to ensure that everforest is configured well
+    -- need to ensure that everforest dark hard
     if vim.g.colors_name == "everforest" then
       vim.g.everforest_background = "hard"
     end
     vim.cmd("set background=dark")
   else
-    -- need to ensure that everforest is configured well
+    -- need to ensure that everforest light medium
     if vim.g.colors_name == "everforest" then
       vim.g.everforest_background = "medium"
     end
