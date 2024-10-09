@@ -30,7 +30,7 @@ end
 
 vim.api.nvim_create_user_command("FzfColors", function()
   vim.print([[export FZF_DEFAULT_OPTS="]])
-  vim.print("--color=" .. fzf_colors({ export = true }))
+  vim.print("--color=" .. fzf_colors())
   vim.print([["]])
 end, { nargs = 0, force = true })
 
