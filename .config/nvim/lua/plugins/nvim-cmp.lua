@@ -48,6 +48,7 @@ return {
     "L3MON4D3/LuaSnip",
     "saadparwaiz1/cmp_luasnip"
   },
+  lazy = false,
   config = function()
     local cmp = require('cmp')
     local luasnip = require('luasnip')
@@ -105,11 +106,11 @@ return {
         ['<C-j>'] = cmp.mapping.scroll_docs(4),
 
         ['<C-e>'] = cmp.mapping.abort(),
-        ['<cr>'] = cmp.mapping.confirm(), -- pick a selected entry only
+        ['<cr>'] = cmp.mapping.confirm({ select = true }), -- pick a selected entry only
       }),
       sources = cmp.config.sources({
-        { name = 'nvim_lsp',  keyword_length = 3 },
-        { name = 'luasnip',   keyword_length = 2 },
+        { name = 'luasnip' },
+        { name = 'nvim_lsp',  keyword_length = 2 },
         { name = 'async_path' },
       }, {
         { name = 'buffer', keyword_length = 3 },
