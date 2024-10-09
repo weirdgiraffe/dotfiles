@@ -45,6 +45,9 @@ return {
     local fzf = require("fzf-lua")
 
     local opts = {
+      -- fixup file icon padding for kitty
+      -- https://github.com/ibhagwan/fzf-lua/wiki#icon-padding-for-terminals-with-double-width-icon-support
+      file_icon_padding = " ",
       fzf_opts = {
         ["--color"] = fzf_colors(),
       },
