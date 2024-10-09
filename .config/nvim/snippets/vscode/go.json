@@ -114,7 +114,7 @@
     "description": "Error return wrapf with two return values",
     "body": [
       "if err != nil {",
-      "\treturn nil, errors.Wrapf(err, \"${1:message %v}\", ${2:args...})",
+      "\treturn nil, fmt.Errorf(\"${1:message}: %w\", ${2:args...}, err)",
       "\\}",
       "$0"
     ]
@@ -134,7 +134,7 @@
     "description": "Error return wrapf",
     "body": [
       "if err != nil {",
-      "\treturn errors.Wrapf(err, \"${1:message %v}\", ${2:args...})",
+      "\treturn fmt.Errorf(\"${1:message}: %w\", ${2:args...}, err)",
       "\\}",
       "$0"
     ]
@@ -162,12 +162,12 @@
   "ew": {
     "prefix": "ew",
     "description": "errors.Wrap",
-    "body": "errors.Wrap(${1:err}, \"${2:message}\")"
+    "body":"fmt.Errorf(\"${1:message}: %w\", ${2:err})"
   },
   "ewf": {
     "prefix": "ewf",
     "description": "errors.Wrapf",
-    "body": "errors.Wrapf(${1:err}, \"${2:message %v}\", ${3:args...})"
+    "body":"fmt.Errorf(\"${1:message}: %w\", ${2:args...}, ${3:err})"
   },
   "forsel": {
     "prefix": "forsel",
