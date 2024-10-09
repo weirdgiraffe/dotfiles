@@ -24,7 +24,6 @@ return {
   "epwalsh/obsidian.nvim",
   version = "2.10.0", -- note: fixed version, no upgrades
   lazy = false,
-  ft = "markdown",
   event = {
     "BufReadPre " .. table.concat(workspaces_paths(), ","),
     "BufNewFile " .. table.concat(workspaces_paths(), ","),
