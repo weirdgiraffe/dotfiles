@@ -3,6 +3,7 @@ local vnoremap = require("utils").vnoremap
 
 local tmux = require("nvim-tmux-navigation")
 local fzf = require("fzf-lua")
+local Path = require("plenary.path")
 
 nnoremap("-", "<CMD>Oil<CR>", "open parent directory using oil")
 
@@ -12,37 +13,57 @@ nnoremap("<M-k>", tmux.NvimTmuxNavigateUp, "navigate to the window or tmux pane 
 nnoremap("<M-l>", tmux.NvimTmuxNavigateRight, "navigate to the right window or tmux pane")
 
 
+
+
+-- @function fzf_cwd will figure out the base directory to use for fzf related searches and
+-- the relative path to the current directory from the base directory.
+-- @return string,string
+local function fzf_cwd()
+  local function relpath(path)
+    local rel = Path:new(path):make_relative(vim.loop.os_homedir())
+    return path:len() == rel:len() and path or "~/" .. rel
+  end
+
+  local cwd = vim.fn.expand("%:p:h")
+  local git_root = fzf.path.git_root({ cwd = cwd }, true)
+  if git_root then
+    -- In case our cwd is inside of some symlink to the git repository, we don't want to use the
+    -- git root as cwd, so ensure that our cwd is withing the git root.
+    if cwd:len() >= git_root:len() and cwd:sub(1, git_root:len()) == git_root then
+      local rel = Path:new(cwd):make_relative(git_root)
+      return relpath(git_root), rel == "." and "" or rel
+    end
+  end
+  return relpath(cwd), ""
+end
+
 nnoremap("<leader>j", function()
+  local base, rel = fzf_cwd()
   return fzf.files({
     winopts = { preview = { layout = "vertical" } },
+    formatter = { "path.dirname_first" },
+    query = rel ~= "" and rel .. "/",
     fd_opts = table.concat({
       "--hidden",
       "--type=f",
     }, " "),
-    cwd = fzf.path.git_root({}, true)
+    cwd = base,
   })
 end, "find files with respect to current git repo")
 
-nnoremap("<leader>J", function()
-  return fzf.files({
-    fd_opts = table.concat({
-      "--hidden",
-      "--type=f",
-    }, " "),
-    cwd = vim.fn.expand("%:h"),
-  })
-end, "find files with respect to the current file dir")
-
 nnoremap("<leader>g", function()
+  local cwd = vim.fn.expand("%:p:h")
   return fzf.live_grep({
-    cwd = vim.fn.expand("%:h"),
+    winopts = { preview = { layout = "vertical" } },
+    cwd = cwd
   })
 end, "live grep with respect to the current file dir")
 
 nnoremap("<leader>G", function()
+  local base, _ = fzf_cwd()
   return fzf.live_grep({
     winopts = { preview = { layout = "vertical" } },
-    cwd     = fzf.path.git_root({}, true)
+    cwd = base
   })
 end, "live grep with respect to current git repo")
 
