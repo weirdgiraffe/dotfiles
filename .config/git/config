@@ -52,8 +52,9 @@
 	co = checkout
 	st = status
 	dh = diff HEAD
+	dhs = -c delta.features=side-by-side diff HEAD
 	dc = diff --staged
-	ds = -c delta.features=side-by-side diff
+	dcs = -c delta.features=side-by-side diff --staged
 	amend = commit --amend --no-edit
 	psuh = push
 	l = log --pretty='%C(auto)%h %d %s %Cgreen(%ai) %Cblue%an <%ae>%Creset' -10
