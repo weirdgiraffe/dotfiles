@@ -45,3 +45,5 @@ fi
 # initialize zim modules.
 source ${ZIM_HOME}/init.zsh
 
+# switch group using `<` and `>`
+zstyle ':fzf-tab:*' fzf-flags --height=50% --layout=reverse --info=inline-right
