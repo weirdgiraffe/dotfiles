@@ -12,6 +12,7 @@ export FZF_CTRL_T_COMMAND=$FZF_DEFAULT_COMMAND
 # NOTE: run in a subshell to not pollute top level shell environment
 function fzf() {(
     source ${XDG_CONFIG_HOME:-$HOME/.config}/fzf/current-theme.zsh
+    export FZF_DEFAULT_OPTS='--prompt=": " '${FZF_DEFAULT_OPTS}
     $(whence -p fzf) "$@"
 )}
 
@@ -43,13 +44,15 @@ rr() {
 _fzf_complete_rr() {
   local _repo=$(__git_repo_root)
   [[ -n ${_repo} ]] || return
-
   local _workdir=$(realpath --relative-to="${_repo}" "$(pwd)")
 
   _fzf_complete \
+    --height=20% \
+    --no-scrollbar \
     --layout=reverse \
+    --info=inline-right \
     --preview="ls --color --group-directories-first -F -1 ${_repo:=.}/{}" \
-    --prompt="repo:cd> " \
+    --preview-window 'right,50%,border-left,+{2}+3/3,~3' \
     -- "$@" < <(
 
       fd --type=d \
@@ -69,9 +72,10 @@ _fzf_complete_vim() {
   local _currdir=$(pwd)
 
   _fzf_complete \
-    --preview "bat {}" \
-    --reverse \
-    --prompt="vim ❯ " \
+    --height=20% \
+    --layout=reverse \
+    --no-scrollbar \
+    --info=inline-right \
     -- "$@" < <(
       fd --type=f \
         --hidden \
@@ -106,9 +110,12 @@ __complete_users_and_repos() {
   local workdir=$2
 
   _fzf_complete \
-    --reverse \
+    --height=20% \
+    --no-scrollbar \
+    --layout=reverse \
+    --info=inline-right \
     --preview="ls --color --group-directories-first -F -1 ${workdir:=.}/{}" \
-    --prompt="${name}> " \
+    --preview-window 'right,50%,border-left,+{2}+3/3,~3' \
     -- "$name " < <(
       __list_users_and_repos ${workdir}
 		)
