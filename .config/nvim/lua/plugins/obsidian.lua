@@ -10,6 +10,10 @@ local workspaces = {
     name = "crypto",
     path = Path:new("~/Obsidian/crypto"):expand(),
   },
+  {
+    name = "chronicle",
+    path = Path:new("~/Obsidian/chronicle"):expand(),
+  },
 }
 
 local function workspaces_paths()
