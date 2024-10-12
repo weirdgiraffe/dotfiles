@@ -12,6 +12,12 @@ nnoremap("<M-j>", tmux.NvimTmuxNavigateDown, "navigate to the window or tmux pan
 nnoremap("<M-k>", tmux.NvimTmuxNavigateUp, "navigate to the window or tmux pane on top")
 nnoremap("<M-l>", tmux.NvimTmuxNavigateRight, "navigate to the right window or tmux pane")
 
+vim.keymap.set("i", "<M-BS>", "<C-o>diW", {
+  silent = true,
+  noremap = true,
+  desc = "delete current word while typing",
+})
+
 
 
 
@@ -160,24 +166,21 @@ nnoremap("<leader>y", function()
 end, "close all but the current buffer")
 
 
+nnoremap("<leader>ow", function()
+  local workspace = vim.fn.input("Workspace: ")
+  vim.cmd("ObsidianWorkspace " .. workspace)
+end, "obsidian: set current workspace")
+
 nnoremap("<leader>o", function()
-  vim.cmd([[ObsidianWorkspace default]])
   vim.cmd([[ObsidianQuickSwitch]])
 end, "obsidian: quick switch for default workspace")
 
-nnoremap("<leader>oc", function()
-  vim.cmd([[ObsidianWorkspace crypto]])
-  vim.cmd([[ObsidianQuickSwitch]])
-end, "obsidian: quick switch for crypto workspace")
-
 nnoremap("<leader>on", function()
   local title = vim.fn.input("Title: ")
-  vim.cmd([[ObsidianWorkspace default]])
   vim.cmd("ObsidianNew " .. title)
 end, "obsidian: new note")
 
 nnoremap("<leader>ot", function()
-  vim.cmd([[ObsidianWorkspace default]])
   vim.cmd([[ObsidianToday]])
 end, "obsidian: today note")
 
