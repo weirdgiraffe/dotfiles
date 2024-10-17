@@ -203,11 +203,8 @@ keymap = [
 		"w",
 	], run = "rename --cursor=before_ext", desc = "Rename file or directory" },
 	{ on = [
-		";",
-	], run = "shell", desc = "Run a shell command" },
-	{ on = [
 		":",
-	], run = "shell --block", desc = "Run a shell command (block the UI until the command finishes)" },
+	], run = "shell --interactive --block", desc = "Run a shell command (block the UI until the command finishes)" },
 	{ on = [
 		".",
 	], run = "hidden toggle", desc = "Toggle the visibility of hidden files" },
