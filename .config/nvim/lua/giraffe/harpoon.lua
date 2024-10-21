@@ -92,7 +92,9 @@ local function delete_mark(prompt_bufnr)
 end
 
 local function telescope()
-  local opts = require("telescope.themes").get_dropdown()
+  -- local opts = require("telescope.themes").get_dropdown()
+  -- local opts = require("telescope.themes").get_cursor()
+  local opts = require("telescope.themes").get_ivy()
 
   local entries = not_empty_list_entries()
   if #entries == 0 then
@@ -101,11 +103,13 @@ local function telescope()
   end
 
   local conf = require("telescope.config").values
+  local previewer = conf.grep_previewer(opts)
+
   require("telescope.pickers").new(opts, {
-    prompt_title = "Harpoon",
+    prompt_title = "Harpoon Marks (C-d to delete a mark)",
     finder = finder(entries),
     sorter = conf.generic_sorter(opts),
-    previewer = conf.grep_previewer(opts),
+    previewer = previewer,
     attach_mappings = function(_, map)
       map({ "i", "n" }, "<c-d>", delete_mark)
       -- map({ "i", "n" }, "<c-p>", prev_mark)
