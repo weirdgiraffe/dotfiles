@@ -32,6 +32,7 @@ alias urldecode='python -c "import sys, urllib as ul; print ul.unquote_plus(sys.
 alias urlencode='python -c "import sys, urllib as ul; print ul.quote_plus(sys.argv[1])"'
 alias gdiff='git diff'
 alias gdiffsplit='DELTA_FEATURES=+side-by-side git diff'
+alias ssh='kitten ssh'
 
 # clone the repo and cd to it
 gclone() {
@@ -40,6 +41,7 @@ gclone() {
   [[ -d "${dst}" ]] && cd ${dst}
   pre-commit install --allow-missing-config
 }
+
 
 # Temp workaround to disable punycode deprecation logging to stderr
 # https://github.com/bitwarden/clients/issues/6689
