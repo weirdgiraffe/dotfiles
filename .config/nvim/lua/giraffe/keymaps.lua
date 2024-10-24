@@ -74,7 +74,7 @@ nnoremap("<leader>G", function()
 end, "live grep with respect to current git repo")
 
 nnoremap("<leader>k", function()
-  local opts = require("telescope.themes").get_dropdown()
+  local opts = require("telescope.themes").get_ivy()
   return require("telescope.builtin").buffers(opts)
 end, "LSP: document symbols")
 
@@ -94,9 +94,27 @@ nnoremap("gd", function()
 end, "LSP go to definition")
 
 nnoremap("<leader>d", function()
-  return fzf.lsp_document_symbols({
-    winopts = { preview = { layout = "vertical" } },
-  })
+  local opts = require("telescope.themes").get_ivy()
+  opts.path_display = { "hidden" }
+  opts.symbol_width = 60
+
+  if vim.bo.filetype == "go" then
+    -- I would like to display struct.field for field entries returned from gopls.
+    local entry_maker_func = require("telescope.make_entry").gen_from_lsp_symbols(opts)
+    local current_struct = ""
+    opts.entry_maker = function(entry)
+      if entry.kind == "Struct" then
+        current_struct = entry.text:sub(10) -- remove "[Struct] " prefix
+      elseif entry.kind == "Field" then
+        local field = entry.text:sub(9)     -- remove "[Field] " prefix
+        entry.text = "[Field] " .. current_struct .. "." .. field
+      else
+        current_struct = ""
+      end
+      return entry_maker_func(entry)
+    end
+  end
+  return require("telescope.builtin").lsp_document_symbols(opts)
 end, "LSP: document symbols")
 
 nnoremap("<leader>D", function()
