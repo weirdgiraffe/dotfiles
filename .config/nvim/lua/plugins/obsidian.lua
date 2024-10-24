@@ -4,6 +4,19 @@ local Path = require("plenary.path")
 local workspaces = {
   {
     name = "default",
+    path = Path:new("~/Obsidian/Everything"):expand(),
+    overrides = {
+      detect_cwd = true,
+      sorty_by = "path",
+      notes_subdir = "1-Quick",
+      templates = {
+        subdir = "3-Templates",
+      },
+      disable_frontmatter = true,
+    }
+  },
+  {
+    name = "unsorted",
     path = Path:new("~/Obsidian/unsorted"):expand(),
   },
   {
@@ -43,26 +56,7 @@ return {
     require("obsidian").setup({
       workspaces = workspaces,
       log_level = vim.log.levels.INFO,
-      notes_subdir = "notes", -- where to store the notes
-
-      -- customize how names/IDs for new notes are created.
-      note_id_func = function(title)
-        -- Create note IDs in a Zettelkasten format with a timestamp and a suffix.
-        -- In this case a note with the title 'My new note' will be given an ID that looks
-        -- like '1657296016-my-new-note', and therefore the file name '1657296016-my-new-note.md'
-        local suffix = ""
-        if title ~= nil then
-          -- If title is given, transform it into valid file name.
-          suffix = title:gsub(" ", "-"):gsub("[^A-Za-z0-9-]", ""):lower()
-        else
-          -- If title is nil, just add 4 random uppercase letters to the suffix.
-          for _ = 1, 4 do
-            suffix = suffix .. string.char(math.random(65, 90))
-          end
-        end
-        return os.date("%Y%m%d") .. "-" .. suffix
-      end,
-
+      disable_frontmatter = true,
       -- customize the default name or prefix when pasting images via `:ObsidianPasteImg`.
       image_name_func = function()
         -- Prefix image names with timestamp.
