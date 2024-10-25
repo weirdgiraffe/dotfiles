@@ -3,11 +3,14 @@ export VISUAL="nvim"
 export GREP_COLORS="mt=01;31" # use red color for grep matches to match rg
 
 if [ -x "$(command -v brew)" ]; then
-  # pyenv
   source "$(brew --prefix pyenv)/completions/pyenv.zsh"
-  eval "$(pyenv init -)"
-  eval "$(pyenv virtualenv-init -)"
-
+  if [[ ! -f ${HOME}/.config/zsh/pyenv.zsh ]]; then 
+    # pyenv is extremely slow to load if it rehashes in foreground
+    pyenv init - --no-rehash >| ${HOME}/.config/zsh/pyenv.zsh
+    pyenv virtualenv-init - >> ${HOME}/.config/zsh/pyenv.zsh
+  fi
+  source ${HOME}/.config/zsh/pyenv.zsh 
+  (&>/dev/null command pyenv rehash 2>/dev/null &)
 fi
 
 # needed to allow to work with GPG
@@ -104,8 +107,3 @@ bindkey -e '^L' clear-scrollback-and-screen
 # based on https://stackoverflow.com/a/1438523/1208553
 autoload -U select-word-style
 select-word-style bash
-
-# need to make tab completion predicatable, so it won't complete me any
-# random items. I have no idea why is that happening
-
-
