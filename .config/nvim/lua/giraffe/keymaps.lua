@@ -76,7 +76,7 @@ end, "live grep with respect to current git repo")
 nnoremap("<leader>k", function()
   local opts = require("telescope.themes").get_ivy()
   return require("telescope.builtin").buffers(opts)
-end, "LSP: document symbols")
+end, "current buffers")
 
 nnoremap("<leader>x", function()
   local api = require("trouble.api")
@@ -114,15 +114,25 @@ nnoremap("<leader>d", function()
       return entry_maker_func(entry)
     end
   end
-  return require("telescope.builtin").lsp_document_symbols(opts)
-end, "LSP: document symbols")
-
-nnoremap("<leader>D", function()
-  local opts = require("telescope.themes").get_dropdown()
+  --   local actions = require("telescope.actions")
+  --   opts.attach_mappings = function(_, map)
+  --     map("n", "<c-n>", actions.move_selection_next)
+  --     map("n", "<c-p>", actions.move_selection_previous)
+  --     return true
+  --   end
   return require("telescope.builtin").lsp_document_symbols(opts)
 end, "LSP: document symbols")
 
 nnoremap("<leader>r", function()
+  --   local opts = require("telescope.themes").get_ivy()
+  --   opts.symbol_width = 60
+  --   opts.show_line = true
+  --   opts.path_display = { "tail" }
+  --   local entry_maker_func = require("telescope.make_entry").gen_from_quickfix(opts)
+  --   opts.entry_maker = function(entry)
+  --     return entry_maker_func(entry)
+  --   end
+  --   return require("telescope.builtin").lsp_references(opts)
   return fzf.lsp_references({
     winopts = { preview = { layout = "vertical" } },
   })
