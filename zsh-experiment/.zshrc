@@ -34,4 +34,10 @@ setopt HIST_IGNORE_SPACE
 setopt HIST_VERIFY
 setopt HIST_REDUCE_BLANKS
 
+# add keybindings to searth the history, i.e. when I'm on the line like ls
+# those keypresses will search history with this prefix and suggest things
+# like ls /tmp, ls /var, etc.
+bindkey '^K' history-search-backward
+bindkey '^J' history-search-forward
+
 # ------------------------------------------------------------------------------
