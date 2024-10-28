@@ -44,39 +44,37 @@ bindkey '^]]B' history-search-forward
 # ------------------------------------------------------------------------------
 # misc functions
 
-autoload -Uz
+autoload -Uz zcompile
+
 local function zcompare() {
-    if [[ -s ${1} && ( ! -s ${1}.zwc || ${1} -nt ${1}.zwc ) ]]; then
-      printf "compile: %s :" ${1}
-      [[ ${1} -nt ${1}.zwc ]] && printf "older\n"
-      [[ ! -s ${1}.zwc ]] && printf "not exists\n"
-      zcompile ${1}
-    fi
+  if [[ -s ${1} && ( ! -s ${1}.zwc || ${1} -nt ${1}.zwc ) ]]; then
+    zcompile ${1}
+  fi
 }
 
 function zcompare_and_source() {
-    zcompare ${1}
-    printf "source: %s\n" ${1}
-    source ${1}
+  zcompare ${1}
+  source ${1}
 }
 
 # ------------------------------------------------------------------------------
 # ------------------------------------------------------------------------------
 # completions
 
-fpath=(
-    $(brew --prefix)/share/zsh-completions/
-    ${HOME}/.local/share/zsh/completions/
-    $fpath
-)
-
-( # precompile all of the completions
+# precompile all of the additional completions
+if [[ (-s ${ZDOTDIR}/.zcompdump) && ($(brew --prefix)/share/zsh-completions -nt ${ZDOTDIR}/.zcompdump) ]]; then
   setopt EXTENDED_GLOB
   for file in $(brew --prefix)/share/zsh-completions/^(*.zwc)*; do
       zcompare ${file}
   done
-)
+  unsetopt EXTENDED_GLOB
+fi
 
+fpath=(
+  $(brew --prefix)/share/zsh-completions/
+  ${HOME}/.local/share/zsh/completions/
+  $fpath
+)
 
 autoload -Uz compinit
 if [[ -n ${ZDOTDIR}/.zcompdump ]]; then
@@ -113,15 +111,14 @@ zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' '+r:|?=**'
 # ------------------------------------------------------------------------------
 # other plugins
 
-( # precompile all of my custom functions
-  setopt EXTENDED_GLOB
-  for file in ${ZDOTDIR}/functions/^(*.zwc)*; do
-      zcompare ${file}
-  done
-)
+# oh-my-posh: (need to comment out if want to benchmark)
+# . <( oh-my-posh init zsh --config=${HOME}/.config/oh-my-posh/config.toml )
+
+# . <(zoxide init zsh)
+
+# precompile and source all my custom functions
 for file in ${ZDOTDIR}/functions/*.zsh; do
-    printf "source: %s\n" ${file}
-    source ${file}
+  zcompare_and_source ${file}
 done
 
 zcompare_and_source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
