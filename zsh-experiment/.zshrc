@@ -37,7 +37,95 @@ setopt HIST_REDUCE_BLANKS
 # add keybindings to searth the history, i.e. when I'm on the line like ls
 # those keypresses will search history with this prefix and suggest things
 # like ls /tmp, ls /var, etc.
-bindkey '^K' history-search-backward
-bindkey '^J' history-search-forward
+bindkey '^[[A' history-search-backward
+bindkey '^]]B' history-search-forward
+
+# ------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# misc functions
+
+autoload -Uz
+local function zcompare() {
+    if [[ -s ${1} && ( ! -s ${1}.zwc || ${1} -nt ${1}.zwc ) ]]; then
+      printf "compile: %s :" ${1}
+      [[ ${1} -nt ${1}.zwc ]] && printf "older\n"
+      [[ ! -s ${1}.zwc ]] && printf "not exists\n"
+      zcompile ${1}
+    fi
+}
+
+function zcompare_and_source() {
+    zcompare ${1}
+    printf "source: %s\n" ${1}
+    source ${1}
+}
+
+# ------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# completions
+
+fpath=(
+    $(brew --prefix)/share/zsh-completions/
+    ${HOME}/.local/share/zsh/completions/
+    $fpath
+)
+
+( # precompile all of the completions
+  setopt EXTENDED_GLOB
+  for file in $(brew --prefix)/share/zsh-completions/^(*.zwc)*; do
+      zcompare ${file}
+  done
+)
+
+
+autoload -Uz compinit
+if [[ -n ${ZDOTDIR}/.zcompdump ]]; then
+  compinit -i -d "${ZDOTDIR}/.zcompdump"
+else
+  compinit -i -C -d "${ZDOTDIR}/.zcompdump"
+fi
+
+# If a completion is performed with the cursor within a word, and a full
+# completion is inserted, the cursor is moved to the end of the word.
+setopt ALWAYS_TO_END
+# Perform a path search even on command names with slashes in them.
+setopt PATH_DIRS
+# Make globbing (filename generation) not sensitive to case.
+setopt NO_CASE_GLOB
+# Don't beep on an ambiguous completion.
+setopt NO_LIST_BEEP
+
+# group matches and describe.
+zstyle ':completion:*:*:*:*:*' menu select
+zstyle ':completion:*:matches' group yes
+zstyle ':completion:*:options' description yes
+zstyle ':completion:*:options' auto-description '%d'
+zstyle ':completion:*:corrections' format '%F{green}-- %d (errors: %e) --%f'
+zstyle ':completion:*:descriptions' format '%F{yellow}-- %d --%f'
+zstyle ':completion:*:messages' format '%F{purple}-- %d --%f'
+zstyle ':completion:*:warnings' format '%F{red}-- no matches found --%f'
+zstyle ':completion:*' format '%F{yellow}-- %d --%f'
+zstyle ':completion:*' group-name ''
+zstyle ':completion:*' verbose yes
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' '+r:|?=**'
+
+# ------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# other plugins
+
+( # precompile all of my custom functions
+  setopt EXTENDED_GLOB
+  for file in ${ZDOTDIR}/functions/^(*.zwc)*; do
+      zcompare ${file}
+  done
+)
+for file in ${ZDOTDIR}/functions/*.zsh; do
+    printf "source: %s\n" ${file}
+    source ${file}
+done
+
+zcompare_and_source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+# syntax-highlight should be the last plugin
+zcompare_and_source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # ------------------------------------------------------------------------------
