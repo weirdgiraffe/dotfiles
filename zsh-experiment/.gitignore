@@ -1,0 +1,4 @@
+*.zwc
+/.zcompdump
+/.zhistory
+/.cache
