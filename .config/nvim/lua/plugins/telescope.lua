@@ -8,6 +8,7 @@ return {
   config = function()
     local actions = require "telescope.actions"
     local telescope = require("telescope")
+    local actions = require("telescope.actions")
     telescope.setup({
       defaults = {
         path_display = { "smart" },
@@ -24,7 +25,11 @@ return {
         ["ui-select"] = {
           require("telescope.themes").get_ivy()
         },
-      }
+      },
+      attach_mappings = function(_, map)
+        map({ "n", "i", "c", "x" }, "<c-n>", actions.move_selection_next)
+        map({ "n", "i", "c", "x" }, "<c-p>", actions.move_selection_previous)
+      end,
     })
     require("telescope").load_extension("ui-select")
   end,

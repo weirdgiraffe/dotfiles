@@ -60,12 +60,12 @@ return {
           cmp.select_next_item()
         elseif luasnip.expand_or_jumpable() then
           luasnip.expand_or_jump()
-        elseif has_words_before() then
+        elseif vim.api.nvim_buf_get_option(0, 'buftype') ~= 'prompt' and has_words_before() then
           cmp.complete()
         else
           fallback()
         end
-      end, { "i", "s" }),
+      end, { "i", "c" }),
 
       select_prev = cmp.mapping(function(fallback)
         if cmp.visible() then
@@ -75,7 +75,7 @@ return {
         else
           fallback()
         end
-      end, { "i", "s" }),
+      end, { "i", "c" }),
     }
 
     ---@diagnostic disable-next-line: missing-fields
@@ -96,6 +96,8 @@ return {
         documentation = cmp.config.window.bordered(),
       },
       mapping = cmp.mapping.preset.insert({
+        -- ["<Tab>"] = actions.select_next,
+        -- ['<C-n>'] = actions.select_next,
         ["<Tab>"] = actions.select_next,
         ['<C-n>'] = actions.select_next,
 
