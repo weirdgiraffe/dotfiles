@@ -190,6 +190,7 @@
   alias urldecode='python -c "import sys, urllib as ul; print ul.unquote_plus(sys.argv[1])"'
   alias urlencode='python -c "import sys, urllib as ul; print ul.quote_plus(sys.argv[1])"'
   alias gdiff='git diff'
+  alias cd="z"
   alias gdiffsplit='DELTA_FEATURES=+side-by-side git diff'
 
   # Preserve terminfo for kitty when ssh-ing somewhere
@@ -212,5 +213,9 @@
   # based on https://stackoverflow.com/a/1438523/1208553
   autoload -U select-word-style
   select-word-style bash
+
+  # allow cd without typing cd in interactive shell
+  # reference: man zshoptions
+  setopt AUTO_CD
 
 } # end of the anonymous function
