@@ -93,6 +93,7 @@
 
   # NOTE: assume that brew is already installed
   [[ -s ${CACHE_COMPLETIONS_DIR}/_pyenv ]]  || cp $(brew --prefix pyenv)/completions/pyenv.zsh ${CACHE_COMPLETIONS_DIR}/_pyenv
+  [[ -s ${CACHE_COMPLETIONS_DIR}/_docker ]] || docker completion zsh > ${CACHE_COMPLETIONS_DIR}/_docker
 
   # NOTE: assume that rustup is already installed
   [[ -s ${CACHE_COMPLETIONS_DIR}/_rustup ]] || rustup completions zsh > ${CACHE_COMPLETIONS_DIR}/_rustup
