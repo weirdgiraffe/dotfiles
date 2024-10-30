@@ -85,7 +85,7 @@ _fzf_complete_vim() {
   )
 }
 
-__list_users_and_repos() {
+local function __list_users_and_repos() {
   local workdir=${1}
   local function strip_git_suffix() {
     while IFS=$'\n' read -r line; do
@@ -105,7 +105,7 @@ __list_users_and_repos() {
     '^\.git$'| strip_git_suffix
 }
 
-__complete_users_and_repos() {
+local function __complete_users_and_repos() {
   local name=$1
   local workdir=$2
 
