@@ -1,5 +1,6 @@
 local nnoremap = require("utils").nnoremap
 local vnoremap = require("utils").vnoremap
+local trim_prefix = require("utils").trim_prefix
 
 local tmux = require("nvim-tmux-navigation")
 local fzf = require("fzf-lua")
@@ -101,15 +102,21 @@ nnoremap("<leader>d", function()
   if vim.bo.filetype == "go" then
     -- I would like to display struct.field for field entries returned from gopls.
     local entry_maker_func = require("telescope.make_entry").gen_from_lsp_symbols(opts)
-    local current_struct = ""
+    local cs = ""
     opts.entry_maker = function(entry)
-      if entry.kind == "Struct" then
-        current_struct = entry.text:sub(10) -- remove "[Struct] " prefix
-      elseif entry.kind == "Field" then
-        local field = entry.text:sub(9)     -- remove "[Field] " prefix
-        entry.text = "[Field] " .. current_struct .. "." .. field
-      else
-        current_struct = ""
+      local actions = {
+        ["Struct"] = function()
+          cs = trim_prefix(entry.text, "[Struct] ")
+        end,
+        ["Field"] = function()
+          local text = trim_prefix(entry.text, "[Field] ")
+          if cs ~= "" then
+            entry.text = "[Field] " .. cs .. "." .. text
+          end
+        end,
+      }
+      if actions[entry.kind] then
+        actions[entry.kind]()
       end
       return entry_maker_func(entry)
     end
