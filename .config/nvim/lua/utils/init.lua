@@ -43,4 +43,15 @@ function M.cfcd(what)
   end
 end
 
+--- trim_prefix will remove a prefix from a string
+---@param s string string which will be trimmed
+---@param prefix string prefix to trim
+---@return string trimmed string without a prefix
+function M.trim_prefix(s, prefix)
+  if s:sub(1, prefix:len()) == prefix then
+    return s:sub(prefix:len() + 1)
+  end
+  return s
+end
+
 return M

@@ -6,10 +6,19 @@ return {
     'nvim-lua/plenary.nvim',
   },
   config = function()
+    local actions = require "telescope.actions"
     local telescope = require("telescope")
     telescope.setup({
       defaults = {
         path_display = { "smart" },
+        mappings = {
+          i = {
+            ["<C-j>"] = actions.move_selection_next,
+            ["<C-k>"] = actions.move_selection_previous,
+            ["<C-n>"] = actions.move_selection_next,
+            ["<C-p>"] = actions.move_selection_previous,
+          }
+        }
       },
       extensions = {
         ["ui-select"] = {
