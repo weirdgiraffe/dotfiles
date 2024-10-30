@@ -3,8 +3,8 @@
   local LOCAL_FUNCTIONS_DIR="${ZDOTDIR:-${HOME}}/.config/zsh/functions"
   local CACHE_COMPLETIONS_DIR="${ZDOTDIR:-${HOME}}/.cache/zsh/completions"
   local CACHE_FUNCTIONS_DIR="${ZDOTDIR:-${HOME}}/.cache/zsh/functions"
-  local ZCOMPDUMP_FILE="${ZDOTDIR:-${HOME}}/.zcompdump"
-  local ZHISTORY_FILE="${ZDOTDIR:-${HOME}}/.zhistory"
+  local ZCOMPDUMP_FILE="${ZDOTDIR:-${HOME}}/.cache/zsh/zcompdump"
+  local ZHISTORY_FILE="${ZDOTDIR:-${HOME}}/.cache/zsh/zhistory"
 
   mkdir -p ${CACHE_COMPLETIONS_DIR}
   mkdir -p ${CACHE_FUNCTIONS_DIR}
@@ -106,9 +106,9 @@
 
   autoload -Uz compinit
   if [[ -n ${ZCOMPDUMP_FILE} ]]; then
-    compinit -i -C ${ZCOMPDUMP_FILE}
+    compinit -i -C -d "${ZCOMPDUMP_FILE}"
   else
-    compinit -i -d ${ZCOMPDUMP_FILE}
+    compinit -i -d "${ZCOMPDUMP_FILE}"
   fi
   zcompare ${ZCOMPDUMP_FILE}
 
@@ -179,6 +179,7 @@
   alias la="ls --color --group-directories-first --time-style=long-iso -Fla"
   alias lah="ls --color --group-directories-first --time-style=long-iso -Flah"
   alias grep="grep --color=auto"
+  alias v="nvim"
   alias vi="nvim"
   alias vim="nvim"
   alias tf='terraform'
