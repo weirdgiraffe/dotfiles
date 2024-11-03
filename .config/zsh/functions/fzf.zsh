@@ -92,17 +92,27 @@ local function __list_users_and_repos() {
       echo "${line%/.git/}"
     done
   }
+
+  mkdir -p  ~/.cache/repos/${workdir}
+  if [[ ${workdir} -ot ~/.cache/repos/${workdir}/result.txt ]]; then
+    cat ~/.cache/repos/${workdir}/result.txt
+    return
+  fi
+
   # output top level directories
   fd --type=d \
     --exact-depth=1 \
-    --base-directory=${workdir}
+    --base-directory=${workdir} |\
+  tee ~/.cache/repos/${workdir}/result.txt
+
   # output all folders with .git folder inside
   fd --type=d \
     --no-ignore \
     --hidden \
     --exclude='{vendor,.terraform}' \
     --base-directory=${workdir} \
-    '^\.git$'| strip_git_suffix
+    '^\.git$'| strip_git_suffix |\
+  tee -a ~/.cache/repos/${workdir}/result.txt
 }
 
 local function __complete_users_and_repos() {
@@ -118,7 +128,7 @@ local function __complete_users_and_repos() {
     --preview-window 'right,50%,border-left,+{2}+3/3,~3' \
     -- "$name " < <(
       __list_users_and_repos ${workdir}
-		)
+    )
 }
 
 github() {
