@@ -22,22 +22,23 @@
     ${upath}
   )
   path=(${upath})
+  export PATH
 
   # set defaults shell keybindings to emacs keybindings
   bindkey -e
 
-  EDITOR="nvim"
-  VISUAL="nvim"
+  export EDITOR="nvim"
+  export VISUAL="nvim"
 
   # use red color for grep matches to match rg
-  GREP_COLORS="mt=01;31"
+  export GREP_COLORS="mt=01;31"
 
   # needed to allow to work with GPG
   # reference: https://gist.github.com/troyfontaine/18c9146295168ee9ca2b30c00bd1b41e
-  GPG_TTY=$(tty)
+  export GPG_TTY=$(tty)
 
   # golang specific settings
-  GOPRIVATE=github.com/weirdgiraffe
+  export GOPRIVATE=github.com/weirdgiraffe
 
   # ------------------------------------------------------------------------------
   # ------------------------------------------------------------------------------
