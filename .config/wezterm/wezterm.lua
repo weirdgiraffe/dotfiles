@@ -5,7 +5,7 @@ local wezterm = require 'wezterm'
 local config = wezterm.config_builder()
 
 config.font = wezterm.font("Iosevka Nerd Font Mono")
-config.font_size = 12.0
+config.font_size = 14.0
 
 -- This is where you actually apply your config choices
 local function scheme_for_appearance(appearance)
@@ -24,11 +24,10 @@ config.window_padding = {
   bottom = 10,
 }
 
-config.show_tabs_in_tab_bar = false
-config.show_new_tab_button_in_tab_bar = false
-
+config.enable_tab_bar = false
 config.window_decorations = 'RESIZE'
 
+config.adjust_window_size_when_changing_font_size = false
 config.automatically_reload_config = true
 
 -- and finally, return the configuration to wezterm
