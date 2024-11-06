@@ -38,6 +38,17 @@ config.front_end                                  = "WebGpu"
 config.window_background_opacity                  = 0.99
 config.macos_window_background_blur               = 50
 
+config.hyperlink_rules                            = wezterm.default_hyperlink_rules()
+table.insert(config.hyperlink_rules, {
+  regex = "\\b(0x[0-9a-fA-F]{64})\\b",
+  format = "https://etherscan.io/tx/$1",
+  highlight = 1,
+})
+table.insert(config.hyperlink_rules, {
+  regex = "\\b(0x[0-9a-fA-F]{40})\\b",
+  format = "https://etherscan.io/address/$1",
+  highlight = 1,
+})
 
 -- and finally, return the configuration to wezterm
 return config
