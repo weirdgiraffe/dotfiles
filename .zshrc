@@ -196,7 +196,7 @@
   alias gdiffsplit='DELTA_FEATURES=+side-by-side git diff'
 
   # Preserve terminfo for kitty when ssh-ing somewhere
-  alias ssh='kitten ssh'
+  # alias ssh='kitten ssh'
 
   # Temp workaround to disable punycode deprecation logging to stderr
   # https://github.com/bitwarden/clients/issues/6689
