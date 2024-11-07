@@ -87,32 +87,21 @@ _fzf_complete_vim() {
 
 local function __list_users_and_repos() {
   local workdir=${1}
-  local function strip_git_suffix() {
-    while IFS=$'\n' read -r line; do
-      echo "${line%/.git/}"
-    done
-  }
 
-  mkdir -p  ~/.cache/repos/${workdir}
-  if [[ ${workdir} -ot ~/.cache/repos/${workdir}/result.txt ]]; then
-    cat ~/.cache/repos/${workdir}/result.txt
-    return
-  fi
-
-  # output top level directories
+  # output top level directories for users and organizations
   fd --type=d \
     --exact-depth=1 \
-    --base-directory=${workdir} |\
-  tee ~/.cache/repos/${workdir}/result.txt
+    --base-directory=${workdir}
 
   # output all folders with .git folder inside
   fd --type=d \
     --no-ignore \
     --hidden \
     --exclude='{vendor,.terraform}' \
+    --max-depth=4 \
     --base-directory=${workdir} \
-    '^\.git$'| strip_git_suffix |\
-  tee -a ~/.cache/repos/${workdir}/result.txt
+    '^\.git$' \
+    --exec-batch ls -1td | sed 's/^\.\///;s/\/\.git//'
 }
 
 local function __complete_users_and_repos() {
@@ -122,6 +111,7 @@ local function __complete_users_and_repos() {
   _fzf_complete \
     --height=20% \
     --no-scrollbar \
+    --no-sort \
     --layout=reverse \
     --info=inline-right \
     --preview="ls --color --group-directories-first -F -1 ${workdir:=.}/{}" \
