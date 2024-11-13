@@ -19,9 +19,6 @@ vim.keymap.set("i", "<M-BS>", "<C-o>diW", {
   desc = "delete current word while typing",
 })
 
-
-
-
 -- @function fzf_cwd will figure out the base directory to use for fzf related searches and
 -- the relative path to the current directory from the base directory.
 -- @return string,string
@@ -76,6 +73,8 @@ end, "live grep with respect to current git repo")
 
 nnoremap("<leader>k", function()
   local opts = require("telescope.themes").get_ivy()
+  opts.sort_mru = true
+  opts.sort_lastused = true
   return require("telescope.builtin").buffers(opts)
 end, "current buffers")
 
