@@ -1,3 +1,11 @@
+-- some example configs:
+--
+--  https://github.com/dreamsofcode-io/dotfiles/blob/main/.config/nvim/lua/plugins/configs/cmp.lua
+--  https://github.com/linkarzu/dotfiles-latest/blob/main/neovim/neobean/lua/plugins/nvim-cmp.lua
+--  https://github.com/omerxx/dotfiles/blob/master/nvim/lua/plugins/cmp.lua
+--  https://github.com/tjdevries/config.nvim/blob/master/lua/custom/completion.lua
+--
+
 local function has_words_before()
   unpack = unpack or table.unpack
   local line, col = unpack(vim.api.nvim_win_get_cursor(0))
@@ -63,9 +71,12 @@ return {
         elseif vim.api.nvim_buf_get_option(0, 'buftype') ~= 'prompt' and has_words_before() then
           cmp.complete()
         else
+          local info = debug.getinfo(fallback)
+          local msg = string.format("cmp: fallback to %s:%d", info.source, info.linedefined)
+          vim.notify(msg)
           fallback()
         end
-      end, { "i", "c" }),
+      end, { "i", "s" }),
 
       select_prev = cmp.mapping(function(fallback)
         if cmp.visible() then
@@ -75,7 +86,7 @@ return {
         else
           fallback()
         end
-      end, { "i", "c" }),
+      end, { "i", "s" }),
     }
 
     ---@diagnostic disable-next-line: missing-fields
@@ -95,6 +106,18 @@ return {
         completion = cmp.config.window.bordered(),
         documentation = cmp.config.window.bordered(),
       },
+      --  I would like the following keymapping for my completions:
+      --
+      --  - <Tab> starts the completion
+      --  - <C-n> next item
+      --  - <C-p> previous item
+      --  - <C-j> scroll down the documentation
+      --  - <C-k> scroll up the documentation
+      --  - <C-y> go to the next snippet placeholder
+      --  - <C-y>p go to the previous snippet placeholder
+      --
+      --  This setup should not interfere with the default keybinding
+      --  of the copilot and may work way better for me.
       mapping = cmp.mapping.preset.insert({
         -- ["<Tab>"] = actions.select_next,
         -- ['<C-n>'] = actions.select_next,
