@@ -75,7 +75,9 @@
   # those keypresses will search history with this prefix and suggest things
   # like ls /tmp, ls /var, etc.
   bindkey '^[[A' history-search-backward
+  bindkey '^P' history-search-backward
   bindkey '^]]B' history-search-forward
+  bindkey '^N' history-search-forward
 
   # ------------------------------------------------------------------------------
   # ------------------------------------------------------------------------------
