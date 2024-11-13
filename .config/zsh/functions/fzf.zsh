@@ -88,10 +88,13 @@ _fzf_complete_vim() {
 local function __list_users_and_repos() {
   local workdir=${1}
 
-  # output top level directories for users and organizations
-  fd --type=d \
-    --exact-depth=1 \
-    --base-directory=${workdir}
+  # I just need couple of top level directories to be able
+  # to quickly cd to. And those dirs which are care about
+  # should present in GOPRIVATE env variable
+  
+  # this cryptic line is splitting GOPRIVATE by , 
+  # using amazing zsh functionality and
+  echo ${GOPRIVATE//,/\\n}
 
   # output all folders with .git folder inside
   fd --type=d \
