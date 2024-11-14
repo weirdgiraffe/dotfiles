@@ -89,12 +89,20 @@ local function __list_users_and_repos() {
   local workdir=${1}
 
   # I just need couple of top level directories to be able
-  # to quickly cd to. And those dirs which are care about
-  # should present in GOPRIVATE env variable
-  
-  # this cryptic line is splitting GOPRIVATE by , 
-  # using amazing zsh functionality and
-  echo ${GOPRIVATE//,/\\n}
+  # to quickly cd to like github.com/weirdgiraffe. And those
+  # dirs which I do care about should present in GOPRIVATE
+  # env variable already.
+  #
+  # explantaion of the following line:
+  #
+  # 1. split GOPRIVATE by comma ${(@s:,:)GOPRIVATE} into an array
+  # 2. pick only matching elements ${(M)arr:#pattern}
+  # 3. remove prefix ${(@)arr#prefix}
+  # 5. join using newline ${(F)arr}
+  # 6. remove empty lines sed /^$/d
+  #
+  # reference: https://zsh.sourceforge.io/Doc/Release/Expansion.html
+  echo ${(F@)${(M)${(@s:,:)GOPRIVATE}:#${workdir:t}*}#${workdir:t}/} | sed /^$/d
 
   # output all folders with .git folder inside
   fd --type=d \
