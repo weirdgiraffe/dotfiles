@@ -44,8 +44,12 @@ local gopls_config = vim.tbl_deep_extend("force",
           relativePatternSupport = false,
         }
       }
-    }
+    },
+    init_options = {
+      usePlaceholders = true,
+    },
   })
+-- vim.print(vim.inspect(gopls_config))
 lspconfig["gopls"].setup(gopls_config)
 
 
