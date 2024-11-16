@@ -3,7 +3,7 @@ return {
   version = "v2.*",
   build = "make install_jsregexp",
   config = function()
-    local luasnip = require "luasnip"
+    local luasnip = require("luasnip")
 
     vim.snippet.expand = luasnip.lsp_expand
 
@@ -38,6 +38,8 @@ return {
       history = true,
       updateevents = "TextChanged,TextChangedI",
       override_builtin = true,
+      region_check_events = "InsertEnter",
+      delete_check_events = "TextChanged,InsertLeave",
     }
 
     local snippet_dir = vim.fn.stdpath("config") .. "/snippets/vscode"

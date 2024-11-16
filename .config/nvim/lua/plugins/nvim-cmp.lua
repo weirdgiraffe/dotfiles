@@ -104,6 +104,7 @@ return {
         ["<C-p>"] = actions.select_prev_item,
         ["<Tab>"] = actions.comfirm_or_next_placeholder,
         ["<S-Tab>"] = actions.prev_placeholder,
+        ["<CR>"] = cmp.mapping.confirm({ select = true }),
       },
       completion = {
         completeopt = "menu,menuone,noselect",
