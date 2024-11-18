@@ -71,13 +71,27 @@
   setopt HIST_VERIFY
   setopt HIST_REDUCE_BLANKS
 
+  function local-history-search-backward() {
+      zle set-local-history 1
+      zle history-search-backward
+      zle set-local-history 0
+  }
+  zle -N local-history-search-backward
+
+  function local-history-search-forward() {
+      zle set-local-history 1
+      zle history-search-forward
+      zle set-local-history 0
+  }
+  zle -N local-history-search-forward
+
   # add keybindings to searth the history, i.e. when I'm on the line like ls
   # those keypresses will search history with this prefix and suggest things
   # like ls /tmp, ls /var, etc.
-  bindkey '^[[A' history-search-backward
-  bindkey '^P' history-search-backward
-  bindkey '^]]B' history-search-forward
-  bindkey '^N' history-search-forward
+  bindkey '^[[A' local-history-search-backward
+  bindkey '^P' local-history-search-backward
+  bindkey '^]]B' local-history-search-forward
+  bindkey '^N' local-history-search-forward
 
   # ------------------------------------------------------------------------------
   # ------------------------------------------------------------------------------
