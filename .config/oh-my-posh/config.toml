@@ -1,66 +1,125 @@
-#:schema https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json
-
-version = 2
-final_space = true
 console_title_template = '{{ .Shell }} in {{ .Folder }}'
+version = 3
+final_space = true
+auto_upgrade = true
+
+[secondary_prompt]
+template = " "
+foreground = 'magenta'
+background = 'transparent'
+
+[transient_prompt]
+template = " "
+background = 'transparent'
+foreground_templates = [
+	'{{if gt .Code 0}}red{{end}}',
+	'{{if eq .Code 0}}magenta{{end}}',
+]
 
 [[blocks]]
-type = 'prompt'
-alignment = 'left'
+type = "prompt"
+alignment = "left"
 newline = true
 
 [[blocks.segments]]
-type = 'path'
-style = 'plain'
-background = 'transparent'
-foreground = 'blue'
+type = "path"
+style = "plain"
+foreground = "blue"
+background = "transparent"
 template = '{{ .Path }}'
-
+[blocks.segments.cache]
+duration = "1h"
+strategy = "folder"
 [blocks.segments.properties]
-style = 'full'
+style = "full"
+[blocks.segments.properties.mapped_locations]
+"~/code/github.com/*" = "github.com"
+"~/code/gilab.com/*" = "gitlab.com"
 
 [[blocks.segments]]
-type = 'git'
-style = 'plain'
+type = "git"
+style = "plain"
 foreground = 'p:grey'
-background = 'transparent'
+background = "transparent"
 template = """ {{ .HEAD }}
-{{- if or (.Working.Changed) (.Staging.Changed) }} ∗{{ end -}}
-{{- if .BranchStatus }} <cyan>
-  {{- if gt .Behind 0 -}}⇣{{ end -}}
-  {{- if gt .Ahead 0 -}}⇡{{ end -}}
-</>{{ end -}}
-"""
-
+{{- if or (.Working.Changed) (.Staging.Changed) }} ∗ {{- end -}}
+{{- if .BranchStatus -}}
+<cyan>
+	{{- if gt .Behind 0 -}}⇣ {{- end -}}
+	{{- if gt .Ahead 0  -}}⇡ {{- end -}}
+</>
+{{- end }} """
+[blocks.segments.cache]
+duration = "none"
 [blocks.segments.properties]
-# branch_icon = ''
 commit_icon = '@'
 fetch_status = true
 
 [[blocks]]
-type = 'rprompt'
-overflow = 'hidden'
+type = "prompt"
+alignment = "right"
+
+# add more languages here
+[[blocks.segments]]
+type = "go"
+style = "plain"
+foreground = "blue"
+background = "transparent"
+template = "  {{ .Full }} "
+[blocks.segments.properties]
+cache_duration = "1m"
 
 [[blocks.segments]]
-type = 'text'
-style = 'plain'
+type = "lua"
+style = "plain"
+foreground = "blue"
+background = "transparent"
+template = "  {{ .Full }} "
+[blocks.segments.properties]
+cache_duration = "1m"
+
+[[blocks.segments]]
+type = "rust"
+style = "plain"
+foreground = "blue"
+background = "transparent"
+template = "  {{ .Full }} "
+[blocks.segments.properties]
+cache_duration = "1m"
+
+[[blocks.segments]]
+type = "text"
+style = "plain"
 foreground = 'yellow'
 background = 'transparent'
 template = """
 {{- if .Env.YAZI_LEVEL -}}
-yazi:{{ .Env.YAZI_LEVEL }}
+ {{ .Env.YAZI_LEVEL }}
 {{- end -}}
 """
+[blocks.segments.cache]
+duration = "none"
 
 [[blocks.segments]]
-type = 'executiontime'
-style = 'plain'
-foreground = 'yellow'
-background = 'transparent'
-template = '{{ .FormattedMs }}'
-
+type = "status"
+style = "plain"
+foreground = "red"
+background = "transparent"
+template = "  {{ .String }}"
 [blocks.segments.properties]
-threshold = 5000
+cache_duration = "none"
+threshold = 1000
+
+[[blocks.segments]]
+type = "executiontime"
+style = 'plain'
+foreground = "magenta"
+background = "transparent"
+template = " 󰔛 {{ .FormattedMs }}"
+[blocks.segments.properties]
+cache_duration = "none"
+threshold = 1000
+
 
 [[blocks]]
 type = 'prompt'
@@ -68,24 +127,13 @@ alignment = 'left'
 newline = true
 
 [[blocks.segments]]
-type = 'text'
-style = 'plain'
+type = "text"
+style = "plain"
+background = 'transparent'
 foreground_templates = [
-	"{{if gt .Code 0}}red{{end}}",
-	"{{if eq .Code 0}}magenta{{end}}",
+	'{{if gt .Code 0}}red{{end}}',
+	'{{if eq .Code 0}}magenta{{end}}',
 ]
-background = 'transparent'
-template = '❯'
-
-[transient_prompt]
-foreground_templates = [
-	"{{if gt .Code 0}}red{{end}}",
-	"{{if eq .Code 0}}magenta{{end}}",
-]
-background = 'transparent'
-template = '❯ '
-
-[secondary_prompt]
-foreground = 'magenta'
-background = 'transparent'
-template = '❯❯ '
+template = ""
+[blocks.segments.properties]
+cache_duration = 'none'
