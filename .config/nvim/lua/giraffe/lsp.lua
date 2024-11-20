@@ -7,6 +7,7 @@ local capabilities = vim.tbl_deep_extend(
 )
 
 lspconfig["bashls"].setup({})
+lspconfig["sqlls"].setup({})
 
 local configs = require('lspconfig.configs')
 configs.solidity = {
