@@ -54,9 +54,13 @@ local gopls_config = vim.tbl_deep_extend("force",
 lspconfig["gopls"].setup(gopls_config)
 
 
-
+-- fixup completions based on taplo
+-- based on: https://www.reddit.com/r/neovim/comments/1fkprp5/how_to_properly_setup_lspconfig_for_toml_files/
 lspconfig["taplo"].setup({
   capabilities = capabilities,
+  filetypse = { "toml" },
+  -- IMPORTANT: this is required for taplo LSP to work in non-git repositories
+  root_dir = require('lspconfig.util').root_pattern('*.toml', '.git'),
 })
 
 -- rust configuration is handled by rustaceanvim
