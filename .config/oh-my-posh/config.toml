@@ -4,12 +4,12 @@ final_space = true
 auto_upgrade = true
 
 [secondary_prompt]
-template = " "
+template = " "
 foreground = 'magenta'
 background = 'transparent'
 
 [transient_prompt]
-template = " "
+template = " "
 background = 'transparent'
 foreground_templates = [
 	'{{if gt .Code 0}}red{{end}}',
@@ -28,7 +28,7 @@ foreground = "blue"
 background = "transparent"
 template = '{{ .Path }}'
 [blocks.segments.cache]
-duration = "1h"
+duration = "1m"
 strategy = "folder"
 [blocks.segments.properties]
 style = "full"
@@ -56,8 +56,9 @@ commit_icon = '@'
 fetch_status = true
 
 [[blocks]]
-type = "prompt"
+type = "rprompt"
 alignment = "right"
+overflow = "hidden"
 
 # add more languages here
 [[blocks.segments]]
@@ -86,6 +87,11 @@ background = "transparent"
 template = "  {{ .Full }} "
 [blocks.segments.properties]
 cache_duration = "1m"
+
+
+[[blocks]]
+type = "prompt"
+alignment = "right"
 
 [[blocks.segments]]
 type = "text"
@@ -120,7 +126,6 @@ template = " 󰔛 {{ .FormattedMs }}"
 cache_duration = "none"
 threshold = 1000
 
-
 [[blocks]]
 type = 'prompt'
 alignment = 'left'
@@ -134,6 +139,6 @@ foreground_templates = [
 	'{{if gt .Code 0}}red{{end}}',
 	'{{if eq .Code 0}}magenta{{end}}',
 ]
-template = ""
+template = ""
 [blocks.segments.properties]
 cache_duration = 'none'
