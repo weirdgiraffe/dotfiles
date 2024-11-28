@@ -1,7 +1,9 @@
+"$schema" = "https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json"
 console_title_template = '{{ .Shell }} in {{ .Folder }}'
 version = 3
 final_space = true
-auto_upgrade = true
+upgrade_notice = false
+auto_upgrade = false
 
 [secondary_prompt]
 template = " "
@@ -12,8 +14,8 @@ background = 'transparent'
 template = " "
 background = 'transparent'
 foreground_templates = [
-	'{{if gt .Code 0}}red{{end}}',
-	'{{if eq .Code 0}}magenta{{end}}',
+  '{{if gt .Code 0}}red{{end}}',
+  '{{if eq .Code 0}}magenta{{end}}',
 ]
 
 [[blocks]]
@@ -136,8 +138,8 @@ type = "text"
 style = "plain"
 background = 'transparent'
 foreground_templates = [
-	'{{if gt .Code 0}}red{{end}}',
-	'{{if eq .Code 0}}magenta{{end}}',
+  '{{if gt .Code 0}}red{{end}}',
+  '{{if eq .Code 0}}magenta{{end}}',
 ]
 template = ""
 [blocks.segments.properties]
