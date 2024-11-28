@@ -109,9 +109,10 @@
   # plugins
 
   # oh-my-posh: (need to comment out if want to benchmark)
-  if [[ ! -s ${CACHE_FUNCTIONS_DIR}/oh-my-posh.zsh ]]; then
-    oh-my-posh init zsh --config=${HOME}/.config/oh-my-posh/config.toml > ${CACHE_FUNCTIONS_DIR}/oh-my-posh.zsh
-  fi
+#   if [[ ! -s ${CACHE_FUNCTIONS_DIR}/oh-my-posh.zsh ]]; then
+#     oh-my-posh init zsh --config=${HOME}/.config/oh-my-posh/config.toml > ${CACHE_FUNCTIONS_DIR}/oh-my-posh.zsh
+#   fi
+  eval "$(starship init zsh)"
 
   # NOTE: pyenv has an extremely slow initialization function
   #       so it is reimplemented as ${CACHE_FUNCTIONS_DIR}/pyenv.zsh
