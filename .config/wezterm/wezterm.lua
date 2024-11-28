@@ -15,16 +15,19 @@ local function scheme_for_appearance(appearance)
     return "Everforest Light (Gogh)"
   end
 end
+
 config.color_scheme                               = scheme_for_appearance(wezterm.gui.get_appearance())
+config.colors                                     = { cursor_bg = '#dbbc7f' }
 
 config.window_padding                             = {
-  left = 20,
-  right = 20,
+  left = 10,
+  right = 10,
   top = 10,
   bottom = 10,
 }
 
 config.window_decorations                         = "TITLE | RESIZE"
+-- config.window_decorations                         = "RESIZE"
 -- config.enable_tab_bar = false
 config.hide_tab_bar_if_only_one_tab               = true
 config.max_fps                                    = 120
