@@ -40,6 +40,23 @@ config.exit_behavior                              = "Close"
 config.front_end                                  = "WebGpu"
 config.window_background_opacity                  = 0.99
 config.macos_window_background_blur               = 50
+config.mouse_bindings                             = {
+  { -- Disable the default click behavior
+    event = { Up = { streak = 1, button = "Left" } },
+    mods = "NONE",
+    action = wezterm.action.DisableDefaultAssignment,
+  },
+  { -- Cmd-click will open the link under the mouse cursor
+    event = { Up = { streak = 1, button = "Left" } },
+    mods = "CMD",
+    action = wezterm.action.OpenLinkAtMouseCursor,
+  },
+  { -- Disable the Cmd-click down event to stop programs from seeing it when a URL is clicked
+    event = { Down = { streak = 1, button = "Left" } },
+    mods = "CMD",
+    action = wezterm.action.Nop,
+  },
+}
 
 config.hyperlink_rules                            = wezterm.default_hyperlink_rules()
 table.insert(config.hyperlink_rules, {
