@@ -236,5 +236,5 @@
   # allow cd without typing cd in interactive shell
   # reference: man zshoptions
   setopt AUTO_CD
-
+  export VIRTUAL_ENV_DISABLE_PROMPT=1
 } # end of the anonymous function
