@@ -77,8 +77,7 @@ keymap = [
 	], desc = "Go back to the parent directory" },
 	{ on = [
 		"l",
-	], run = "plugin --sync smart-enter", desc = "Enter the child directory, or open the file" },
-
+	], run = "plugin smart-enter", desc = "Enter the child directory, or open the file" },
 	{ on = [
 		"H",
 	], run = "back", desc = "Go back to the previous directory" },
