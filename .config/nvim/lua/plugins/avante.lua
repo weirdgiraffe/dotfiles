@@ -4,10 +4,20 @@ return {
   lazy = false,
   version = false, -- set this if you want to always pull the latest change
   opts = {
-    provider = "openai",
-    openai = {
-      model = "gpt-4o-mini",
-    },
+    provider = "copilot",
+    mappings = {
+      ask = "<leader>AA",
+      edit = "<leader>AE",
+      refresh = "<leader>AR",
+      focus = "<leader>AF",
+      toggle = {
+        default = "<leader>AT",
+        debug = "<leader>AD",
+        hint = "<leader>AH",
+        suggestion = "<leader>AS",
+        repomap = "<leader>ARM",
+      },
+    }
   },
   -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
   build = "make",
@@ -40,7 +50,8 @@ return {
       -- Make sure to set this up properly if you have lazy=true
       'MeanderingProgrammer/render-markdown.nvim',
       opts = {
-        file_types = { "markdown", "Avante" },
+        file_types = { "Avante" },
+        bullet = { right_pad = 1 },
       },
       ft = { "markdown", "Avante" },
     },
