@@ -42,10 +42,25 @@ local function fzf_cwd()
 end
 
 nnoremap("<leader>j", function()
+  local base, _ = fzf_cwd()
+  return fzf.files({
+    winopts = { preview = { layout = "vertical" } },
+    formatter = { "path.dirname_first" },
+    fzf_opts = { ["--tiebreak"] = "end,length" },
+    fd_opts = table.concat({
+      "--hidden",
+      "--type=f",
+    }, " "),
+    cwd = base,
+  })
+end, "find files with respect to current git repo")
+
+nnoremap("<leader>l", function()
   local base, rel = fzf_cwd()
   return fzf.files({
     winopts = { preview = { layout = "vertical" } },
     formatter = { "path.dirname_first" },
+    fzf_opts = { ["--tiebreak"] = "end,length" },
     query = rel ~= "" and rel .. "/",
     fd_opts = table.concat({
       "--hidden",
@@ -59,6 +74,7 @@ nnoremap("<leader>g", function()
   local cwd = vim.fn.expand("%:p:h")
   return fzf.live_grep({
     winopts = { preview = { layout = "vertical" } },
+    fzf_opts = { ["--tiebreak"] = "end,length" },
     cwd = cwd
   })
 end, "live grep with respect to the current file dir")
@@ -67,6 +83,7 @@ nnoremap("<leader>G", function()
   local base, _ = fzf_cwd()
   return fzf.live_grep({
     winopts = { preview = { layout = "vertical" } },
+    fzf_opts = { ["--tiebreak"] = "end,length" },
     cwd = base
   })
 end, "live grep with respect to current git repo")
