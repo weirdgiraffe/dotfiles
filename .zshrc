@@ -211,6 +211,7 @@
   alias gdiff='git diff'
   alias cd="z"
   alias gdiffsplit='DELTA_FEATURES=+side-by-side git diff'
+  alias dc='docker compose'
 
   # Preserve terminfo for kitty when ssh-ing somewhere
   # alias ssh='kitten ssh'
