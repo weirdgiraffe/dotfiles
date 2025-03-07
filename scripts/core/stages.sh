@@ -17,7 +17,8 @@ function download_fonts() {(
   source core/defer.sh
 
   pushd "${1}"
-  curl -fsSL https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/Meslo.zip | tar xzf -
+  curl -fsSL https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/Meslo.zip | tar xzf -
+  curl -fsSL https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/Iosevka.zip | tar xzf -
   defer popd
 )}
 
