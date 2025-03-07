@@ -34,23 +34,26 @@ lspconfig["lua_ls"].setup({
 
 -- FIXME: workaround for https://github.com/neovim/neovim/issues/28058
 -- based on https://github.com/neovim/neovim/issues/28058#issuecomment-2210490506
-local gopls_config = vim.tbl_deep_extend("force",
-  { require('go.lsp').config() },
-  { capabilities = capabilities },
+local gopls_config = require('go.lsp').config() or {}
+gopls_config.capabilities = vim.tbl_deep_extend(
+  "force",
+  gopls_config.capabilities or {},
+  capabilities,
   {
-    capabilities = {
-      workspace = {
-        didChangeWatchedFiles = {
-          dynamicRegistration = false,
-          relativePatternSupport = false,
-        }
+    workspace = {
+      didChangeWatchedFiles = {
+        dynamicRegistration = false,
+        relativePatternSupport = false,
       }
-    },
-    init_options = {
-      usePlaceholders = true,
-    },
-  })
--- vim.print(vim.inspect(gopls_config))
+    }
+  }
+)
+gopls_config.init_options = vim.tbl_deep_extend(
+  "force",
+  gopls_config.init_options or {},
+  { usePlaceholders = true }
+)
+-- vim.print(vim.inspect(gopls_config.settings))
 lspconfig["gopls"].setup(gopls_config)
 
 

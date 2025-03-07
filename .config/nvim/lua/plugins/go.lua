@@ -1,6 +1,7 @@
 return {
-  "weirdgiraffe/go.nvim",
-  dir = "~/code/github.com/weirdgiraffe/go.nvim",
+  "ray-x/go.nvim",
+  -- "weirdgiraffe/go.nvim",
+  -- dir = "~/code/github.com/weirdgiraffe/go.nvim",
   dependencies = {
     "ray-x/guihua.lua",
     "folke/trouble.nvim",
