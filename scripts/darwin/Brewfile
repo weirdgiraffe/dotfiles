@@ -34,6 +34,8 @@ brew "pngpaste"
 brew "oh-my-posh"
 brew "git-delta"
 brew "pre-commit"
+brew "zsh"
+brew "zsh-autosuggestions"
 
 # casks
 cask "bitwarden"
