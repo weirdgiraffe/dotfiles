@@ -46,7 +46,6 @@ brew "fzf"
 
 # casks
 cask "bitwarden"
-cask "kitty"
 cask "hammerspoon"
 cask "raycast"
 cask "brave-browser"
@@ -54,3 +53,4 @@ cask "docker"
 cask "stats"
 cask "notunes"
 cask "keycastr"
+cask "wezterm"
