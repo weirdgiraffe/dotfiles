@@ -35,7 +35,13 @@ brew "oh-my-posh"
 brew "git-delta"
 brew "pre-commit"
 brew "zsh"
+brew "zsh-completions"
 brew "zsh-autosuggestions"
+brew "zsh-syntax-highlighting"
+brew "starship"
+brew "zoxide"
+brew "pyenv"
+brew "fzf"
 
 # casks
 cask "bitwarden"

@@ -1,5 +1,6 @@
-source ${XDG_CONFIG_HOME:-$HOME/.config}/fzf/fzf.zsh
-
+if [[ -f ${XDG_CONFIG_HOME:-$HOME/.config}/fzf/fzf.zsh ]]; then
+  source ${XDG_CONFIG_HOME:-$HOME/.config}/fzf/fzf.zsh
+fi
 
 export FZF_ALT_C_COMMAND="fd --type d --hidden --follow"
 export FZF_ALT_C_COMMAND="fd --type d --hidden --follow"
