@@ -1,5 +1,6 @@
 # packages
 brew "coreutils"
+brew "gnu-sed"
 brew "stow"
 brew "httpie"
 brew "reattach-to-user-namespace"
