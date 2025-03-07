@@ -25,7 +25,7 @@ fi
 # because they just miss the activation of compdef.
 BW_COMPLETION_FILE=$(brew --prefix)/share/zsh/site-functions/_bitwarden-cli
 # ensure that we don't add this line twice
-sed -i '/^compdef _bw bw$/d' ${BW_COMPLETION_FILE}
+gsed -i '/^compdef _bw bw$/d' ${BW_COMPLETION_FILE}
 # actually add the missing line
-sed -i 's/^\(#compdef _bw bw\)$/\1\n\ncompdef _bw bw\n/' ${BW_COMPLETION_FILE}
+gsed -i 's/^\(#compdef _bw bw\)$/\1\n\ncompdef _bw bw\n/' ${BW_COMPLETION_FILE}
 
