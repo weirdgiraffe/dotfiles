@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Battery_state</key>
+	<false/>
+	<key>GPU_state</key>
+	<true/>
+	<key>LaunchAtLoginNext</key>
+	<true/>
+	<key>NSStatusItem Preferred Position CPU_mini</key>
+	<real>675</real>
+	<key>NSStatusItem Preferred Position Disk_mini</key>
+	<real>534</real>
+	<key>NSStatusItem Preferred Position GPU_mini</key>
+	<real>628</real>
+	<key>NSStatusItem Preferred Position Network_speed</key>
+	<real>301</real>
+	<key>NSStatusItem Preferred Position RAM_mini</key>
+	<real>581</real>
+	<key>NSStatusItem Restore Position Battery_battery</key>
+	<integer>405</integer>
+	<key>NSToolbar Configuration eu.exelban.Stats.Settings.Toolbar</key>
+	<dict>
+		<key>TB Display Mode</key>
+		<integer>1</integer>
+		<key>TB Icon Size Mode</key>
+		<integer>1</integer>
+		<key>TB Is Shown</key>
+		<true/>
+		<key>TB Size Mode</key>
+		<integer>1</integer>
+	</dict>
+	<key>NSWindow Frame NSNavPanelAutosaveName</key>
+	<string>1505 939 430 163 0 0 3440 1415 </string>
+	<key>Network_base</key>
+	<string>bit</string>
+	<key>Network_publicIPRefreshInterval</key>
+	<string>never</string>
+	<key>Network_speed_icon</key>
+	<string>dots</string>
+	<key>Network_speed_monochrome</key>
+	<true/>
+	<key>runAtLoginInitialized</key>
+	<true/>
+	<key>setupProcess</key>
+	<true/>
+	<key>support_ts</key>
+	<integer>1741162241</integer>
+	<key>telemetry</key>
+	<true/>
+	<key>telemetry_id</key>
+	<string>5EB3EF3E-B534-4CC8-A05D-DC69A67C4C5B</string>
+	<key>temperature_units</key>
+	<string>system</string>
+	<key>update-interval</key>
+	<string>Silent</string>
+	<key>updater_check_ts</key>
+	<integer>1741162228</integer>
+	<key>version</key>
+	<string>2.11.33</string>
+</dict>
+</plist>
