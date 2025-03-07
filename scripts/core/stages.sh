@@ -65,6 +65,7 @@ function configure_fzf() {(
   pushd ${HOME}/.config/fzf
   defer popd
 
+  fzf --zsh > fzf.zsh
   ln -sf themes/kanagawa-wave current-theme.zsh
 )}
 
