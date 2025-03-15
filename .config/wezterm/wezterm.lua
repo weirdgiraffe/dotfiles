@@ -4,7 +4,11 @@ local wezterm = require 'wezterm'
 -- This will hold the configuration.
 local config = wezterm.config_builder()
 
-config.font = wezterm.font("Iosevka Nerd Font")
+-- config.font = wezterm.font("Iosevka Nerd Font")
+config.font = wezterm.font("IosevkaTerm Nerd Font")
+-- config.font = wezterm.font("Source Code Pro")
+-- config.font = wezterm.font("0xProto Nerd Font")
+-- config.font = wezterm.font("Hasklug Nerd Font")
 config.font_size = 14.0
 
 -- This is where you actually apply your config choices
