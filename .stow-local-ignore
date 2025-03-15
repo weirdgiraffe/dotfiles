@@ -27,3 +27,5 @@ _darcs
 ^/.github
 ^/.git-crypt
 ^/settings
+^/.config/github-copilot
+^/.ssh/known_hosts*
