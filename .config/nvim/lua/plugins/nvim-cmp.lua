@@ -45,46 +45,46 @@ return {
     local actions = {
       complete_or_select_next_item = cmp.mapping(function(fallback)
         if cmp.visible() then
-          vim.notify("select_next: cmp visible: select_next_item")
+          -- vim.notify("select_next: cmp visible: select_next_item")
           cmp.select_next_item()
         elseif vim.api.nvim_buf_get_option(0, 'buftype') ~= 'prompt' then
-          vim.notify("select next: cmp not visible: complete")
+          -- vim.notify("select next: cmp not visible: complete")
           cmp.complete()
         else
-          vim.notify("select_next: cmp not visible: fallback")
+          -- vim.notify("select_next: cmp not visible: fallback")
           fallback()
         end
       end, { "i", "s" }),
 
       select_prev_item = cmp.mapping(function(fallback)
         if cmp.visible() then
-          vim.notify("select_prev: cmp visible: select_prev_item")
+          -- vim.notify("select_prev: cmp visible: select_prev_item")
           cmp.select_prev_item()
         else
-          vim.notify("select_prev: cmp not visible: fallback")
+          -- vim.notify("select_prev: cmp not visible: fallback")
           fallback()
         end
       end, { "i", "s" }),
 
       comfirm_or_next_placeholder = cmp.mapping(function(fallback)
         if cmp.visible() then
-          vim.notify("next paceholder: confirm")
+          -- vim.notify("next paceholder: confirm")
           cmp.confirm({ select = true })
         elseif vim.snippet.active({ direction = 1 }) then
-          vim.notify("next paceholder: jump")
+          -- vim.notify("next paceholder: jump")
           vim.snippet.jump(1)
         else
-          vim.notify("next paceholder: fallback")
+          -- vim.notify("next paceholder: fallback")
           fallback()
         end
       end, { "i", "s" }),
 
       prev_placeholder = cmp.mapping(function(fallback)
         if vim.snippet.active({ direction = -1 }) then
-          vim.notify("prev paceholder: jump")
+          -- vim.notify("prev paceholder: jump")
           vim.snippet.jump(-1)
         else
-          vim.notify("prev paceholder: fallback")
+          -- vim.notify("prev paceholder: fallback")
           fallback()
         end
       end, { "i", "s" }),
@@ -113,10 +113,17 @@ return {
         autocomplete = false,
       },
       sources = {
-        { name = 'nvim_lsp_signature_help', priority = 4 },
-        { name = "nvim_lsp",                priority = 3 },
-        { name = 'luasnip',                 priority = 2 },
-        { name = "path",                    priority = 1 },
+        {
+          name = 'nvim_lsp_signature_help',
+          priority = 4,
+          entry_filter = function(entry, _)
+            print("entry_filter: " .. entry)
+            return true
+          end
+        },
+        { name = "nvim_lsp", priority = 3 },
+        { name = 'luasnip',  priority = 2 },
+        { name = "path",     priority = 1 },
       },
       view = { entries = { name = "native" } },
       -- the only working option having multiple sources

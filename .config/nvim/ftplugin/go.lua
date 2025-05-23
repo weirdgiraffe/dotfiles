@@ -12,6 +12,9 @@ end
 vim.o.shiftwidth = 4
 vim.o.tabstop = 4
 
+vim.o.textwidth = 120
+vim.o.colorcolumn = "+1"
+
 keymap("<leader>a", function()
   require("go.alternate").switch("", "")
 end, "go alternate")
