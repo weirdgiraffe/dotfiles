@@ -1,4 +1,3 @@
-local lspconfig = require("lspconfig")
 local capabilities = vim.tbl_deep_extend(
   "force",
   {},
@@ -6,23 +5,33 @@ local capabilities = vim.tbl_deep_extend(
   require("cmp_nvim_lsp").default_capabilities()
 )
 
-lspconfig["bashls"].setup({})
-lspconfig["sqlls"].setup({})
+local modern_config = vim.fn.has('nvim-0.11')
+local function configure_lsp(server, config)
+  if modern_config then
+    vim.lsp.config(server, config)
+  else
+    require('lspconfig')[server].setup(config)
+  end
+end
+
+
+configure_lsp("bashls", {})
+configure_lsp("sqlls", {})
 
 local configs = require('lspconfig.configs')
 configs.solidity = {
   default_config = {
     cmd = { 'nomicfoundation-solidity-language-server', '--stdio' },
     filetypes = { 'solidity' },
-    root_dir = lspconfig.util.find_git_ancestor,
+    root_dir = require('lspconfig').util.find_git_ancestor,
     single_file_support = true,
   },
 }
-lspconfig["solidity"].setup({
-  capabilities = capabilities,
-})
 
-lspconfig["lua_ls"].setup({
+configure_lsp("solidity", { capabilities = capabilities })
+
+
+configure_lsp("lua_ls", {
   capabilities = capabilities,
   settings = {
     Lua = {
@@ -54,31 +63,19 @@ gopls_config.init_options = vim.tbl_deep_extend(
   { usePlaceholders = true }
 )
 -- vim.print(vim.inspect(gopls_config.settings))
-lspconfig["gopls"].setup(gopls_config)
+configure_lsp("gopls", gopls_config)
 
 
 -- fixup completions based on taplo
 -- based on: https://www.reddit.com/r/neovim/comments/1fkprp5/how_to_properly_setup_lspconfig_for_toml_files/
-lspconfig["taplo"].setup({
+configure_lsp("taplo", {
   capabilities = capabilities,
   filetypse = { "toml" },
   -- IMPORTANT: this is required for taplo LSP to work in non-git repositories
   root_dir = require('lspconfig.util').root_pattern('*.toml', '.git'),
 })
 
--- rust configuration is handled by rustaceanvim
--- lspconfig["rust_analyzer"].setup({
---   capabilities = capabilities,
---   settings = {
---     ["rust-analyzer"] = {
---       checkOnSave = {
---         command = "clippy-driver",
---       },
---     }
---   }
--- })
-
-lspconfig["yamlls"].setup({
+configure_lsp("yamlls", {
   capabilities = capabilities,
 })
 
@@ -131,7 +128,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
     local bufnr = event.buf or error("LspAttach event shall have a buffer")
     local client = vim.lsp.get_client_by_id(event.data.client_id) or error("LspAttach event shall have an lsp client")
 
-    if client.supports_method("textDocument/formatting") then
+    if client:supports_method("textDocument/formatting") then
       local callback = function() lsp_format_buffer(client, bufnr) end
       if client.name == "gopls" then
         callback = function()

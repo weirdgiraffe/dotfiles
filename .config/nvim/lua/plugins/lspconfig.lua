@@ -13,7 +13,7 @@ return {
     require("mason-lspconfig").setup({
       -- install lsp servers configured via lspconfig automatically.
       -- servers should be configured in giraffe/lsp.lua
-      automatic_installation = true,
+      automatic_enable = true
     })
   end,
 }
