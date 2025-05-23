@@ -43,6 +43,7 @@ brew "starship"
 brew "zoxide"
 brew "pyenv"
 brew "fzf"
+brew "rust"
 
 # casks
 cask "bitwarden"

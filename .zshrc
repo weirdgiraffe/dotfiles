@@ -239,3 +239,7 @@
   setopt AUTO_CD
   export VIRTUAL_ENV_DISABLE_PROMPT=1
 } # end of the anonymous function
+
+. "$HOME/.atuin/bin/env"
+
+eval "$(atuin init zsh)"

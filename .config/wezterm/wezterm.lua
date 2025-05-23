@@ -6,17 +6,24 @@ local config = wezterm.config_builder()
 
 -- config.font = wezterm.font("Iosevka Nerd Font")
 config.font = wezterm.font("IosevkaTerm Nerd Font")
+-- config.font = wezterm.font("IosevkaTermSlab Nerd Font")
+-- config.font = wezterm.font("Hack Nerd Font")
+-- config.font = wezterm.font("Monofur Nerd Font")
 -- config.font = wezterm.font("Source Code Pro")
 -- config.font = wezterm.font("0xProto Nerd Font")
 -- config.font = wezterm.font("Hasklug Nerd Font")
-config.font_size = 14.0
+-- config.font = wezterm.font("EnvyCodeR Nerd Font")
+-- config.font = wezterm.font("GeistMono Nerd Font")
+config.font_size = 16.0
 
 -- This is where you actually apply your config choices
 local function scheme_for_appearance(appearance)
   if appearance:find("Dark") then
     return "Everforest Dark (Gogh)"
+    -- return "Rosé Pine Moon (Gogh)"
   else
     return "Everforest Light (Gogh)"
+    -- return "Rosé Pine Dawn (Gogh)"
   end
 end
 

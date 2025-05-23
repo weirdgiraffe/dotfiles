@@ -4,6 +4,9 @@ return {
     "rose-pine/neovim",
     name = "rose-pine",
     lazy = true,
+    --     config = function()
+    --       vim.cmd([[colorscheme rose-pine]])
+    --     end,
   },
   {
     "rebelot/kanagawa.nvim",
@@ -47,6 +50,7 @@ return {
   {
     'sainnhe/everforest',
     priority = 999,
+    lazy = false,
     config = function()
       vim.g.everforest_background = "hard"
       vim.g.everforest_better_performance = 1
