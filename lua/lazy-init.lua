@@ -17,7 +17,7 @@ vim.opt.rtp:prepend(lazypath)
 -- check: https://lazy.folke.io/configuration
 require("lazy").setup({
   root = stdpath.data .. "/lazy", -- directory where plugins will be installed
-  defaults = { lazy = false },
+  defaults = { lazy = true },
   spec = "plugins",
   lockfile = stdpath.config .. "/lazy-lock.json",
   git = {
