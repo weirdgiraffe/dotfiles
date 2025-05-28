@@ -1,23 +1,9 @@
-local Path = require("plenary.path")
-
-
 local function split_path(path)
-  local filename = vim.fn.fnamemodify(path, ":t")
-  local dirname = vim.fn.fnamemodify(path, ":h")
-  return dirname, filename
-  --[[
-  local sep = Path.path.sep
-  local components = vim.split(path, sep)
-  local filename = components[#components]
-  local dirname = ""
-  for i = 1, #components - 1 do
-    if i ~= 1 then dirname = dirname .. sep end
-    dirname = dirname .. components[i]
-  end
-  return dirname, filename
-  --]]
+  return vim.fn.fnamemodify(path, ":t"), vim.fn.fnamemodify(path, ":h")
 end
 
+---nice_path will try to print absolute_path making it relative to the user's
+---home dir, if path is outside of the homedir it returns the absolute path.
 local function nice_path(absolute_path)
   ---@diagnostic disable-next-line: undefined-field
   local home = vim.loop.os_homedir()
@@ -27,8 +13,8 @@ local function nice_path(absolute_path)
   return absolute_path
 end
 
-local function nice_path_display(opts, path)
-  path = Path.new(path):absolute()
+function path_display(opts, path)
+  path = require("plenary.path").new(path):absolute()
   local dirname, filename = split_path(path)
   local this_file = vim.api.nvim_buf_get_name(opts.bufnr or 0)
   local this_dir = vim.fn.fnamemodify(this_file, ":h")
@@ -39,7 +25,7 @@ local function nice_path_display(opts, path)
     dirname = nice_path(dirname) .. Path.path.sep
   end
 
-  local display = require("telescope.pickers.entry_display").create({
+  local display = entry_display.create({
     separator = "",
     items = {
       { width = #dirname }, -- dirname + "/"
@@ -52,8 +38,6 @@ local function nice_path_display(opts, path)
   })
 end
 
-
-
 return {
   "nvim-telescope/telescope.nvim",
   dependencies = {
@@ -61,12 +45,10 @@ return {
     'nvim-lua/plenary.nvim',
   },
   config = function()
-    local actions = require "telescope.actions"
-    local telescope = require("telescope")
     local actions = require("telescope.actions")
-    telescope.setup({
+    require("telescope").setup({
       defaults = {
-        path_display = nice_path_display,
+        path_display = path_display,
         mappings = {
           i = {
             ["<C-j>"] = actions.move_selection_next,

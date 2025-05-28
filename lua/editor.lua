@@ -74,8 +74,8 @@ vim.opt.splitbelow = true -- horisontal split focus on the bottom pane
 -- https://stackoverflow.com/a/30691754/1208553
 vim.opt_global.clipboard = { "unnamed", "unnamedplus" }
 
-vim.o.shortmess = vim.o.shortmess .. 'I' -- disable intro message
-vim.go.termguicolors = true              -- enable 24-bit RGB colors in the terminal
+vim.o.shortmess = vim.o.shortmess .. 'WI' -- disable intro message and write messages
+vim.go.termguicolors = true               -- enable 24-bit RGB colors in the terminal
 vim.o.guicursor = "n-i-v-c-ci-ve:block" ..
     ",r-cr:hor20,o:hor50" ..
     ",n-i-r:Cursor/lCursor" ..
