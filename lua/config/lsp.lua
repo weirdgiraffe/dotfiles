@@ -8,8 +8,6 @@ local capabilities = vim.tbl_deep_extend("force", {},
 )
 vim.lsp.config('*', { capabilities = capabilities, })
 
-
-
 ---gopls_organize_imports will organize imports for the provided buffer
 ---@param client vim.lsp.Client gopls instance
 ---@param bufnr number buffer to organize imports for
