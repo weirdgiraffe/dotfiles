@@ -56,3 +56,5 @@ nnoremap("<leader>sd", function()
     border = "rounded",
   })
 end, "show diagnostics for the current line")
+
+nnoremap("<leader>cw", ":IncRename ", "LSP: rename")
