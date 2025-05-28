@@ -29,8 +29,8 @@ M.binary_files = {
 }
 
 --- nnoremap is equivalent to nnoremap in vimscript
----@param lhs string           Left-hand side |{lhs}| of the mapping.
----@param rhs string|function  Right-hand side |{rhs}| of the mapping, can be a Lua function.
+---@param lhs string Left-hand side |{lhs}| of the mapping.
+---@param rhs string|function Right-hand side |{rhs}| of the mapping, can be a Lua function.
 ---@param desc string mapping description
 function M.nnoremap(lhs, rhs, desc)
   vim.keymap.set("n", lhs, rhs, {
@@ -80,6 +80,119 @@ function M.trim_prefix(s, prefix)
     return s:sub(prefix:len() + 1)
   end
   return s
+end
+
+--- close_other_buffers will close all buffers except the current one if the
+--- buffer is not modified.
+function M.close_other_buffers()
+  local buffers = vim.api.nvim_list_bufs()
+  local current_buffer = vim.api.nvim_get_current_buf()
+  for _, bufnr in ipairs(buffers) do
+    local listed = vim.api.nvim_get_option_value("buflisted", { buf = bufnr })
+    local modified = vim.api.nvim_get_option_value("modified", { buf = bufnr })
+    local current = current_buffer == bufnr
+    if not current and listed and not modified then
+      vim.api.nvim_buf_delete(bufnr, {})
+    end
+  end
+end
+
+--- switch_focus_to_buffer will switch focus to a buffer with the given bufnr.
+---@param bufnr number buffer number to switch focus to
+function M.switch_focus_to_buffer(bufnr)
+  -- we need to pass "!" instead of "<bang>" here to actually
+  -- pass the bang sign to the underlying function, otherwise
+  -- it will panic if we would try to switch to the buffer
+  -- which not exists
+  require("lualine.components.buffers").buffer_jump(bufnr, '!')
+end
+
+function M.lsp_goto_definition()
+  local opts = require("telescope.themes").get_ivy()
+  opts.show_line = false
+  return require("telescope.builtin").lsp_definitions(opts)
+end
+
+function M.lsp_document_symbols()
+  local opts = require("telescope.themes").get_ivy()
+  opts.path_display = { "hidden" }
+  opts.symbol_width = 60
+
+  if vim.bo.filetype == "go" then
+    -- I would like to display struct.field for field entries returned from gopls.
+    local entry_maker_func = require("telescope.make_entry").gen_from_lsp_symbols(opts)
+    local cs = ""
+    opts.entry_maker = function(entry)
+      local actions = {
+        ["Struct"] = function()
+          cs = M.trim_prefix(entry.text, "[Struct] ")
+        end,
+        ["Field"] = function()
+          local text = M.trim_prefix(entry.text, "[Field] ")
+          if cs ~= "" then
+            entry.text = "[Field] " .. cs .. "." .. text
+          end
+        end,
+      }
+      if actions[entry.kind] then
+        actions[entry.kind]()
+      end
+      return entry_maker_func(entry)
+    end
+  end
+  return require("telescope.builtin").lsp_document_symbols(opts)
+end
+
+-- @function fzf_cwd will figure out the base directory to use for fzf related
+-- searches and the relative path to the current directory from the base
+-- directory. @return string,string
+local function fzf_cwd()
+  local fzf = require("fzf-lua")
+  local Path = require("plenary.path")
+
+  local function relpath(path)
+    local home_dir = vim.fn.expand("~")
+    local rel = Path:new(path):make_relative(home_dir)
+    return path:len() == rel:len() and path or "~/" .. rel
+  end
+
+  local cwd = vim.fn.expand("%:p:h")
+  local git_root = fzf.path.git_root({ cwd = cwd }, true)
+  if git_root then
+    -- In case our cwd is inside of some symlink to the git repository, we
+    -- don't want to use the git root as cwd, so ensure that our cwd is withing
+    -- the git root.
+    if cwd:len() >= git_root:len() and cwd:sub(1, git_root:len()) == git_root then
+      local rel = Path:new(cwd):make_relative(git_root)
+      return relpath(git_root), rel == "." and "" or rel
+    end
+  end
+  return relpath(cwd), ""
+end
+
+function M.list_repo_files()
+  local fzf = require("fzf-lua")
+
+  local base, _ = fzf_cwd()
+  return fzf.files({
+    winopts = { preview = { layout = "vertical" } },
+    formatter = { "path.dirname_first" },
+    fzf_opts = { ["--tiebreak"] = "end,length" },
+    fd_opts = table.concat({
+      "--color=never",
+      "--exclude='.git'",
+      "--hidden",
+      "--type=f",
+    }, " "),
+    cwd = base,
+  })
+end
+
+function M.custom_list_document_symbols()
+  local opts = require("telescope.themes").get_ivy()
+  opts.symbol_width = 8
+  opts.entry_maker = require("customize.telescope").gen_entries_from_lsp_symbols(opts)
+  return require("telescope.builtin").lsp_document_symbols(opts)
 end
 
 return M

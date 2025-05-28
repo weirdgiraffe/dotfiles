@@ -2,7 +2,6 @@ return {
   {
     "folke/lazydev.nvim",
     opts = function(_, opts)
-      vim.print("nvim-dap-ui: extending lazydev")
       opts.library = opts.library or {}
       table.insert(opts.library, "nvim-dap-ui")
     end,

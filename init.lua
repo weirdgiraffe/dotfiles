@@ -1,4 +1,5 @@
 require('editor')
 require('lazy-init')
+require('config.lsp')
 require('keymap')
 vim.cmd([[colorscheme everforest]])
