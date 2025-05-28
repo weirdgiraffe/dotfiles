@@ -58,8 +58,8 @@ vim.opt.showbreak = "^"
 -- =============================================================================
 -- tab completion for vim commands
 -- =============================================================================
-vim.opt.wildignore = require("utils").binary_files
-vim.opt.wildmode = { "list:longest", "full" }
+-- vim.opt.wildignore = require("utils").binary_files
+-- vim.opt.wildmode = { "list:longest", "full" }
 
 -- =============================================================================
 -- splits
@@ -75,6 +75,8 @@ vim.opt.splitbelow = true -- horisontal split focus on the bottom pane
 vim.opt_global.clipboard = { "unnamed", "unnamedplus" }
 
 vim.o.shortmess = vim.o.shortmess .. 'WI' -- disable intro message and write messages
+vim.cmd [[cnoreabbrev w silent w]]        -- disable messages on file writes
+vim.cmd [[cnoreabbrev wq silent wq]]
 vim.go.termguicolors = true               -- enable 24-bit RGB colors in the terminal
 vim.o.guicursor = "n-i-v-c-ci-ve:block" ..
     ",r-cr:hor20,o:hor50" ..

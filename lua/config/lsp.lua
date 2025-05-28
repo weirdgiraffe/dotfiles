@@ -1,6 +1,14 @@
 vim.lsp.set_log_level("warn")
 
 
+-- ensure that all lsp servers will receive correct capabilities
+local capabilities = vim.tbl_deep_extend("force", {},
+  vim.lsp.protocol.make_client_capabilities(),
+  require("cmp_nvim_lsp").default_capabilities()
+)
+vim.lsp.config('*', { capabilities = capabilities, })
+
+
 
 ---gopls_organize_imports will organize imports for the provided buffer
 ---@param client vim.lsp.Client gopls instance
@@ -10,7 +18,7 @@ local function gopls_organize_imports(client, bufnr)
     vim.notify("Organize imports is only supported for gopls", vim.log.levels.WARN)
     return
   end
-  local params = vim.lsp.util.make_range_params()
+  local params = vim.lsp.util.make_range_params(0, client.offset_encoding)
   params.context = {
     only = {
       "source.organizeImports"
