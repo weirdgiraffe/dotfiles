@@ -19,6 +19,7 @@ return {
       },
       filetypes = {
         go = true,
+        lua = true,
         gomod = true,
         gowork = true,
         gotmpl = true,
