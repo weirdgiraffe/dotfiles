@@ -58,3 +58,4 @@ nnoremap("<leader>sd", function()
 end, "show diagnostics for the current line")
 
 nnoremap("<leader>cw", ":IncRename ", "LSP: rename")
+nnoremap("<leader>gh", "<CMD>GH<CR>", "Open github")

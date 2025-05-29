@@ -56,5 +56,16 @@ return {
       mapping = require("customize").cmp.mapping,
       sorting = require("customize").cmp.sorting,
     })
+
+    local copilot_available, suggestion = pcall(require, 'copilot.suggestion')
+    if copilot_available then
+      cmp.event:on("menu_opened", function()
+        suggestion.dismiss()
+        vim.b.copilot_suggestion_hidden = true
+      end)
+      cmp.event:on("menu_closed", function()
+        vim.b.copilot_suggestion_hidden = false
+      end)
+    end
   end,
 }
