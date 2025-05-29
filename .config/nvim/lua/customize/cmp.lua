@@ -5,10 +5,8 @@ local complete_or_next_item = function(opts)
   return function(fallback)
     local fn = function()
       if cmp.visible() then
-        print("select next item " .. vim.inspect(opts))
         return cmp.select_next_item(opts)
       end
-      print("complete")
       return cmp.complete()
     end
     if not fn() then
