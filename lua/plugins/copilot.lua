@@ -1,8 +1,12 @@
+local stdpath = require("config.stdpath")
 return {
   "zbirenbaum/copilot.lua",
   event = "InsertEnter",
   config = function()
     require("copilot").setup({
+      logger = {
+        file = stdpath.log .. "/copilot-lua.log",
+      },
       panel = { enabled = false },
       suggestion = {
         enabled = true,
