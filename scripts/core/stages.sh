@@ -69,12 +69,3 @@ function configure_fzf() {(
   fzf --zsh > fzf.zsh
   ln -sf themes/kanagawa-wave current-theme.zsh
 )}
-
-function configure_kitty() {(
-  # set initial kitty colorsheme to be light
-  kitty +kitten themes \
-    --config-file-name=themes.conf \
-    --reload-in=all \
-    Kanagawa-wave
-)}
-
