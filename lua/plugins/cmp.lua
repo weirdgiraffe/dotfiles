@@ -18,27 +18,6 @@ return {
     -- TODO: figure out how to load snippers
     require("luasnip.loaders.from_vscode").lazy_load(require("stdpath").config .. "/snippets/vscode")
 
-    cmp.setup.cmdline("/", {
-      mapping = cmp.mapping.preset.cmdline(),
-      sources = {
-        { name = "buffer" },
-      },
-    })
-
-    cmp.setup.cmdline(":", {
-      mapping = cmp.mapping.preset.cmdline(),
-      sources = cmp.config.sources({
-        { name = "path" },
-      }, {
-        {
-          name = "cmdline",
-          option = {
-            ignore_cmds = { "Man", "!" },
-          },
-        },
-      }),
-    })
-
     cmp.setup({
       completion = { autocomplete = false },
       snippet = {
@@ -53,9 +32,37 @@ return {
         { name = "path",     priority = 1 },
       },
       preselect = cmp.PreselectMode.None,
-      mapping = require("customize").cmp.mapping,
+      mapping = require("customize").cmp.mapping.insert,
       sorting = require("customize").cmp.sorting,
     })
+
+    cmp.setup.cmdline("/", {
+      mapping = require("customize").cmp.mapping.cmdline,
+      sources = {
+        { name = "buffer" },
+      },
+    })
+
+    cmp.setup.cmdline(":", {
+      completion = {
+        autocomplete = {
+          require('cmp.types').cmp.TriggerEvent.TextChanged,
+        },
+      },
+      mapping = require("customize").cmp.mapping.cmdline,
+      sources = cmp.config.sources({
+        { name = "path" },
+      }, {
+        {
+          name = "cmdline",
+          option = {
+            ignore_cmds = { "Man", "!" },
+          },
+          keyword_length = 4,
+        },
+      }),
+    })
+
 
     local copilot_available, suggestion = pcall(require, 'copilot.suggestion')
     if copilot_available then

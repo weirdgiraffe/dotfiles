@@ -1,38 +1,44 @@
 local cmp = require('cmp')
 local compare = require('cmp.config.compare')
 
-local cmp_select = { behavior = cmp.SelectBehavior.Select }
-
-local complete_or_next_item = cmp.mapping(function(fallback)
-  local fn = function()
-    if cmp.visible() then
-      return cmp.select_next_item(cmp_select)
+local complete_or_next_item = function(opts, modes)
+  return cmp.mapping(function(fallback)
+    local fn = function()
+      if cmp.visible() then
+        print("select next item " .. vim.inspect(opts))
+        return cmp.select_next_item(opts)
+      end
+      print("complete")
+      return cmp.complete()
     end
-    return cmp.complete()
-  end
-  if not fn() then
-    fallback()
-  end
-end)
+    if not fn() then
+      fallback()
+    end
+  end, modes)
+end
 
-local select_prev_item = cmp.mapping(function(fallback)
-  if not cmp.visible() then
-    fallback()
-  end
+local select_prev_item = function(opts, modes)
+  return cmp.mapping(function(fallback)
+    if not cmp.visible() then
+      fallback()
+    end
 
-  if not cmp.select_prev_item(cmp_select) then
-    fallback()
-  end
-end)
+    if not cmp.select_prev_item(opts) then
+      fallback()
+    end
+  end, modes)
+end
 
-local confirm_item = cmp.mapping(function(fallback)
-  if not cmp.visible() then
-    fallback()
-  end
-  if not cmp.confirm({ select = true }) then
-    fallback()
-  end
-end)
+local confirm_item = function(opts, modes)
+  return cmp.mapping(function(fallback)
+    if not cmp.visible() then
+      fallback()
+    end
+    if not cmp.confirm({ select = true }) then
+      fallback()
+    end
+  end, modes)
+end
 
 local dismiss_completion = cmp.mapping(function(fallback)
   if not cmp.visible() then
@@ -43,12 +49,19 @@ local dismiss_completion = cmp.mapping(function(fallback)
   end
 end)
 
-local mapping = cmp.mapping.preset.insert({
-  ["<C-p>"] = select_prev_item,
-  ["<C-n>"] = complete_or_next_item,
-  ["<C-e>"] = dimiss_completion,
-  ["<C-l>"] = confirm_item,
-  ["<CR>"]  = confirm_item,
+local mapping_cmdline = cmp.mapping.preset.cmdline({
+  ["<Tab>"] = complete_or_next_item({ behavior = cmp.SelectBehavior.Select }, { "c" }),
+  ["<S-Tab>"] = select_prev_item({ behavior = cmp.SelectBehavior.Select }, { "c" }),
+  ["<C-l>"] = confirm_item({ behavior = cmp.ConfirmBehavior.Replace }, { "c" }),
+  ["<CR>"] = confirm_item({ behavior = cmp.ConfirmBehavior.Replace }, { "c" }),
+})
+
+local mapping_insert = cmp.mapping.preset.insert({
+  ["<C-p>"] = select_prev_item({ behavior = cmp.SelectBehavior.Select }),
+  ["<C-n>"] = complete_or_next_item({ behavior = cmp.SelectBehavior.Select }),
+  ["<C-e>"] = dismiss_completion,
+  ["<C-l>"] = confirm_item({ behavior = cmp.ConfirmBehavior.Insert }),
+  ["<CR>"] = confirm_item({ behavior = cmp.ConfirmBehavior.Insert }),
 })
 
 ---@param entry1 cmp.Entry
@@ -78,6 +91,9 @@ local sorting = {
 }
 
 return {
-  mapping = mapping,
+  mapping = {
+    insert = mapping_insert,
+    cmdline = mapping_cmdline,
+  },
   sorting = sorting,
 }

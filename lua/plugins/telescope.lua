@@ -8,7 +8,7 @@ local function nice_path(absolute_path)
   ---@diagnostic disable-next-line: undefined-field
   local home = vim.loop.os_homedir()
   if vim.startswith(absolute_path, home) then
-    return "~/" .. Path:new(absolute_path):make_relative(home)
+    return "~/" .. require("plenary.path"):new(absolute_path):make_relative(home)
   end
   return absolute_path
 end
@@ -22,10 +22,10 @@ function path_display(opts, path)
   if this_file == path or this_dir == dirname then
     dirname = ""
   else
-    dirname = nice_path(dirname) .. Path.path.sep
+    dirname = nice_path(dirname) .. require("plenary.path").path.sep
   end
 
-  local display = entry_display.create({
+  local display = require("telescope.pickers.entry_display").create({
     separator = "",
     items = {
       { width = #dirname }, -- dirname + "/"
