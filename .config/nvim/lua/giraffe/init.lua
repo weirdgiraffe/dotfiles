@@ -1,5 +1,0 @@
-require('giraffe.editor')
-require('giraffe.lazy')
-require('giraffe.colors')
-require('giraffe.lsp')
-require('giraffe.keymaps')
