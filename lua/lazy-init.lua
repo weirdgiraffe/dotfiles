@@ -1,4 +1,4 @@
-local stdpath = require("stdpath")
+local stdpath = require("config.stdpath")
 local lazypath = stdpath.data .. "/lazy/lazy.nvim"
 
 if not vim.loop.fs_stat(lazypath) then

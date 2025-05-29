@@ -2,6 +2,7 @@ local entry_display = require("telescope.pickers.entry_display")
 local make_entry = require("telescope.make_entry")
 local themes = require("telescope.themes")
 local builtin = require("telescope.builtin")
+local Path = require("plenary.path")
 
 
 local lsp_type_highlight = {
@@ -141,6 +142,52 @@ function M.buffers()
   opts.sort_mru = true
   opts.sort_lastused = true
   return builtin.buffers(opts)
+end
+
+local function split_path(path)
+  return vim.fn.fnamemodify(path, ":t"), vim.fn.fnamemodify(path, ":h")
+end
+
+function M.lsp_goto_definition()
+  local opts = require("telescope.themes").get_ivy()
+  opts.show_line = false
+  return require("telescope.builtin").lsp_definitions(opts)
+end
+
+---nice_path will try to print absolute_path making it relative to the user's
+---home dir, if path is outside of the homedir it returns the absolute path.
+local function nice_path(absolute_path)
+  ---@diagnostic disable-next-line: undefined-field
+  local home = vim.loop.os_homedir()
+  if vim.startswith(absolute_path, home) then
+    return "~/" .. Path:new(absolute_path):make_relative(home)
+  end
+  return absolute_path
+end
+
+function M.path_display(opts, path)
+  path = Path.new(path):absolute()
+  local dirname, filename = split_path(path)
+  local this_file = vim.api.nvim_buf_get_name(opts.bufnr or 0)
+  local this_dir = vim.fn.fnamemodify(this_file, ":h")
+
+  if this_file == path or this_dir == dirname then
+    dirname = ""
+  else
+    dirname = nice_path(dirname) .. Path.path.sep
+  end
+
+  local display = entry_display.create({
+    separator = "",
+    items = {
+      { width = #dirname }, -- dirname + "/"
+      { remaining = true }, -- filename
+    },
+  })
+  return display({
+    { dirname,  "TelescopeResultsComment" },
+    { filename, "TelescopeResultsIdentifier" },
+  })
 end
 
 return M

@@ -1,5 +1,6 @@
 local utils = require("utils")
-local customize = require("customize")
+local telescope_builtin = require("telescope.builtin")
+local telescope = require("customize.telescope")
 local tmux = require("nvim-tmux-navigation")
 local fzf = require("fzf-lua")
 
@@ -21,22 +22,15 @@ end
 
 nnoremap("<leader>y", utils.close_other_buffers, "close all but the current buffer")
 
-nnoremap("gd", utils.lsp_goto_definition, "LSP: go to definition")
-nnoremap("<leader>d", customize.telescope.lsp_document_symbols, "LSP: document symbols")
+nnoremap("gd", telescope.lsp_goto_definition, "LSP: go to definition")
+nnoremap("<leader>d", telescope.lsp_document_symbols, "LSP: document symbols")
 
 nnoremap("<leader>j", utils.list_repo_files, "List files in the current git repository")
-nnoremap("<leader>k", customize.telescope.buffers, "List opened buffers")
-nnoremap("<leader>r", customize.telescope.lsp_references, "LSP: references")
---[[
-nnoremap("<leader>r", function()
-  return require("fzf-lua").lsp_references({
-    winopts = { preview = { layout = "vertical" } },
-  })
-end, "LSP: references")
---]]
-vnoremap("<leader>i", customize.telescope.lsp_implementations, "LSP: implementations")
+nnoremap("<leader>k", telescope.buffers, "List opened buffers")
+nnoremap("<leader>r", telescope.lsp_references, "LSP: references")
+vnoremap("<leader>i", telescope.lsp_implementations, "LSP: implementations")
 vnoremap("<leader>q", fzf.lsp_code_actions, "LSP: code actions")
-nnoremap("<leader>x", require("telescope.builtin").diagnostics, "Display diagnostics")
+nnoremap("<leader>x", telescope_builtin.diagnostics, "Display diagnostics")
 
 nnoremap("<leader>g", function()
   local cwd = vim.fn.expand("%:p:h")

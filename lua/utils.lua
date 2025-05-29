@@ -107,42 +107,6 @@ function M.switch_focus_to_buffer(bufnr)
   require("lualine.components.buffers").buffer_jump(bufnr, '!')
 end
 
-function M.lsp_goto_definition()
-  local opts = require("telescope.themes").get_ivy()
-  opts.show_line = false
-  return require("telescope.builtin").lsp_definitions(opts)
-end
-
-function M.lsp_document_symbols()
-  local opts = require("telescope.themes").get_ivy()
-  opts.path_display = { "hidden" }
-  opts.symbol_width = 60
-
-  if vim.bo.filetype == "go" then
-    -- I would like to display struct.field for field entries returned from gopls.
-    local entry_maker_func = require("telescope.make_entry").gen_from_lsp_symbols(opts)
-    local cs = ""
-    opts.entry_maker = function(entry)
-      local actions = {
-        ["Struct"] = function()
-          cs = M.trim_prefix(entry.text, "[Struct] ")
-        end,
-        ["Field"] = function()
-          local text = M.trim_prefix(entry.text, "[Field] ")
-          if cs ~= "" then
-            entry.text = "[Field] " .. cs .. "." .. text
-          end
-        end,
-      }
-      if actions[entry.kind] then
-        actions[entry.kind]()
-      end
-      return entry_maker_func(entry)
-    end
-  end
-  return require("telescope.builtin").lsp_document_symbols(opts)
-end
-
 -- @function fzf_cwd will figure out the base directory to use for fzf related
 -- searches and the relative path to the current directory from the base
 -- directory. @return string,string
@@ -186,13 +150,6 @@ function M.list_repo_files()
     }, " "),
     cwd = base,
   })
-end
-
-function M.custom_list_document_symbols()
-  local opts = require("telescope.themes").get_ivy()
-  opts.symbol_width = 8
-  opts.entry_maker = require("lua.customize.custom-telescope").gen_entries_from_lsp_symbols(opts)
-  return require("telescope.builtin").lsp_document_symbols(opts)
 end
 
 return M
