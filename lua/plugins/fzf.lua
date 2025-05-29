@@ -9,7 +9,7 @@ local function attr_color(what, hlID)
   end
 end
 
-local function fzf_colors(opts)
+local function fzf_colors()
   local colors = {
     "fg:" .. attr_color("fg", "Normal"),
     "bg:" .. attr_color("bg", "Normal"),
