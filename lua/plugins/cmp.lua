@@ -15,8 +15,8 @@ return {
   config = function(_, opts)
     local cmp = require("cmp")
 
-    -- TODO: figure out how to load snippers
-    require("luasnip.loaders.from_vscode").lazy_load(require("stdpath").config .. "/snippets/vscode")
+    local snipppets_path = require("stdpath").config .. "/snippets/vscode"
+    require("luasnip.loaders.from_vscode").lazy_load(snipppets_path)
 
     cmp.setup({
       completion = { autocomplete = false },
@@ -25,12 +25,15 @@ return {
           require("luasnip").lsp_expand(args.body)
         end,
       },
-      sources = {
-        { name = "nvim_lsp", priority = 400 },
-        { name = "luasnip",  priority = 30, keyword_length = 2 },
-        { name = "buffer",   priority = 2,  keyword_length = 3, max_item_count = 5 },
-        { name = "path",     priority = 1 },
-      },
+      sources = cmp.config.sources({
+        -- primary source
+        { name = "nvim_lsp", priority = 10, keyword_length = 1 },
+        { name = "luasnip",  priority = 5,  keyword_length = 2 },
+      }, {
+        -- fallback sources
+        { name = "buffer", keyword_length = 3, max_item_count = 5 },
+        { name = "path" },
+      }),
       preselect = cmp.PreselectMode.None,
       mapping = require("customize").cmp.mapping.insert,
       sorting = require("customize").cmp.sorting,
