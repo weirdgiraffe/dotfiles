@@ -10,20 +10,24 @@ return {
     { "hrsh7th/cmp-buffer" },
     { "hrsh7th/cmp-path" },
     { "hrsh7th/cmp-cmdline" },
-    { "saadparwaiz1/cmp_luasnip" },
+    {
+      "saadparwaiz1/cmp_luasnip",
+      config = function()
+        local path = require("config.stdpath").config .. "/snippets/vscode"
+        require("luasnip.loaders.from_vscode").lazy_load(path)
+      end,
+    },
   },
   config = function(_, opts)
     local cmp = require("cmp")
+    local luasnip = require("luasnip")
     local custom = require("customize.cmp")
-
-    local snipppets_path = require("config.stdpath").config .. "/snippets/vscode"
-    require("luasnip.loaders.from_vscode").lazy_load(snipppets_path)
 
     cmp.setup({
       completion = { autocomplete = false },
       snippet = {
         expand = function(args)
-          require("luasnip").lsp_expand(args.body)
+          luasnip.lsp_expand(args.body)
         end,
       },
       sources = cmp.config.sources({
@@ -67,7 +71,6 @@ return {
         },
       }),
     })
-
 
     local copilot_available, suggestion = pcall(require, 'copilot.suggestion')
     if copilot_available then
