@@ -14,8 +14,9 @@ return {
   },
   config = function(_, opts)
     local cmp = require("cmp")
+    local custom = require("customize.cmp")
 
-    local snipppets_path = require("stdpath").config .. "/snippets/vscode"
+    local snipppets_path = require("config.stdpath").config .. "/snippets/vscode"
     require("luasnip.loaders.from_vscode").lazy_load(snipppets_path)
 
     cmp.setup({
@@ -35,12 +36,12 @@ return {
         { name = "path" },
       }),
       preselect = cmp.PreselectMode.None,
-      mapping = require("customize").cmp.mapping.insert,
-      sorting = require("customize").cmp.sorting,
+      mapping = custom.mapping.insert,
+      sorting = custom.sorting,
     })
 
     cmp.setup.cmdline("/", {
-      mapping = require("customize").cmp.mapping.cmdline,
+      mapping = custom.mapping.cmdline,
       sources = {
         { name = "buffer" },
       },
@@ -49,10 +50,11 @@ return {
     cmp.setup.cmdline(":", {
       completion = {
         autocomplete = {
-          require('cmp.types').cmp.TriggerEvent.TextChanged,
+          -- require('cmp.types').cmp.TriggerEvent.TextChanged,
+          cmp.TriggerEvent.TextChanged,
         },
       },
-      mapping = require("customize").cmp.mapping.cmdline,
+      mapping = custom.mapping.cmdline,
       sources = cmp.config.sources({
         { name = "path" },
       }, {

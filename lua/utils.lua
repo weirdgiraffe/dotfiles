@@ -191,7 +191,7 @@ end
 function M.custom_list_document_symbols()
   local opts = require("telescope.themes").get_ivy()
   opts.symbol_width = 8
-  opts.entry_maker = require("customize.telescope").gen_entries_from_lsp_symbols(opts)
+  opts.entry_maker = require("lua.customize.custom-telescope").gen_entries_from_lsp_symbols(opts)
   return require("telescope.builtin").lsp_document_symbols(opts)
 end
 

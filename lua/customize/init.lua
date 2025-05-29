@@ -1,3 +1,3 @@
 return {
-  cmp = require("customize.custom-cmp"),
+  telescope = require("customize.custom-telescope"),
 }

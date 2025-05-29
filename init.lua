@@ -1,5 +1,5 @@
-require('editor')
+require('config.editor')
 require('lazy-init')
 require('config.lsp')
-require('keymap')
-vim.cmd([[colorscheme everforest]])
+require('config.keymap')
+require('config.colors')

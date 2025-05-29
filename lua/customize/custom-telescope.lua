@@ -2,7 +2,6 @@ local entry_display = require("telescope.pickers.entry_display")
 local make_entry = require("telescope.make_entry")
 local themes = require("telescope.themes")
 local builtin = require("telescope.builtin")
-local Path = require("plenary.path")
 
 
 local lsp_type_highlight = {

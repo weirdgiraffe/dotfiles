@@ -1,3 +1,4 @@
+local stdpath = require("config.stdpath")
 return {
   "weirdgiraffe/go.nvim",
   ft = { "go", "gomod", "gowork", "gotmpl" },
@@ -8,7 +9,7 @@ return {
   },
   build = function() require("go.install").install_all_sync() end,
   opts = {
-    log_path            = require("stdpath").state .. "/go.nvim.log",
+    log_path            = stdpath.state .. "/go.nvim.log",
     lsp_cfg             = true,
     lsp_keymaps         = false,            -- disable default lsp keymaps
     lsp_inlay_hints     = { enable = false },

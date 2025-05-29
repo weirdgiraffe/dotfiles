@@ -1,8 +1,10 @@
 local utils = require("utils")
-local nnoremap = utils.nnoremap
-local vnoremap = utils.vnoremap
+local customize = require("customize")
 local tmux = require("nvim-tmux-navigation")
 local fzf = require("fzf-lua")
+
+local nnoremap = utils.nnoremap
+local vnoremap = utils.vnoremap
 
 nnoremap("<M-h>", tmux.NvimTmuxNavigateLeft, "navigate to the left window or tmux pane")
 nnoremap("<M-j>", tmux.NvimTmuxNavigateDown, "navigate to the window or tmux pane below")
@@ -20,11 +22,11 @@ end
 nnoremap("<leader>y", utils.close_other_buffers, "close all but the current buffer")
 
 nnoremap("gd", utils.lsp_goto_definition, "LSP: go to definition")
-nnoremap("<leader>d", require("customize.telescope").lsp_document_symbols, "LSP: document symbols")
+nnoremap("<leader>d", customize.telescope.lsp_document_symbols, "LSP: document symbols")
 
 nnoremap("<leader>j", utils.list_repo_files, "List files in the current git repository")
-nnoremap("<leader>k", require("customize.telescope").buffers, "List opened buffers")
-nnoremap("<leader>r", require("customize.telescope").lsp_references, "LSP: references")
+nnoremap("<leader>k", customize.telescope.buffers, "List opened buffers")
+nnoremap("<leader>r", customize.telescope.lsp_references, "LSP: references")
 --[[
 nnoremap("<leader>r", function()
   return require("fzf-lua").lsp_references({
@@ -32,8 +34,8 @@ nnoremap("<leader>r", function()
   })
 end, "LSP: references")
 --]]
-vnoremap("<leader>i", require("customize.telescope").lsp_implementations, "LSP: implementations")
-vnoremap("<leader>q", require("fzf-lua").lsp_code_actions, "LSP: code actions")
+vnoremap("<leader>i", customize.telescope.lsp_implementations, "LSP: implementations")
+vnoremap("<leader>q", fzf.lsp_code_actions, "LSP: code actions")
 nnoremap("<leader>x", require("telescope.builtin").diagnostics, "Display diagnostics")
 
 nnoremap("<leader>g", function()

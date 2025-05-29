@@ -1,4 +1,4 @@
-local stdpath = require("stdpath")
+local stdpath = require("config.stdpath")
 -- =============================================================================
 -- configure the leader key to be <Space>
 -- NOTE: it is configured as the first thing in the config to avoid any further
