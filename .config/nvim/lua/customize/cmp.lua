@@ -81,8 +81,8 @@ local mapping_insert = cmp.mapping.preset.insert({
     i = confirm_or_next_item({ behavior = cmp.SelectBehavior.Select }),
     s = confirm_or_next_item({ behavior = cmp.SelectBehavior.Select }),
   },
-  ["<C-p>"] = { i = complete_or_prev_item({ behavior = cmp.SelectBehavior.Select }) },
-  ["<C-n>"] = { i = complete_or_next_item({ behavior = cmp.SelectBehavior.Select }) },
+  ["<C-p>"] = { i = complete_or_prev_item({ behavior = cmp.SelectBehavior.Insert }) },
+  ["<C-n>"] = { i = complete_or_next_item({ behavior = cmp.SelectBehavior.Insert }) },
   ["<CR>"]  = {
     i = cmp.mapping.confirm({
       select = true,
