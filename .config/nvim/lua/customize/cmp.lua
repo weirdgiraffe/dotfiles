@@ -15,18 +15,40 @@ local complete_or_next_item = function(opts)
   end
 end
 
+local complete_or_prev_item = function(opts)
+  return function(fallback)
+    local fn = function()
+      if cmp.visible() then
+        return cmp.select_prev_item(opts)
+      end
+      return cmp.complete()
+    end
+    if not fn() then
+      fallback()
+    end
+  end
+end
+
 local mapping_cmdline = cmp.mapping.preset.cmdline({
   ["<Tab>"]   = { c = complete_or_next_item({ behavior = cmp.SelectBehavior.Select }) },
-  ["<S-Tab>"] = { c = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }) },
-  ["<CR>"]    = { c = cmp.mapping.confirm({ select = true, behavior = cmp.ConfirmBehavior.Replace }) },
+  ["<S-Tab>"] = { c = complete_or_prev_item({ behavior = cmp.SelectBehavior.Select }) },
+  ["<CR>"]    = {
+    c = cmp.mapping.confirm({
+      select = true,
+      behavior = cmp.ConfirmBehavior.Replace,
+    })
+  },
 })
 
 local mapping_insert = cmp.mapping.preset.insert({
-  ["<S-Tab>"] = { i = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }) },
-  ["<C-p>"]   = { i = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }) },
-  ["<Tab>"]   = { i = complete_or_next_item({ behavior = cmp.SelectBehavior.Select }) },
-  ["<C-n>"]   = { i = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }) },
-  ["<CR>"]    = { i = cmp.mapping.confirm({ select = true }) },
+  ["<C-p>"] = { i = complete_or_prev_item({ behavior = cmp.SelectBehavior.Select }) },
+  ["<C-n>"] = { i = complete_or_next_item({ behavior = cmp.SelectBehavior.Select }) },
+  ["<CR>"]  = {
+    i = cmp.mapping.confirm({
+      select = true,
+      behavior = cmp.ConfirmBehavior.Insert,
+    })
+  },
 })
 
 ---@param entry1 cmp.Entry

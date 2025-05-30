@@ -16,9 +16,9 @@ return {
           accept = "<C-l>",
           accept_word = false,
           accept_line = false,
-          next = "<C-n>",
-          prev = "<C-p>",
-          dismiss = "<C-e>",
+          next = "<M-]>",
+          prev = "<M-[>",
+          dismiss = "<C-]>",
         },
       },
       filetypes = {
