@@ -5,43 +5,54 @@ return {
     { "hrsh7th/cmp-nvim-lsp" }, -- Required
     {
       "L3MON4D3/LuaSnip",
-      build = "make install_jsregexp"
+      lazy = false,
+      build = "make install_jsregexp",
+      config = function()
+        local path = require("config.stdpath").config .. "/snippets/vscode"
+        require("luasnip.loaders.from_vscode").lazy_load({
+          paths = { path },
+        })
+      end,
     }, -- Required
     { "hrsh7th/cmp-buffer" },
     { "hrsh7th/cmp-path" },
     { "hrsh7th/cmp-cmdline" },
-    {
-      "saadparwaiz1/cmp_luasnip",
-      config = function()
-        local path = require("config.stdpath").config .. "/snippets/vscode"
-        require("luasnip.loaders.from_vscode").lazy_load(path)
-      end,
-    },
+    { "saadparwaiz1/cmp_luasnip" },
   },
   config = function(_, opts)
     local cmp = require("cmp")
     local luasnip = require("luasnip")
     local custom = require("customize.cmp")
 
-    cmp.setup({
-      completion = { autocomplete = false },
+    cmp.setup.buffer({
       snippet = {
         expand = function(args)
           luasnip.lsp_expand(args.body)
         end,
       },
       sources = cmp.config.sources({
-        -- primary source
-        { name = "nvim_lsp", priority = 10, keyword_length = 1 },
-        { name = "luasnip",  priority = 5,  keyword_length = 2 },
+        -- look for the snippets first
+        { name = "luasnip", keyword_length = 1 },
       }, {
-        -- fallback sources
-        { name = "buffer", keyword_length = 3, max_item_count = 5 },
+        -- if no snippets found, look for the LSP completions
+        {
+          name = "nvim_lsp",
+          keyword_length = 2,
+          -- ingnore lsp snippets
+          entry_filter = function(entry, _)
+            local kind = entry:get_kind()
+            return kind ~= require("cmp.types").lsp.CompletionItemKind.Snippet
+          end,
+        },
+      }, {
+        -- if neither is available, look for the buffer and path completions
+        { name = "buffer" },
         { name = "path" },
       }),
-      preselect = cmp.PreselectMode.None,
       mapping = custom.mapping.insert,
       sorting = custom.sorting,
+      preselect = cmp.PreselectMode.None,
+      completion = { autocomplete = false },
     })
 
     cmp.setup.cmdline("/", {

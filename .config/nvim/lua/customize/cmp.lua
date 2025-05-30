@@ -1,5 +1,6 @@
 local cmp = require('cmp')
 local compare = require('cmp.config.compare')
+local luasnip = require('luasnip')
 
 local complete_or_next_item = function(opts)
   return function(fallback)
@@ -29,6 +30,20 @@ local complete_or_prev_item = function(opts)
   end
 end
 
+local confirm_snippet_or_next_item = function(opts)
+  return function(fallback)
+    if cmp.visible() then
+      return cmp.select_next_item(opts)
+    end
+
+    if luasnip.expand_or_jumpable() then
+      return luasnip.expand_or_jump()
+    end
+
+    fallback()
+  end
+end
+
 local mapping_cmdline = cmp.mapping.preset.cmdline({
   ["<Tab>"]   = { c = complete_or_next_item({ behavior = cmp.SelectBehavior.Select }) },
   ["<S-Tab>"] = { c = complete_or_prev_item({ behavior = cmp.SelectBehavior.Select }) },
@@ -41,6 +56,10 @@ local mapping_cmdline = cmp.mapping.preset.cmdline({
 })
 
 local mapping_insert = cmp.mapping.preset.insert({
+  ["<Tab>"] = {
+    i = confirm_snippet_or_next_item({ behavior = cmp.SelectBehavior.Select }),
+    s = confirm_snippet_or_next_item({ behavior = cmp.SelectBehavior.Select }),
+  },
   ["<C-p>"] = { i = complete_or_prev_item({ behavior = cmp.SelectBehavior.Select }) },
   ["<C-n>"] = { i = complete_or_next_item({ behavior = cmp.SelectBehavior.Select }) },
   ["<CR>"]  = {
@@ -51,19 +70,9 @@ local mapping_insert = cmp.mapping.preset.insert({
   },
 })
 
----@param entry1 cmp.Entry
----@param entry2 cmp.Entry
----@return boolean|nil
-local function prefer_lsp_completions(entry1, entry2)
-  local source = { entry1.source.name, entry2.source.name }
-  if source[1] == "nvim_lsp" and source[2] ~= "nvim_lsp" then return true end
-  if source[1] ~= "nvim_lsp" and source[2] == "nvim_lsp" then return false end
-end
-
 local sorting = {
   priority_weight = 2,
   comparators = {
-    prefer_lsp_completions,
     compare.offset,
     compare.exact,
     -- compare.scopes,
