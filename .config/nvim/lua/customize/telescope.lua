@@ -112,6 +112,7 @@ function M.lsp_references()
       end,
     },
   })
+  opts.include_declaration = true
   opts.include_current_line = true
   return builtin.lsp_references(opts)
 end
@@ -131,7 +132,6 @@ function M.lsp_implementations()
       end,
     },
   })
-  opts.include_current_line = true
   return builtin.lsp_implementations(opts)
 end
 
