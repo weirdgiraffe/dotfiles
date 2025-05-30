@@ -49,27 +49,13 @@ return {
         { name = "buffer" },
         { name = "path" },
       }),
+      completion = { autocomplete = false },
       mapping = custom.mapping.insert,
       sorting = custom.sorting,
       preselect = cmp.PreselectMode.None,
-      completion = { autocomplete = false },
-    })
-
-    cmp.setup.cmdline("/", {
-      mapping = custom.mapping.cmdline,
-      sources = {
-        { name = "buffer" },
-      },
     })
 
     cmp.setup.cmdline(":", {
-      completion = {
-        autocomplete = {
-          -- require('cmp.types').cmp.TriggerEvent.TextChanged,
-          cmp.TriggerEvent.TextChanged,
-        },
-      },
-      mapping = custom.mapping.cmdline,
       sources = cmp.config.sources({
         { name = "path" },
       }, {
@@ -78,9 +64,20 @@ return {
           option = {
             ignore_cmds = { "Man", "!" },
           },
-          keyword_length = 4,
+          entry_filter = function(entry, _)
+            local ignore_completions = {
+              "edit",
+              "write", "wall",
+              "quit", "qall", "quitall",
+              "wq", "wqall",
+            }
+            return not vim.tbl_contains(ignore_completions, entry.word)
+          end,
+          keyword_length = 1,
         },
       }),
+      completion = { autocomplete = { cmp.TriggerEvent.TextChanged } },
+      mapping = custom.mapping.cmdline,
     })
 
     local copilot_available, suggestion = pcall(require, 'copilot.suggestion')
