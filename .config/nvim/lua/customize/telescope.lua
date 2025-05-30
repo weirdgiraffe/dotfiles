@@ -145,7 +145,7 @@ function M.buffers()
 end
 
 local function split_path(path)
-  return vim.fn.fnamemodify(path, ":t"), vim.fn.fnamemodify(path, ":h")
+  return vim.fn.fnamemodify(path, ":h"), vim.fn.fnamemodify(path, ":t")
 end
 
 function M.lsp_goto_definition()
