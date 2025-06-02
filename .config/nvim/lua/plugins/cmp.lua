@@ -50,7 +50,7 @@ return {
         { name = "path" },
       }),
       completion = { autocomplete = false },
-      mapping = custom.mapping.insert,
+      mapping = custom.mapping.buffer,
       sorting = custom.sorting,
       preselect = cmp.PreselectMode.None,
     })
@@ -70,6 +70,9 @@ return {
               "write", "wall",
               "quit", "qall", "quitall",
               "wq", "wqall",
+              "bd", "bdelete",
+              "bn", "bnext",
+              "bp", "bprevious",
             }
             return not vim.tbl_contains(ignore_completions, entry.word)
           end,
