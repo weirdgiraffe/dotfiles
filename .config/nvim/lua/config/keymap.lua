@@ -24,8 +24,7 @@ nnoremap("<leader>y", utils.close_other_buffers, "close all but the current buff
 
 nnoremap("gd", telescope.lsp_goto_definition, "LSP: go to definition")
 nnoremap("<leader>d", telescope.lsp_document_symbols, "LSP: document symbols")
-
-nnoremap("<leader>j", utils.list_repo_files, "List files in the current git repository")
+nnoremap("<leader>j", telescope.list_project_files, "List files in the current git repository")
 nnoremap("<leader>k", telescope.buffers, "List opened buffers")
 nnoremap("<leader>r", telescope.lsp_references, "LSP: references")
 vnoremap("<leader>i", telescope.lsp_implementations, "LSP: implementations")

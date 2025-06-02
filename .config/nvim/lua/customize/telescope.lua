@@ -2,7 +2,6 @@ local entry_display = require("telescope.pickers.entry_display")
 local make_entry = require("telescope.make_entry")
 local themes = require("telescope.themes")
 local builtin = require("telescope.builtin")
-local Path = require("plenary.path")
 
 
 local lsp_type_highlight = {
@@ -144,8 +143,81 @@ function M.buffers()
   return builtin.buffers(opts)
 end
 
-local function split_path(path)
-  return vim.fn.fnamemodify(path, ":h"), vim.fn.fnamemodify(path, ":t")
+---@function get_git root searches for the git root directory
+---@return string|nil
+local function get_git_root(path)
+  local git_dir = vim.fs.find('.git', {
+    path = path or vim.fn.expand("%:p:h"),
+    upward = true,
+    type = 'directory',
+  })[1]
+  if git_dir then
+    return vim.fs.dirname(git_dir)
+  end
+end
+
+local function diplay(dirname, filename)
+  if #dirname > 0 then dirname = dirname .. "/" end
+  local display = entry_display.create({
+    separator = "",
+    items = {
+      { width = #dirname }, -- dirname
+      { remaining = true }, -- filename
+    },
+  })
+  return display({
+    { dirname,  "TelescopeResultsComment" },
+    { filename, "TelescopeResultsIdentifier" },
+  })
+end
+
+local function home_path_display(opts, path)
+  path = vim.fs.abspath(path)
+  local dirname, filename = vim.fs.dirname(path), vim.fs.basename(path)
+  local this_file = vim.api.nvim_buf_get_name(opts.bufnr or 0)
+  local this_dir = vim.fs.dirname(this_file)
+
+  if this_dir == dirname then
+    dirname = ""
+  else
+    ---@diagnostic disable-next-line: undefined-field
+    local home = vim.loop.os_homedir()
+    dirname = "~/" .. vim.fs.relpath(home, dirname)
+  end
+
+  return diplay(dirname, filename)
+end
+
+local function cwd_path_display(opts, path)
+  if not opts.cwd then
+    return home_path_display(opts, path)
+  end
+
+  path = vim.fs.abspath(path)
+  local dirname, filename = vim.fs.dirname(path), vim.fs.basename(path)
+  dirname = vim.fs.relpath(opts.cwd, dirname) or vim.fs.abspath(dirname)
+
+  return diplay(dirname, filename)
+end
+
+function M.list_project_files()
+  local opts = themes.get_ivy({
+    preview_title = "",
+  })
+  local cwd = vim.fn.expand("%:p:d")
+  cwd = cwd:gsub("^oil://", "") -- remove oil:// prefix if present
+  opts.cwd = get_git_root(cwd) or cwd
+  print("Using cwd: " .. opts.cwd)
+  opts.find_command = {
+    "fd",
+    "--type=f",
+    "--exclude='.git'",
+    "--hidden",
+    "--color=never",
+  }
+  opts.hidden = false
+  opts.path_display = cwd_path_display
+  return builtin.find_files(opts)
 end
 
 function M.lsp_goto_definition()
@@ -154,40 +226,8 @@ function M.lsp_goto_definition()
   return require("telescope.builtin").lsp_definitions(opts)
 end
 
----nice_path will try to print absolute_path making it relative to the user's
----home dir, if path is outside of the homedir it returns the absolute path.
-local function nice_path(absolute_path)
-  ---@diagnostic disable-next-line: undefined-field
-  local home = vim.loop.os_homedir()
-  if vim.startswith(absolute_path, home) then
-    return "~/" .. Path:new(absolute_path):make_relative(home)
-  end
-  return absolute_path
-end
-
 function M.path_display(opts, path)
-  path = Path.new(path):absolute()
-  local dirname, filename = split_path(path)
-  local this_file = vim.api.nvim_buf_get_name(opts.bufnr or 0)
-  local this_dir = vim.fn.fnamemodify(this_file, ":h")
-
-  if this_file == path or this_dir == dirname then
-    dirname = ""
-  else
-    dirname = nice_path(dirname) .. Path.path.sep
-  end
-
-  local display = entry_display.create({
-    separator = "",
-    items = {
-      { width = #dirname }, -- dirname + "/"
-      { remaining = true }, -- filename
-    },
-  })
-  return display({
-    { dirname,  "TelescopeResultsComment" },
-    { filename, "TelescopeResultsIdentifier" },
-  })
+  return home_path_display(opts, path)
 end
 
 return M
