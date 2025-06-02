@@ -76,13 +76,13 @@ local mapping_cmdline = cmp.mapping.preset.cmdline({
   },
 })
 
-local mapping_insert = cmp.mapping.preset.insert({
+local mapping_buffer = cmp.mapping.preset.insert({
   ["<Tab>"] = {
     i = confirm_or_next_item({ behavior = cmp.SelectBehavior.Select }),
     s = confirm_or_next_item({ behavior = cmp.SelectBehavior.Select }),
   },
-  ["<C-p>"] = { i = complete_or_prev_item({ behavior = cmp.SelectBehavior.Insert }) },
-  ["<C-n>"] = { i = complete_or_next_item({ behavior = cmp.SelectBehavior.Insert }) },
+  ["<C-p>"] = { i = complete_or_prev_item({ behavior = cmp.SelectBehavior.Select }) },
+  ["<C-n>"] = { i = complete_or_next_item({ behavior = cmp.SelectBehavior.Select }) },
   ["<CR>"]  = {
     i = cmp.mapping.confirm({
       select = true,
@@ -109,7 +109,7 @@ local sorting = {
 
 return {
   mapping = {
-    insert = mapping_insert,
+    buffer = mapping_buffer,
     cmdline = mapping_cmdline,
   },
   sorting = sorting,
