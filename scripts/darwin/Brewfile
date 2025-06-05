@@ -43,6 +43,7 @@ brew "zoxide"
 brew "pyenv"
 brew "fzf"
 brew "rust"
+brew "argocd"
 brew "shellcheck" # tool for linting of the shell scripts
 brew "shfmt"      # tool for formating of the shell scripts
 
