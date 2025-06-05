@@ -77,10 +77,12 @@ return {
           { 'filename', path = 3 },
         },
         lualine_x = {},
-        lualine_y = { 'encoding', 'fileformat', 'filetype', 'progress' },
+        lualine_y = { 'encoding', 'fileformat', 'filetype' },
         -- lualine_z = { 'location' },
         lualine_z = {
-          { 'location', color = section_b_color },
+          { 'selectioncount', color = 'Search' },
+          { 'progress',       color = section_b_color },
+          { 'location',       color = section_b_color },
         },
       },
     })
