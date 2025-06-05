@@ -212,6 +212,7 @@
   alias cd="z"
   alias gdiffsplit='DELTA_FEATURES=+side-by-side git diff'
   alias dc='docker compose'
+  alias argocd='argocd --grpc-web'
 
   # Preserve terminfo for kitty when ssh-ing somewhere
   # alias ssh='kitten ssh'
