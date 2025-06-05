@@ -17,7 +17,8 @@ end
 
 return {
   'towolf/vim-helm',
-  ft = 'helm',
+  ft = { 'helm', 'yaml', 'yml', 'tmpl', 'tpl' },
+  lazy = false,
   config = function()
     -- need to define filetypes for helm in order
     -- to disable yamlls LSP server for helm files
