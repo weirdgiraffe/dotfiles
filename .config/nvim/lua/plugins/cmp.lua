@@ -3,17 +3,7 @@ return {
   event = "BufWinEnter",
   dependencies = {
     { "hrsh7th/cmp-nvim-lsp" }, -- Required
-    {
-      "L3MON4D3/LuaSnip",
-      lazy = false,
-      build = "make install_jsregexp",
-      config = function()
-        local path = require("config.stdpath").config .. "/snippets/vscode"
-        require("luasnip.loaders.from_vscode").lazy_load({
-          paths = { path },
-        })
-      end,
-    }, -- Required
+    { "L3MON4D3/LuaSnip" },     -- Required
     { "hrsh7th/cmp-buffer" },
     { "hrsh7th/cmp-path" },
     { "hrsh7th/cmp-cmdline" },
@@ -23,6 +13,15 @@ return {
     local cmp = require("cmp")
     local luasnip = require("luasnip")
     local custom = require("customize.cmp")
+
+    cmp.setup.global({
+      performance = {
+        debounce = 60,           -- Wait 60ms before sending requests
+        throttle = 30,           -- Wait 30ms between suggestios update.
+        fetching_timeout = 1000, -- Give up if a source takes 1s
+      },
+    })
+
 
     cmp.setup.buffer({
       snippet = {

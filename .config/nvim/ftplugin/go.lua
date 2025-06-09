@@ -35,6 +35,7 @@ keymap("<leader>cc", function() require("go.comment").gen() end, "go: add commen
 
 keymap("<leader>m", cfcd(function()
   vim.cmd([[GoModTidy]])
+  vim.cmd([[LspRestart]])
 end), "go mod tidy")
 
 keymap("<leader>tc", cfcd(function()

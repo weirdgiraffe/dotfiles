@@ -14,7 +14,16 @@ return {
     },
     lazy = false,
     config = function()
-      require("mason-lspconfig").setup({})
+      require("mason-lspconfig").setup({
+        ensure_installed = {
+          "bashls",
+          "dockerls",
+          "gopls",
+          "lua_ls",
+          "rust_analyzer",
+          "yamlls",
+        },
+      })
     end,
   },
 }

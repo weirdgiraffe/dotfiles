@@ -182,7 +182,11 @@ local function home_path_display(opts, path)
   else
     ---@diagnostic disable-next-line: undefined-field
     local home = vim.loop.os_homedir()
-    dirname = "~/" .. vim.fs.relpath(home, dirname)
+    if home then
+      dirname = "~/" .. vim.fs.relpath(home, dirname)
+    else
+      print("Warning: Unable to determine home directory.")
+    end
   end
 
   return diplay(dirname, filename)
@@ -207,7 +211,6 @@ function M.list_project_files()
   local cwd = vim.fn.expand("%:p:d")
   cwd = cwd:gsub("^oil://", "") -- remove oil:// prefix if present
   opts.cwd = get_git_root(cwd) or cwd
-  print("Using cwd: " .. opts.cwd)
   opts.find_command = {
     "fd",
     "--type=f",
