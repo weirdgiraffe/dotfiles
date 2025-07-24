@@ -1,2 +1,3 @@
 /.config/github-copilot
 /.ssh/known_hosts.old
+/bin/vao-document.sh
