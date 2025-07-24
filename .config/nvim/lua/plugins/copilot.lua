@@ -1,34 +1,27 @@
 local stdpath = require("config.stdpath")
--- NOTE: I would like to somehow disable the telemetry
 return {
   "zbirenbaum/copilot.lua",
   event = "InsertEnter",
   config = function()
     require("copilot").setup({
-      -- copilot_node_command = { "node", "--trace-warnings" },
       -- server_opts_overrides = {
-      --   capabilities = {
-      --     general = {
-      --       positionEncodings = { "utf-16" }
-      --     }
-      --   }
-      --   -- settings = {
-      --   --   telemetry = {
-      --   --     telemetryLevel = "off"
-      --   --   }
-      --   -- }
+      --   settings = {
+      --     telemetry = {
+      --       telemetryLevel = "off",
+      --     },
+      --   },
       -- },
       logger = {
         file = stdpath.log .. "/copilot-lua.log",
         file_log_level = vim.log.levels.WARN,
         log_lsp_messages = true,
-        trace_lsp = "verbose",
+        trace_lsp = "off",
       },
-      panel = { enabled = false },
+      panel = { enabled = true },
       suggestion = {
         enabled = true,
         auto_trigger = true,
-        debounce = 75,
+        debounce = 200,
         keymap = {
           accept = "<C-l>",
           accept_word = false,

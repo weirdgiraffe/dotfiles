@@ -1,26 +1,27 @@
 vim.lsp.set_log_level("WARN")
 
-
 -- ensure that all lsp servers will receive correct capabilities
 local capabilities = vim.tbl_deep_extend("force", {},
   vim.lsp.protocol.make_client_capabilities(),
-  require("cmp_nvim_lsp").default_capabilities(),
-  { general = { positionEncodings = { "utf-16" } } }
+  require("cmp_nvim_lsp").default_capabilities()
+-- {
+--   general = { positionEncodings = { "utf-8" } },
+--   offsetEncoding = { "utf-8" },
+-- }
 )
+-- capabilities.general.positionEncodings = { "utf-16" }
 
 vim.lsp.config('*', { capabilities = capabilities, })
 
 local function configure_gopls()
   local cfg = require('go.lsp').config() or {}
-  -- table.insert(cfg.cmd, "--rpc.trace")
-  -- table.insert(cfg.cmd, "--logfile=/Users/viktor/.local/state/nvim/gopls.log")
   cfg.workspace = vim.tbl_deep_extend("force", cfg.workspace or {}, {
     didChangeWatchedFiles = {
       dynamicRegistration = false,
       relativePatternSupport = false,
     }
   })
-  vim.lsp.config('gopls', cfg)
+  vim.lsp.config('gopls', vim.tbl_deep_extend("force", cfg, { capabilities = capabilities }))
 end
 
 configure_gopls()

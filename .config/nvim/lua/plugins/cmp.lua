@@ -1,6 +1,7 @@
 return {
   "hrsh7th/nvim-cmp",
-  event = "BufWinEnter",
+  lazy = false,
+  -- event = "BufWinEnter",
   dependencies = {
     { "hrsh7th/cmp-nvim-lsp" }, -- Required
     { "L3MON4D3/LuaSnip" },     -- Required
@@ -15,15 +16,15 @@ return {
     local custom = require("customize.cmp")
 
     cmp.setup.global({
+      ---@diagnostic disable-next-line: missing-fields
       performance = {
         debounce = 60,           -- Wait 60ms before sending requests
         throttle = 30,           -- Wait 30ms between suggestios update.
         fetching_timeout = 1000, -- Give up if a source takes 1s
-      },
+      }
     })
 
-
-    cmp.setup.buffer({
+    cmp.setup({
       snippet = {
         expand = function(args)
           luasnip.lsp_expand(args.body)
@@ -36,7 +37,6 @@ return {
         -- if no snippets found, look for the LSP completions
         {
           name = "nvim_lsp",
-          keyword_length = 2,
           -- ingnore lsp snippets
           entry_filter = function(entry, _)
             local kind = entry:get_kind()
