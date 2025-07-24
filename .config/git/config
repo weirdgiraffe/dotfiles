@@ -50,7 +50,7 @@
 	cam = !git add --all && git commit --message
 	cm = commit --message
 	ncm = commit --no-verify --message
-	cob = !git checkout $(git branch | sed '/^*/d' | fzf --height=20% --reverse --info=inline)
+	cb = !git checkout $(git branch | sed '/^*/d' | fzf --height=20% --reverse --info=inline)
 	co = checkout
 	st = status
 	dh = diff HEAD
