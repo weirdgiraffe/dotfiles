@@ -14,7 +14,7 @@ config.font = wezterm.font("IosevkaTerm Nerd Font")
 -- config.font = wezterm.font("Hasklug Nerd Font")
 -- config.font = wezterm.font("EnvyCodeR Nerd Font")
 -- config.font = wezterm.font("GeistMono Nerd Font")
-config.font_size = 16.0
+config.font_size = 14.0
 
 -- This is where you actually apply your config choices
 local function scheme_for_appearance(appearance)
