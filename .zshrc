@@ -40,6 +40,11 @@
   # golang specific settings
   export GOPRIVATE=github.com/weirdgiraffe
 
+  # load the rest of the configuration for the interactive shells only
+  if ! [[ $- == *i* ]]; then
+    return
+  fi
+
   # ------------------------------------------------------------------------------
   # ------------------------------------------------------------------------------
 
@@ -239,8 +244,7 @@
   # reference: man zshoptions
   setopt AUTO_CD
   export VIRTUAL_ENV_DISABLE_PROMPT=1
+
+  . "$HOME/.atuin/bin/env"
+  eval "$(atuin init zsh)"
 } # end of the anonymous function
-
-. "$HOME/.atuin/bin/env"
-
-eval "$(atuin init zsh)"
