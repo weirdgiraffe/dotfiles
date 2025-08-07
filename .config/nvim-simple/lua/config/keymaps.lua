@@ -14,6 +14,7 @@ nnoremap("<M-l>", tmux.NvimTmuxNavigateRight, "Navigate to the right window or t
 nnoremap("<M-n>", require("utils.buffers").next_buffer, "Switch to next buffer")
 nnoremap("<M-p>", require("utils.buffers").prev_buffer, "Switch to prev buffer")
 nnoremap("<leader>y", require("utils.buffers").close_other_buffers, "Close all buffers but the current one")
+
 -- configure mapping for buffers: <Leader>bufnr for buffers up to 9
 for i = 1, 9, 1 do
   nnoremap("<leader>" .. i, function()
