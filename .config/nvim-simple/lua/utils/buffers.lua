@@ -22,7 +22,8 @@ local function filter_buffers(buffers, filter_fn)
 end
 
 local function switch_to_buffer(bufnr)
-  vim.api.nvim_set_current_buf(bufnr)
+  local buffers = filter_buffers(vim.api.nvim_list_bufs(), is_listed)
+  vim.api.nvim_set_current_buf(buffers[bufnr])
 end
 
 --- switch focus to a buffer with the given bufnr.
