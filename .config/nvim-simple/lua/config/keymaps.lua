@@ -32,6 +32,7 @@ nnoremap("<leader>k", telescope.buffers, "List opened buffers")
 nnoremap("<leader>r", telescope.lsp_references, "LSP: references")
 nnoremap("<leader>i", telescope.lsp_implementations, "LSP: implementations")
 nnoremap("<leader>x", telescope.diagnostics, "Display diagnostics")
+nnoremap("<leader>g", telescope.live_grep, "Live grep")
 
 vim.keymap.set({ "n", "x" }, "<leader>q", function()
   require("tiny-code-action").code_action()

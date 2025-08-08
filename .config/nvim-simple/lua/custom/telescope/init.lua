@@ -189,6 +189,19 @@ function M.project_files()
   return builtin.find_files(opts)
 end
 
+-- Live grep
+function M.live_grep()
+  local opts = telescope_opts()
+  local cwd = vim.fn.expand("%:p:h"):gsub("^oil://", "") -- remove oil:// prefix if present
+  opts.cwd = cwd
+  opts.sorter = file_sorter_boosting_prefix(cwd)
+  -- opts.type_filter = "f"
+  opts.hidden = false
+  opts.path_display = display.relpath_display
+  opts.preview_title = ''
+  return builtin.live_grep(opts)
+end
+
 -- List diagnostics
 function M.diagnostics()
   -- local opts = vertical_display_opts()
