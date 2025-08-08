@@ -2,7 +2,23 @@ local log = require("utils.log")
 vim.lsp.set_log_level("WARN")
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
+
+-- generic lsp configuration
 vim.lsp.config('*', { capabilities = capabilities, })
+
+-- configure gopls specifically to avoid workspaces errors
+vim.lsp.config('gopls', (function()
+  local cfg = require('go.lsp').config() or {}
+  cfg.workspace = vim.tbl_deep_extend("force", cfg.workspace or {}, {
+    didChangeWatchedFiles = {
+      dynamicRegistration = false,
+      relativePatternSupport = false,
+    }
+  })
+  vim.tbl_deep_extend("force", cfg, { capabilities = capabilities })
+  return cfg
+end)())
+
 
 
 ---Format the provided bufnr using the the provided lsp client
