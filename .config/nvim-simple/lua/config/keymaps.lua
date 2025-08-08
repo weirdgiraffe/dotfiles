@@ -53,3 +53,9 @@ nnoremap("<leader>sd", function()
     border = "rounded",
   })
 end, "show diagnostics for the current line")
+nnoremap("<leader>gh", "<CMD>GH<CR>", "Open github")
+
+
+-- for current file page
+vim.api.nvim_set_keymap("n", "<Leader>gh", ":OpenInGHFile <CR>", { silent = true, noremap = true })
+vim.api.nvim_set_keymap("v", "<Leader>gh", ":OpenInGHFileLines <CR>", { silent = true, noremap = true })
