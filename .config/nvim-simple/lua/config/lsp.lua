@@ -15,11 +15,15 @@ vim.lsp.config('gopls', (function()
       relativePatternSupport = false,
     }
   })
+  cfg.settings.gopls = vim.tbl_deep_extend("force", cfg.settings.gopls or {}, {
+    analyses = {
+      -- disable annoying "at least one file in a package should have a package comment" warning
+      ST1000 = false,
+    },
+  })
   vim.tbl_deep_extend("force", cfg, { capabilities = capabilities })
   return cfg
 end)())
-
-
 
 ---Format the provided bufnr using the the provided lsp client
 ---
