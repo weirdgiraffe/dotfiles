@@ -142,7 +142,34 @@ function M.buffers()
   return builtin.buffers(opts)
 end
 
---- Boost boost_prefix in scoring
+--- Extracts path components from the path
+--- Example: {"/home/user/foo", "/home/user", "/home"}
+---@param path string
+local function path_components(path)
+  local components = {}
+  while path ~= "/" and path ~= "" do
+    table.insert(components, path)
+    path = vim.fs.dirname(path)
+  end
+  return vim.fn.reverse(components)
+end
+
+--- Computes boost for the provided path
+---@param path string
+---@param components table<string>
+---@return number
+local function compute_boost(path, components)
+  local boost = 0
+  for _, component in pairs(components) do
+    if not vim.startswith(path, component) then
+      break
+    end
+    boost = boost - 0.001
+  end
+  return boost
+end
+
+--- Boost boost_prefix path in scoring
 --- @param boost_prefix string|nil if provided, boost this prefix
 local function file_sorter_boosting_prefix(boost_prefix)
   -- I would like to boost the results from the current dir, so they will appear on
@@ -152,17 +179,13 @@ local function file_sorter_boosting_prefix(boost_prefix)
     return file_sorter
   end
 
+  local components = path_components(boost_prefix)
   local base_score = file_sorter.scoring_function
   file_sorter.scoring_function = function(sorter, prompt, line)
-    local need_boost = vim.startswith(line, boost_prefix)
+    local boost = compute_boost(line, components)
     local score = base_score(sorter, prompt, line)
-    if need_boost and score >= 0 then
-      -- the less the score is higher the line in the output, so we need some kind of a
-      -- tight breaker here. and our boost would be just 1%
-      local boosted_score = score - (0.01 * score)
-      score = boosted_score
-    end
-    return score
+    -- NOTE: we need to return -1 for the items which should be filtered out
+    return math.max(-1, score + boost)
   end
   return file_sorter
 end
