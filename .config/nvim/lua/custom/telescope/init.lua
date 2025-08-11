@@ -234,4 +234,8 @@ function M.diagnostics()
   return builtin.diagnostics(opts)
 end
 
+function M.default_opts()
+  return telescope_opts()
+end
+
 return M

@@ -5,5 +5,10 @@ return {
     { "nvim-telescope/telescope.nvim" },
   },
   event = "LspAttach",
-  opts = {},
+  opts = {
+    picker = {
+      "telescope",
+      opts = require("custom.telescope").default_opts(),
+    }
+  },
 }
