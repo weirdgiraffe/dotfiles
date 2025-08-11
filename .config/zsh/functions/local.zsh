@@ -1,0 +1,1 @@
+export CODESTRAL_API_KEY='21spm9HLxT9yWPuojW8ZFphnvXIaTeBn'
