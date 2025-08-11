@@ -1,4 +1,4 @@
 .config/git/chronicleprotocol filter=git-crypt diff=git-crypt
-.config/zsh/work.zsh filter=git-crypt diff=git-crypt
-.config/zsh/local.zsh filter=git-crypt diff=git-crypt
+.config/zsh/functions/work.zsh filter=git-crypt diff=git-crypt
+.config/zsh/functions/local.zsh filter=git-crypt diff=git-crypt
 .ssh/** filter=git-crypt diff=git-crypt
