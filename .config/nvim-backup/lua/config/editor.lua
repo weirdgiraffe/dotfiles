@@ -23,7 +23,7 @@ vim.opt.backup = true
 -- =============================================================================
 vim.o.number = true
 vim.o.relativenumber = true
-vim.o.signcolumn = "yes"
+vim.o.signcolumn = "number"
 vim.o.statuscolumn = "%@SignCb@%s%=%T%@NumCb@%l│%T"
 
 -- =============================================================================

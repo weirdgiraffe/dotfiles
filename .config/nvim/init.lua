@@ -1,5 +1,5 @@
 require('config.editor')
-require('lazy-init')
+require('config.lazy')
 require('config.lsp')
-require('config.keymap')
-require('config.colors')
+require('config.colorscheme')
+require('config.keymaps')

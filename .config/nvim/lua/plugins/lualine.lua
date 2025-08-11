@@ -1,37 +1,16 @@
 local function theme()
-  local auto = require("lualine.utils.loader").load_theme("auto")
-  if vim.g.colors_name == "everforest" then
-    -- prevent constant background changes
-    auto.insert.b.bg = auto.normal.b.bg
-  end
-  return auto
-end
-
-local function section_b_color()
-  local mode_suffix = require("lualine.highlight").get_mode_suffix()
-  local hl = vim.api.nvim_get_hl(0, {
-    name = "lualine_b" .. mode_suffix,
-    create = false,
-  })
-  local format = function(c)
-    if c then
-      return c < 256 and c or ("#%06x"):format(c)
-    end
-  end
-  return {
-    fg = format(hl.fg),
-    bg = format(hl.bg),
-  }
+  return require("lualine.utils.loader").load_theme("auto")
 end
 
 return {
   "nvim-lualine/lualine.nvim",
   lazy = false,
   dependencies = {
-    "nvim-tree/nvim-web-devicons"
+    "nvim-tree/nvim-web-devicons",
+    'milanglacier/minuet-ai.nvim',
   },
   config = function()
-    require('lualine').setup({
+    require("lualine").setup({
       options = {
         theme = theme,
         icons_enabled = true,
@@ -57,7 +36,6 @@ return {
         lualine_a = {
           {
             function() return ' ' end,
-            color = section_b_color,
             padding = { left = 1, right = 1 },
           },
         },
@@ -77,14 +55,30 @@ return {
           { 'filename', path = 3 },
         },
         lualine_x = {},
-        lualine_y = { 'encoding', 'fileformat', 'filetype' },
+        lualine_y = {
+          {
+            require('minuet.lualine'),
+            display_on_idle = true,
+            display_name = "provider",
+            -- the follwing is the default configuration
+            -- the name displayed in the lualine. Set to "provider", "model" or "both"
+            -- display_name = 'both',
+            -- separator between provider and model name for option "both"
+            -- provider_model_separator = ':',
+            -- whether show display_name when no completion requests are active
+            -- display_on_idle = false,
+          },
+          'encoding',
+          'fileformat',
+          'filetype'
+        },
         -- lualine_z = { 'location' },
         lualine_z = {
           { 'selectioncount', color = 'Search' },
-          { 'progress',       color = section_b_color },
-          { 'location',       color = section_b_color },
+          { 'progress' },
+          { 'location' },
         },
       },
     })
-  end,
+  end
 }

@@ -6,11 +6,11 @@ return {
   },
   config = function()
     local telescope = require("telescope")
+    local custom = require("customize.telescope")
     local actions = require("telescope.actions")
     telescope.setup({
       defaults = {
-        dynamic_preview_title = true,
-        path_display = require("custom.telescope.display").relpath_display,
+        path_display = custom.path_display,
         mappings = {
           i = {
             ["<C-j>"] = actions.move_selection_next,
@@ -30,6 +30,6 @@ return {
         map({ "n", "i", "c", "x" }, "<c-p>", actions.move_selection_previous)
       end,
     })
-    telescope.load_extension("ui-select")
+    require("telescope").load_extension("ui-select")
   end,
 }

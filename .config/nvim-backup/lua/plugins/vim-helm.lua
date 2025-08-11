@@ -3,15 +3,15 @@ local function is_helm_file(path)
   return not vim.tbl_isempty(check)
 end
 
-local function yaml_filetype(path)
+local function yaml_filetype(path, bufname)
   return is_helm_file(path) and "helm.yaml" or "yaml"
 end
 
-local function tmpl_filetype(path)
+local function tmpl_filetype(path, bufname)
   return is_helm_file(path) and "helm.tmpl" or "template"
 end
 
-local function tpl_filetype(path)
+local function tpl_filetype(path, bufname)
   return is_helm_file(path) and "helm.tmpl" or "smarty"
 end
 

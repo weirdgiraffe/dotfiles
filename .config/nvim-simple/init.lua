@@ -1,5 +1,0 @@
-require('config.editor')
-require('config.lazy')
-require('config.lsp')
-require('config.colorscheme')
-require('config.keymaps')
