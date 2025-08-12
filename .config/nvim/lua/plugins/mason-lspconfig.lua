@@ -8,9 +8,11 @@ return {
   },
   opts = {
     ensure_installed = {
-      "lua_ls",
-      "gopls",
       "bashls",
+      "docker_language_server",
+      "docker_compose_language_service",
+      "gopls",
+      "lua_ls",
       "yamlls",
     },
   }
