@@ -1,11 +1,14 @@
 -- all of the installed colorschemes
 return {
   {
-    'sainnhe/everforest',
-    lazy = true,
+    'neanias/everforest-nvim',
+    lazy = false,
+    priority = 1000,
     config = function()
-      vim.g.everforest_background = "hard"
-      vim.g.everforest_better_performance = 1
-    end,
+      require("everforest").setup({
+        background = "hard",
+        transparent_background_level = 2,
+      })
+    end
   }
 }
