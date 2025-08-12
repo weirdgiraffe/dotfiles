@@ -10,6 +10,13 @@ local function filter_out(items, filter)
   return items
 end
 
+local function has_words_before()
+  local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+  if col == 0 then return false end
+  local before = vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(1, col)
+  return not before:match("^%s*$")
+end
+
 return {
   'saghen/blink.cmp',
   version = '1.*',
@@ -30,6 +37,8 @@ return {
         ["<CR>"] = { 'accept', 'fallback' },
         ["<Tab>"] = {
           function(cmp)
+            if not has_words_before() then return end
+
             -- next snippet item if we are inside of the snippet
             if cmp.snippet_active({ direction = 1 }) then
               return cmp.snippet_forward()
