@@ -96,7 +96,8 @@ local function git_repository(path)
   }
   local res = vim.system(cmd, opts):wait(1000)
   if (res.code == 0 and res.stdout) then
-    return vim.fs.dirname(res.stdout)
+    local git_dir = res.stdout:gsub("%s+$", "")
+    return git_dir
   end
 end
 
