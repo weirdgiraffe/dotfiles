@@ -56,7 +56,6 @@ nnoremap("<leader>sd", function()
     border = "rounded",
   })
 end, "show diagnostics for the current line")
-nnoremap("<leader>gh", "<CMD>GH<CR>", "Open github")
 
 
 -- for current file page
