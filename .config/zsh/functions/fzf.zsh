@@ -2,6 +2,7 @@ if [[ -f ${XDG_CONFIG_HOME:-$HOME/.config}/fzf/fzf.zsh ]]; then
   source ${XDG_CONFIG_HOME:-$HOME/.config}/fzf/fzf.zsh
 fi
 
+
 export FZF_ALT_C_COMMAND="fd --type d --hidden --follow"
 export FZF_ALT_C_COMMAND="fd --type d --hidden --follow"
 export FZF_DEFAULT_COMMAND="fd --type f --hidden --follow"
@@ -11,83 +12,32 @@ export FZF_CTRL_T_COMMAND=$FZF_DEFAULT_COMMAND
 # switch to dark mode, by sourcing the theme file right before the actual
 # binary execution.
 # NOTE: run in a subshell to not pollute top level shell environment
-function fzf() {(
+fzf() {
+  (
     source ${XDG_CONFIG_HOME:-$HOME/.config}/fzf/current-theme.zsh
     export FZF_DEFAULT_OPTS='--prompt=": " '${FZF_DEFAULT_OPTS}
     $(whence -p fzf) "$@"
-)}
-
-_fzf_compgen_dir() {
-  fd --type d \
-    --hidden \
-    --follow
-}
-
-_fzf_compgen_path() {
-  fd --type f \
-    --hidden \
-    --follow
-}
-
-
-# output current git repository root folder
-__git_repo_root() {
-	git rev-parse --show-toplevel 2>/dev/null
-}
-
-# rr (repo root) cd to the folder relative to the root dir of current repository
-rr() {
-  local _repo=$(__git_repo_root)
-  [[ -d ${_repo} ]] && cd ${_repo}/$1
-}
-
-# fzf completion for rr command
-_fzf_complete_rr() {
-  local _repo=$(__git_repo_root)
-  [[ -n ${_repo} ]] || return
-  local _workdir=$(realpath --relative-to="${_repo}" "$(pwd)")
-
-  _fzf_complete \
-    --height=20% \
-    --no-scrollbar \
-    --layout=reverse \
-    --info=inline-right \
-    --preview="ls --color --group-directories-first -F -1 ${_repo:=.}/{}" \
-    --preview-window 'right,50%,border-left,+{2}+3/3,~3' \
-    -- "$@" < <(
-
-      fd --type=d \
-      --base-directory=${_repo} \
-      --strip-cwd-prefix \
-      . | grep -e "${_workdir//./\.}/$" -v
-      
-    )
-}
-
-# fzf completion for vim command
-_fzf_complete_vim() {
-  local _workdir=$(__git_repo_root)
-  if [[ -z ${_workdir} ]]; then
-    _workdir=$(pwd)
-  fi
-  local _currdir=$(pwd)
-
-  _fzf_complete \
-    --height=20% \
-    --layout=reverse \
-    --no-scrollbar \
-    --info=inline-right \
-    -- "$@" < <(
-      fd --type=f \
-        --hidden \
-        --base-directory=${_workdir} \
-        . \
-        --exec realpath --relative-to=${_currdir} {}
   )
 }
 
-local function __list_users_and_repos() {
-  local workdir=${1}
+_fzf_compgen_dir() { fd --type d --hidden --follow }
+_fzf_compgen_path() { fd --type f --hidden --follow }
+
+
+# output current repository root folder
+current_repo() {
+  git rev-parse --show-toplevel 2>/dev/null
+}
+
+# list all subdirs for the path
+subdirs() {
+  fd --base-directory="${1}" --type=d --hidden
+}
+
+# list all git repos for the path
+repos() {
+  local base_dir=${1}
+  local exclude="{vendor,.terraform}"
 
   # I just need couple of top level directories to be able
   # to quickly cd to like github.com/weirdgiraffe. And those
@@ -103,75 +53,97 @@ local function __list_users_and_repos() {
   # 6. remove empty lines sed /^$/d
   #
   # reference: https://zsh.sourceforge.io/Doc/Release/Expansion.html
-  echo ${(F@)${(M)${(@s:,:)GOPRIVATE}:#${workdir:t}*}#${workdir:t}/} | sed /^$/d
+  echo ${(F@)${(M)${(@s:,:)GOPRIVATE}:#${base_dir:t}*}#${base_dir:t}/} | sed /^$/d
 
   # output all folders with .git folder inside
-  fd --type=d \
-    --no-ignore \
-    --hidden \
-    --exclude='{vendor,.terraform}' \
-    --max-depth=4 \
-    --base-directory=${workdir} \
-    '^\.git$' \
-    --exec-batch ls -1td | sed 's/^\.\///;s/\/\.git//'
+  fd --base-directory=${base_dir} --unrestricted --type=d --exclude="${exclude}" --max-depth=4 '^\.git$' | sed 's/\.git\/$//'
 }
 
-local function __complete_users_and_repos() {
-  local name=${1}
-  local workdir=${2}
-  local query=${3}
+
+# rr command to cd within a current repo
+rr() {
+  local repo=$(current_repo)
+  local subdir=${1}
+  [[ "${repo}" ]] || return 
+  [[ "${query}" ]] || { cd -- "${repo}"; return }
+  [[ -d "${repo}/${subdir}" ]] && { cd -- "${repo}/${subdir}"; return }
+
+  subdir=$(subdirs "${repo}" | fzf --smart-case --select-1 --query="${subdir}")
+  [[ "${subdir}" ]] && cd -- "${repo}/${subdir}"
+}
+
+# fzf completion for rr command
+_fzf_complete_rr() {
+  local repo=$(current_repo)
+  [[ "${repo}" ]] || return 
 
   _fzf_complete \
     --height=20% \
     --no-scrollbar \
     --no-sort \
     --layout=reverse \
-    --query="${query}" \
+    --info=inline-right \
+    --preview="ls --color --group-directories-first -F -1 ${repo:=.}/{}" \
+    --preview-window 'right,50%,border-left,+{2}+3/3,~3' \
+    -- "${@}" < <( subdirs "${repo}" )
+}
+
+
+# generic switch to the git repository
+_switch_to_repository() {
+  local base_dir=${1}
+  local repo=${2}
+
+  [[ "${base_dir}" ]] || { echo "panic: base_dir is not provided"; return }
+  [[ -d "${base_dir}" ]] || { echo "base_dir does not exists: ${base_dir}"; return }
+
+  [[ "${repo}" ]] || { cd -- "${base_dir}"; return }
+  [[ -d "${base_dir}/${repo}" ]] && { cd -- "${base_dir}/${repo}"; return }
+
+  repo=$(repos "${base_dir}" | fzf --smart-case --select-1 --query="${repo}")
+  [[ "${repo}" ]] && cd -- "${base_dir}/${repo}"
+}
+
+# generic fzf completion for _switch_to_repository
+_complete_repos() {
+  local provider=${1}
+  local base_dir=${2}
+
+  [[ "${base_dir}" ]] || { echo "there is no such dir: ${base_dir}"; return }
+  [[ -d "${base_dir}" ]] || return
+
+  _fzf_complete \
+    --height=20% \
+    --no-scrollbar \
+    --no-sort \
+    --layout=reverse \
     --info=inline-right \
     --preview="ls --color --group-directories-first -F -1 ${workdir:=.}/{}" \
     --preview-window 'right,50%,border-left,+{2}+3/3,~3' \
-    -- "$name " < <(
-      __list_users_and_repos ${workdir}
-    )
+    -- "${provider} " < <( repos "${base_dir}" )
 }
 
-local function __pick_single_match() {
-  local query=$1
-  local workdir=$2
-  __list_users_and_repos ${workdir} | fzf --smart-case --select-1 --query="${query}"
+github() { _switch_to_repository "${HOME}/code/github.com" "${1}" }
+_fzf_complete_github() { _complete_repos "gitlab" "${HOME}/code/github.com"}
+
+gitlab() { _switch_to_repository "${HOME}/code/gitlab.com" "${1}" }
+_fzf_complete_gitlab() { _complete_repos "github" "${HOME}/code/gitlab.com"}
+
+
+# fzf completion for vim command
+_fzf_complete_vim() {
+  local curr_dir=$(pwd)
+  local base_dir=$(current_repo)
+  [[ "${base_dir}" ]] || base_dir="${curr_dir}"
+
+  _fzf_complete \
+    --height=20% \
+    --layout=reverse \
+    --no-scrollbar \
+    --info=inline-right \
+    -- "$@" < <( fd --base-directory=${base_dir} --type=f --hidden . --exec realpath --relative-to=${curr_dir} {} )
 }
 
-__switch_to_repository() {
-  local title=${1}
-  local base_dir=${2}
-  local query=${3}
-
-  if [[ -d "${base_dir}" ]]; then
-    local match=$(__pick_single_match "${query}" "${base_dir}")
-    if [[ -n "${match}" ]]; then
-      cd "${base_dir}/${match}"
-    else
-      local completed=$(__complete_users_and_repos "${title}" ${base_dir} "${query}")
-      cd "${base_dir}/${completed}"
-    fi
-  else
-    echo "there is no such dir:${base_dir}"
-  fi
-}
-
-__complete_switch_to_repository() {
-  local title=${1}
-  local base_dir=${2}
-  if [[ -d "${base_dir}" ]]; then
-    __complete_users_and_repos "${title}" ${base_dir}
-  fi
-}
-
-github() { __switch_to_repository "github" "${HOME}/code/github.com" "${1}" }
-_fzf_complete_github() { __complete_switch_to_repository "github" "${HOME}/code/github.com" }
-
-gitlab() { __switch_to_repository "gitlab" "${HOME}/code/gitlab.com" "${1}" }
-_fzf_complete_gitlab() { __complete_switch_to_repository "gitlab" "${HOME}/code/gitlab.com" }
 
 fzf-no-prefix-completion() {
   setopt localoptions noshwordsplit noksh_arrays noposixbuiltins
