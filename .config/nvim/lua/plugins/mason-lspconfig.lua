@@ -12,6 +12,7 @@ return {
       "docker_language_server",
       "docker_compose_language_service",
       "gopls",
+      "jsonls",
       "lua_ls",
       "yamlls",
     },
