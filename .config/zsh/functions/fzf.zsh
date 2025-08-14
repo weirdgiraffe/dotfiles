@@ -117,14 +117,16 @@ local function __list_users_and_repos() {
 }
 
 local function __complete_users_and_repos() {
-  local name=$1
-  local workdir=$2
+  local name=${1}
+  local workdir=${2}
+  local query=${3}
 
   _fzf_complete \
     --height=20% \
     --no-scrollbar \
     --no-sort \
     --layout=reverse \
+    --query="${query}" \
     --info=inline-right \
     --preview="ls --color --group-directories-first -F -1 ${workdir:=.}/{}" \
     --preview-window 'right,50%,border-left,+{2}+3/3,~3' \
@@ -133,30 +135,43 @@ local function __complete_users_and_repos() {
     )
 }
 
-github() {
-  cd ~/code/github.com/$1
+local function __pick_single_match() {
+  local query=$1
+  local workdir=$2
+  __list_users_and_repos ${workdir} | fzf --smart-case --select-1 --query="${query}"
 }
 
-_fzf_complete_github() {
-  __complete_users_and_repos "github" ~/code/github.com
-}
+__switch_to_repository() {
+  local title=${1}
+  local base_dir=${2}
+  local query=${3}
 
-
-gitlab() {
-  local gitlab_dir=~/code/gitlab.com
-  if [[ -d "${gitlab_dir}" ]]; then
-    cd ~/code/src/gitlab.com/$1
+  if [[ -d "${base_dir}" ]]; then
+    local match=$(__pick_single_match "${query}" "${base_dir}")
+    if [[ -n "${match}" ]]; then
+      cd "${base_dir}/${match}"
+    else
+      local completed=$(__complete_users_and_repos "${title}" ${base_dir} "${query}")
+      cd "${base_dir}/${completed}"
+    fi
   else
-    echo "there is no such dir:${gitlab_dir}"
+    echo "there is no such dir:${base_dir}"
   fi
 }
 
-_fzf_complete_gitlab() {
-  local gitlab_dir=~/code/gitlab.com
-  if [[ -d "${gitlab_dir}" ]]; then
-    __complete_users_and_repos "gitlab" ${gitlab_dir}
+__complete_switch_to_repository() {
+  local title=${1}
+  local base_dir=${2}
+  if [[ -d "${base_dir}" ]]; then
+    __complete_users_and_repos "${title}" ${base_dir}
   fi
 }
+
+github() { __switch_to_repository "github" "${HOME}/code/github.com" "${1}" }
+_fzf_complete_github() { __complete_switch_to_repository "github" "${HOME}/code/github.com" }
+
+gitlab() { __switch_to_repository "gitlab" "${HOME}/code/gitlab.com" "${1}" }
+_fzf_complete_gitlab() { __complete_switch_to_repository "gitlab" "${HOME}/code/gitlab.com" }
 
 fzf-no-prefix-completion() {
   setopt localoptions noshwordsplit noksh_arrays noposixbuiltins
