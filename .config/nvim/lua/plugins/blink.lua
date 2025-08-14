@@ -1,3 +1,5 @@
+local log = require("utils.log")
+
 --- Remove all matches from items for which filter returns true
 ---@param items any[] items to process
 ---@param filter fun(item:any):boolean filter to apply
@@ -14,7 +16,7 @@ local function has_words_before()
   local line, col = unpack(vim.api.nvim_win_get_cursor(0))
   if col == 0 then return false end
   local before = vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(1, col)
-  return not before:match("^%s*$")
+  return not before:match("%s$")
 end
 
 return {
