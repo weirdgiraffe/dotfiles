@@ -46,6 +46,7 @@ brew "rust"
 brew "argocd"
 brew "shellcheck" # tool for linting of the shell scripts
 brew "shfmt"      # tool for formating of the shell scripts
+brew "direnv"     # tool for automatically source .env or .envrc files
 
 # casks
 cask "bitwarden"

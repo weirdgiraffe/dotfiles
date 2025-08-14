@@ -9,6 +9,8 @@ __pycache__
 # code coverage for golang
 *.cov
 .env
+.envrc
 
 **/.claude/settings.local.json
 CLAUDE*.md
+TASK.md
