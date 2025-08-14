@@ -35,6 +35,40 @@ local function lsp_format_buffer(client, bufnr)
   vim.lsp.buf.format({ id = client.id, bufnr = bufnr, async = false }) -- format the code using lsp client
 end
 
+
+---gopls_organize_imports will organize imports for the provided buffer
+---@param client vim.lsp.Client gopls instance
+---@param bufnr number buffer to organize imports for
+local function gopls_organize_imports(client, bufnr)
+  if client.name ~= "gopls" then
+    vim.notify("Organize imports is only supported for gopls", vim.log.levels.WARN)
+    return
+  end
+  local params = vim.tbl_deep_extend("keep",
+    {
+      context = {
+        only = { "source.organizeImports" }
+      },
+    },
+    vim.lsp.util.make_range_params(0, client.offset_encoding)
+  )
+  -- buf_request_sync defaults to a 1000ms timeout. Depending on your
+  -- machine and codebase, you may want longer. Add an additional
+  -- argument after params if you find that you have to write the file
+  -- twice for changes to be saved.
+  -- E.g., vim.lsp.buf_request_sync(bufnr, "textDocument/codeAction", params, 3000)
+  local result = vim.lsp.buf_request_sync(bufnr, "textDocument/codeAction", params, 1000)
+  -- local result = client:request_sync("textDocument/codeAction", params, 1000, bufnr)
+  for _, res in pairs(result or {}) do
+    for _, r in pairs(res.result or {}) do
+      if r.edit then
+        vim.lsp.util.apply_workspace_edit(r.edit, client.offset_encoding or "utf-16")
+      end
+    end
+  end
+end
+
+
 vim.api.nvim_create_autocmd('LspAttach', {
   callback = function(event)
     assert(event, "LspAttach event must not be nil")
@@ -47,6 +81,13 @@ vim.api.nvim_create_autocmd('LspAttach', {
       local group_name = string.format("__lsp:on_save:%s:%d", client.name, bufnr)
       local group = vim.api.nvim_create_augroup(group_name, { clear = true })
       local callback = function() return lsp_format_buffer(client, bufnr) end
+      if client.name == "gopls" then
+        callback = function()
+          gopls_organize_imports(client, bufnr)
+          lsp_format_buffer(client, bufnr)
+        end
+      end
+
       vim.api.nvim_create_autocmd("BufWritePre", {
         buffer = bufnr,
         group = group,
