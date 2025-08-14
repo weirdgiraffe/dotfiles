@@ -87,12 +87,17 @@ end
 ---@param path string path to serarch
 ---@return string|nil
 local function git_repository(path)
-  local git_dir = vim.fs.find('.git', {
-    path = path or vim.fn.expand("%:p:h"),
-    upward = true,
-    type = 'directory',
-  })[1]
-  return git_dir and vim.fs.dirname(git_dir)
+  local cmd = { "git", "rev-parse", "--show-toplevel" }
+  local opts = {
+    cwd = path,
+    stdin = false,
+    stdout = true,
+    stderr = false,
+  }
+  local res = vim.system(cmd, opts):wait(1000)
+  if (res.code == 0 and res.stdout) then
+    return vim.fs.dirname(res.stdout)
+  end
 end
 
 local function telescope_opts()
