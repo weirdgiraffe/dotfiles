@@ -1,7 +1,4 @@
-if [[ -f ${XDG_CONFIG_HOME:-$HOME/.config}/fzf/fzf.zsh ]]; then
-  source ${XDG_CONFIG_HOME:-$HOME/.config}/fzf/fzf.zsh
-fi
-
+source ${XDG_CONFIG_HOME:-$HOME/.config}/fzf/fzf.zsh
 
 export FZF_ALT_C_COMMAND="fd --type d --hidden --follow"
 export FZF_ALT_C_COMMAND="fd --type d --hidden --follow"
@@ -158,6 +155,7 @@ fzf-no-prefix-completion() {
     fzf-completion
   fi
 }
+
 zle -N fzf-no-prefix-completion
 
 # tab completion of no prefix commands
