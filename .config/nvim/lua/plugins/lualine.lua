@@ -14,9 +14,11 @@ return {
       options = {
         theme = theme,
         icons_enabled = true,
-        component_separators = "",
+        -- component_separators = "",
         -- section_separators = { left = '', right = '' },
-        section_separators = "",
+        -- section_separators = "",
+        component_separators = { left = '', right = '' },
+        section_separators = { left = '', right = '' },
       },
       -- in the tabline I would like to show the list of open buffers
       -- at the same time I would like to show buffer numbers for the
@@ -51,9 +53,7 @@ return {
             symbols = { error = " ", warn = " " },
           },
         },
-        lualine_c = {
-          { 'filename', path = 3 },
-        },
+        lualine_c = { '%=', { 'filename', separator = { left = " " }, path = 3 } },
         lualine_x = {},
         lualine_y = {
           {
