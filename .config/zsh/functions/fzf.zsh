@@ -62,7 +62,7 @@ rr() {
   local repo=$(current_repo)
   local subdir=${1}
   [[ "${repo}" ]] || return 
-  [[ "${query}" ]] || { cd -- "${repo}"; return }
+  [[ "${subdir}" ]] || { cd -- "${repo}"; return }
   [[ -d "${repo}/${subdir}" ]] && { cd -- "${repo}/${subdir}"; return }
 
   subdir=$(subdirs "${repo}" | fzf --smart-case --select-1 --query="${subdir}")
@@ -121,10 +121,10 @@ _complete_repos() {
 }
 
 github() { _switch_to_repository "${HOME}/code/github.com" "${1}" }
-_fzf_complete_github() { _complete_repos "gitlab" "${HOME}/code/github.com"}
+_fzf_complete_github() { _complete_repos "github" "${HOME}/code/github.com"}
 
 gitlab() { _switch_to_repository "${HOME}/code/gitlab.com" "${1}" }
-_fzf_complete_gitlab() { _complete_repos "github" "${HOME}/code/gitlab.com"}
+_fzf_complete_gitlab() { _complete_repos "gitlab" "${HOME}/code/gitlab.com"}
 
 
 # fzf completion for vim command
