@@ -12,5 +12,5 @@ __pycache__
 .envrc
 
 **/.claude/settings.local.json
-CLAUDE*.md
-TASK.md
+CLAUDE.*.md
+[Ss][Cc][Rr][Aa][Tt][Cc][Hh].md

@@ -46,6 +46,7 @@
 	pager = delta
 	sshCommand = "ssh -i ~/.ssh/git"
 [alias]
+	aa = !git add $(git rev-parse --show-toplevel)
 	c = commit
 	cam = !git add --all && git commit --message
 	cm = commit --message
