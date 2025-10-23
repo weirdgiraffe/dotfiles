@@ -61,3 +61,11 @@ end, "show diagnostics for the current line")
 -- for current file page
 vim.api.nvim_set_keymap("n", "<Leader>gh", ":OpenInGHFile <CR>", { silent = true, noremap = true })
 vim.api.nvim_set_keymap("v", "<Leader>gh", ":OpenInGHFileLines <CR>", { silent = true, noremap = true })
+
+nnoremap("L", function()
+  if vim.lsp.inlay_hint.is_enabled() then
+    vim.lsp.inlay_hint.enable(false, { 0 })
+  else
+    vim.lsp.inlay_hint.enable(true, { 0 })
+  end
+end, "Toggle Inlay Hints")

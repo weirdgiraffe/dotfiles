@@ -53,7 +53,7 @@ vim.opt.listchars        = {
   space = "⋅",
   nbsp = "%",
 }
-vim.opt.showbreak        = "^"
+vim.o.showbreak          = " "
 
 -- =============================================================================
 -- tab completion for vim commands

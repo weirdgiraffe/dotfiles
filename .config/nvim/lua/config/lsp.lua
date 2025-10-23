@@ -25,6 +25,21 @@ vim.lsp.config('gopls', (function()
   return cfg
 end)())
 
+
+vim.lsp.config('rust-analyzer', {
+  settings = {
+    ['rust-analyzer'] = {
+      inlayHints = {
+        typeHints = { enable = true },
+        parameterHints = { enable = true },
+        chainingHints = { enable = true },
+        renderColons = true,
+      },
+    }
+  }
+})
+
+
 ---Format the provided bufnr using the the provided lsp client
 ---
 ---@param client vim.lsp.Client gopls instance

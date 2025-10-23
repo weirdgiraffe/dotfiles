@@ -89,7 +89,7 @@ end
 local function git_repository(path)
   local cmd = { "git", "rev-parse", "--show-toplevel" }
   local opts = {
-    cwd = path,
+    cwd = path:gsub("^oil://", ""),
     stdin = false,
     stdout = true,
     stderr = false,

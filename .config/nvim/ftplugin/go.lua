@@ -1,6 +1,6 @@
 vim.o.shiftwidth = 4
 vim.o.tabstop = 4
-vim.o.textwidth = 110
+vim.o.textwidth = 100
 vim.o.colorcolumn = "+1"
 
 
@@ -45,10 +45,7 @@ keymap("<leader>cc", function()
   require("go.comment").gen()
 end, "go: add comment")
 
-keymap("<leader>m", with_current_file_cwd(function()
-  vim.cmd([[GoModTidy]])
-  vim.cmd([[LspRestart]])
-end), "go mod tidy")
+keymap("<leader>m", "<CMD>GoModTidy<CR>", "go mod tidy")
 
 keymap("<leader>tc", with_current_file_cwd(function()
   vim.cmd([[GoCoverage -t]])

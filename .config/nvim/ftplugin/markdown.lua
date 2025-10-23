@@ -6,7 +6,6 @@
 -- soft wrap long lines in markdown
 vim.o.wrap = true
 vim.o.linebreak = true
-vim.o.showbreak = " "
 vim.o.colorcolumn = "110"
 vim.o.textwidth = 0  -- disable hard wrapping
 vim.o.wrapmargin = 0 -- disable wrap margin

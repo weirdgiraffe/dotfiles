@@ -1,3 +1,5 @@
+local log = require("utils.log")
+
 local M = {}
 
 local function is_listed(bufnr)
@@ -23,7 +25,9 @@ end
 
 local function switch_to_buffer(bufnr)
   local buffers = filter_buffers(vim.api.nvim_list_bufs(), is_listed)
-  vim.api.nvim_set_current_buf(buffers[bufnr])
+  if buffers[bufnr] then
+    vim.api.nvim_set_current_buf(buffers[bufnr])
+  end
 end
 
 --- switch focus to a buffer with the given bufnr.
