@@ -22,6 +22,7 @@ config.font_size = 14.0
 -- This is where you actually apply your config choices
 local function scheme_for_appearance(appearance)
   if appearance:find("Dark") then
+    -- return "Oxocarbon Dark (Gogh)"
     return "Everforest Dark (Gogh)"
     -- return "Rosé Pine Moon (Gogh)"
   else
@@ -34,10 +35,10 @@ config.color_scheme                               = scheme_for_appearance(wezter
 config.colors                                     = { cursor_bg = '#dbbc7f' }
 
 config.window_padding                             = {
-  left = 10,
-  right = 10,
-  top = 10,
-  bottom = 10,
+  left = "10px",
+  right = "10px",
+  top = "15px",
+  bottom = 0,
 }
 
 config.window_decorations                         = "TITLE | RESIZE"
