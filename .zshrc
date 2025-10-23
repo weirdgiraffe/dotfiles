@@ -110,13 +110,9 @@
   zcompare_and_source() { zcompare ${1} && source ${1} }
 
   # ------------------------------------------------------------------------------
-  # ------------------------------------------------------------------------------
   # plugins
+  # ------------------------------------------------------------------------------
 
-  # oh-my-posh: (need to comment out if want to benchmark)
-#   if [[ ! -s ${CACHE_FUNCTIONS_DIR}/oh-my-posh.zsh ]]; then
-#     oh-my-posh init zsh --config=${HOME}/.config/oh-my-posh/config.toml > ${CACHE_FUNCTIONS_DIR}/oh-my-posh.zsh
-#   fi
   eval "$(starship init zsh)"
 
   # NOTE: pyenv has an extremely slow initialization function
@@ -145,20 +141,31 @@
   zcompare_and_source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
   # ------------------------------------------------------------------------------
-  # ------------------------------------------------------------------------------
   # completions
+  # ------------------------------------------------------------------------------
 
-  # NOTE: assume that brew is already installed
-  [[ -s ${CACHE_COMPLETIONS_DIR}/_pyenv ]]  || cp $(brew --prefix pyenv)/completions/pyenv.zsh ${CACHE_COMPLETIONS_DIR}/_pyenv
-  [[ -s ${CACHE_COMPLETIONS_DIR}/_docker ]] || docker completion zsh > ${CACHE_COMPLETIONS_DIR}/_docker
-
-  # NOTE: assume that rustup is already installed
-  [[ -s ${CACHE_COMPLETIONS_DIR}/_rustup ]] || rustup completions zsh > ${CACHE_COMPLETIONS_DIR}/_rustup
-  [[ -s ${CACHE_COMPLETIONS_DIR}/_cargo ]]  || rustup completions zsh cargo > ${CACHE_COMPLETIONS_DIR}/_cargo
+  if command -v pyenv &> /dev/null; then
+    [[ -s ${CACHE_COMPLETIONS_DIR}/_pyenv ]]  || cp $(brew --prefix pyenv)/completions/pyenv.zsh ${CACHE_COMPLETIONS_DIR}/_pyenv
+  fi
+  if command -v docker &> /dev/null; then
+    [[ -s ${CACHE_COMPLETIONS_DIR}/_docker ]] || docker completion zsh > ${CACHE_COMPLETIONS_DIR}/_docker
+  fi
+  if command -v rustup &> /dev/null; then
+    [[ -s ${CACHE_COMPLETIONS_DIR}/_rustup ]] || rustup completions zsh > ${CACHE_COMPLETIONS_DIR}/_rustup
+  fi
+  if command -v cargo &> /dev/null; then
+    [[ -s ${CACHE_COMPLETIONS_DIR}/_cargo ]]  || rustup completions zsh cargo > ${CACHE_COMPLETIONS_DIR}/_cargo
+  fi
+  if command -v kubectl &> /dev/null; then
+    [[ -s ${CACHE_COMPLETIONS_DIR}/_kubectl ]]  || kubectl completion zsh > ${CACHE_COMPLETIONS_DIR}/_kubectl
+  fi
+  if command -v anvil &> /dev/null; then
+    [[ -s ${CACHE_COMPLETIONS_DIR}/_anvil ]]  || anvil completions zsh > ${CACHE_COMPLETIONS_DIR}/_anvil
+  fi
    
   fpath=(
     $(brew --prefix)/share/zsh-completions/
-    ${CACHE_COMPLETION_DIR}
+    ${CACHE_COMPLETIONS_DIR}
     $fpath
   )
 
@@ -218,6 +225,7 @@
   alias gdiffsplit='DELTA_FEATURES=+side-by-side git diff'
   alias dc='docker compose'
   alias argocd='argocd --grpc-web'
+  alias k='kubectl'
 
   # Preserve terminfo for kitty when ssh-ing somewhere
   # alias ssh='kitten ssh'
