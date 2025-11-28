@@ -1,5 +1,7 @@
 local function theme()
-  return require("lualine.utils.loader").load_theme("auto")
+  local t = require("lualine.utils.loader").load_theme("auto")
+  t.inactive.c.bg = t.normal.b.bg
+  return t
 end
 
 return {
