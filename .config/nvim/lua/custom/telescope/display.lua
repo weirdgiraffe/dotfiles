@@ -18,7 +18,7 @@ end
 
 local M = {}
 
-local homedir = vim.loop.os_homedir()
+local homedir = vim.uv.os_homedir()
 
 function M.path_display(opts, path)
   local cwd = opts.cwd or vim.fn.getcwd()
@@ -26,7 +26,7 @@ function M.path_display(opts, path)
 
   local dirname = vim.fs.dirname(path)
   local filename = vim.fs.basename(path)
-  if homedir then
+  if homedir and string.sub(dirname, 1, #homedir) == homedir then
     dirname = "~/" .. vim.fs.relpath(homedir, dirname)
   end
   return diplay(dirname, filename)
@@ -35,9 +35,13 @@ end
 function M.relpath_display(opts, path)
   local dirname = vim.fs.dirname(path)
   local filename = vim.fs.basename(path)
-  if opts.cwd then
-    dirname = dirname:gsub("^" .. opts.cwd, ""):gsub("^/", "")
+
+  if string.sub(dirname, 1, #opts.cwd) == opts.cwd then
+    dirname = "." .. string.sub(dirname, #opts.cwd + 1, #dirname)
+  elseif homedir and string.sub(dirname, 1, #homedir) == homedir then
+    dirname = "~/" .. vim.fs.relpath(homedir, dirname)
   end
+
   return diplay(dirname, filename)
 end
 

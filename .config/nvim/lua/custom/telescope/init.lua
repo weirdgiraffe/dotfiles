@@ -210,6 +210,8 @@ function M.project_files()
     "--unrestricted",
     "--absolute-path",
     "--exclude=.git",
+    "--exclude=target",
+    "--exclude=node_modules",
     "--color=never",
   }
   opts.hidden = false
