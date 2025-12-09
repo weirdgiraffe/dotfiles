@@ -162,7 +162,7 @@
   if command -v anvil &> /dev/null; then
     [[ -s ${CACHE_COMPLETIONS_DIR}/_anvil ]]  || anvil completions zsh > ${CACHE_COMPLETIONS_DIR}/_anvil
   fi
-   
+
   fpath=(
     $(brew --prefix)/share/zsh-completions/
     ${CACHE_COMPLETIONS_DIR}
@@ -176,6 +176,14 @@
     compinit -i -d "${ZCOMPDUMP_FILE}"
   fi
   zcompare ${ZCOMPDUMP_FILE}
+
+  # terraform has quite a stupid completion, which should be 
+  # activated only after compinit
+  if command -v terraform &> /dev/null; then
+      autoload -U +X bashcompinit && bashcompinit
+      complete -o nospace -C $(which terraform) terraform
+  fi
+   
 
   # If a completion is performed with the cursor within a word, and a full
   # completion is inserted, the cursor is moved to the end of the word.
