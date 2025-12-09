@@ -11,7 +11,7 @@ vim.o.textwidth = 0  -- disable hard wrapping
 vim.o.wrapmargin = 0 -- disable wrap margin
 vim.o.list = false   -- disable whitespaces display
 
-vim.o.tabstop = 8
+vim.o.tabstop = 2
 vim.o.softtabstop = 2
 vim.o.shiftwidth = 2
 vim.o.expandtab = false
