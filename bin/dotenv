@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-if [ -f ".env" ]; then
+if [ -f ".env.fission" ]; then
 	set -o allexport
-	source .env
+	source .env.fission
 	set +o allexport
 fi
 
