@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+WORKDIR="${PWD/"${HOME}"//home/user}"
+
+# TERM_PROGRAM and COLORTERM are required to specify the terminal and color to support correct formatting
+# mounting /tmp/tmux-1000/default (or any other uid) is required to mount the tmux socket and enables the copy on selection and paste using C-b-]
+# mounting of the git config is required to have the correct ssh keys for git repos
+# mounting of the ssh config is required to clone private repos
+command=(
+	docker run --rm -it
+	-e TERM=xterm-256color
+	-e TERM_PROGRAM=WezTerm
+	-e COLORTERM=truecolor
+	-v "${HOME}/.config/git":/home/user/.config/git:ro
+	-v "${HOME}/.ssh":/home/user/.ssh:ro
+	-v "${HOME}/.config/opencode":/home/user/.config/opencode
+	-v "${HOME}/.local/share/opencode/auth.json":/home/user/.local/share/opencode/auth.json:ro
+	-v "${HOME}/.local/share/opencode/snapshot":/home/user/.local/share/opencode/snapshot
+	-v "${HOME}/.local/share/opencode/storage":/home/user/.local/share/opencode/storage
+	-v "${HOME}/.local/state/opencode":/home/user/.local/state/opencode
+	-v "${PWD}":"${WORKDIR}"
+	-v "/tmp/tmux-$(id -u)/default":/tmux-socket:z
+	-u "$(id -u):$(id -g)"
+	-w "${WORKDIR}"
+	opencode
+)
+
+"${command[@]}"
