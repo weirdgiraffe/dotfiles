@@ -3,7 +3,7 @@ on: [push]
 jobs:
   macos:
     name: install on macos
-    runs-on: macos-13
+    runs-on: macos-14
     steps:
       - name: checkout
         uses: actions/checkout@v4
@@ -13,7 +13,7 @@ jobs:
         run: ls -a ~/.*
       - name: show ~/.ssh
         run: tree ~/.ssh
-      - name: show ~/.config 
+      - name: show ~/.config
         run: tree ~/.config
       - name: show ~/Library/Fonts
         run: tree ~/Library/Fonts
