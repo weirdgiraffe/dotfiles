@@ -93,6 +93,11 @@ vim.api.nvim_create_user_command("SetColorscheme", function(opts)
 end, { nargs = 1, force = true, desc = "set colorscheme" })
 
 vim.cmd([[colorscheme everforest]])
---vim.cmd([[colorscheme oxocarbon]])
+-- vim.cmd([[colorscheme oxocarbon]])
 -- vim.cmd([[colorscheme vague]])
-vim.api.nvim_set_hl(0, 'MinuetVirtualText', { link = 'NonText' })
+
+-- text color for AI completions
+local _ = (function()
+  local hl = vim.api.nvim_get_hl(0, { name = "NonText" })
+  vim.api.nvim_set_hl(0, 'MinuetVirtualText', { fg = hl.fg, bg = hl.bg })
+end)()
