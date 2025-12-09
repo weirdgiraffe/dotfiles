@@ -69,3 +69,34 @@ nnoremap("L", function()
     vim.lsp.inlay_hint.enable(true, { 0 })
   end
 end, "Toggle Inlay Hints")
+
+
+nnoremap("<leader>z", function()
+  require("zen-mode").toggle({
+    window = {
+      width = .6 -- width will be 85% of the editor width
+    }
+  })
+end, "Toggle zen mode")
+
+-- if I am in the Zen mode and window shrinks, like I'm getting out of zoom in tmux
+-- I would like to exit zen mode
+; (function()
+  local width = vim.api.nvim_win_get_width(0)
+  local height = vim.api.nvim_win_get_height(0)
+
+  vim.api.nvim_create_autocmd("VimResized", {
+    callback = function()
+      local w = vim.api.nvim_win_get_width(0)
+      local h = vim.api.nvim_win_get_height(0)
+      if w < width or h < height then
+        require("zen-mode").close()
+      end
+      width = w
+      height = h
+    end,
+  })
+end)()
+
+
+vim.api.nvim_set_keymap("i", "jj", "<Esc>", { noremap = false })
