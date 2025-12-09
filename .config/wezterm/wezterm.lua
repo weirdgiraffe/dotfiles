@@ -5,7 +5,8 @@ local wezterm = require 'wezterm'
 local config = wezterm.config_builder()
 
 config.font = wezterm.font({
-  family = "Iosevka Nerd Font",
+  -- family = "Iosevka Nerd Font",
+  family = "MartianMono Nerd Font",
   weight = "Regular",
 })
 -- config.font = wezterm.font("IosevkaTerm Nerd Font")
@@ -17,7 +18,7 @@ config.font = wezterm.font({
 -- config.font = wezterm.font("Hasklug Nerd Font")
 -- config.font = wezterm.font("EnvyCodeR Nerd Font")
 -- config.font = wezterm.font("GeistMono Nerd Font")
-config.font_size = 14.0
+config.font_size = 12.0
 
 -- This is where you actually apply your config choices
 local function scheme_for_appearance(appearance)
@@ -84,6 +85,8 @@ table.insert(config.hyperlink_rules, {
   format = "https://etherscan.io/address/$1",
   highlight = 1,
 })
+
+config.enable_csi_u_key_encoding = true
 
 -- and finally, return the configuration to wezterm
 return config
