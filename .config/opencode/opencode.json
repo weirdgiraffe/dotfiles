@@ -6,11 +6,11 @@
   "agent": {
     "plan": {
       "mode": "primary",
-      "model": "opencode/claude-sonnet-4-5"
+      "model": "opencode/claude-haiku-4-5"
     },
     "build": {
       "mode": "primary",
-      "model": "opencode/claude-sonnet-4-5"
+      "model": "opencode/claude-haiku-4-5"
     }
   }
 }
