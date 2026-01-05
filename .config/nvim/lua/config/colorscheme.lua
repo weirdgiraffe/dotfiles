@@ -54,6 +54,8 @@ local function set_background(bg)
     if vim.g.colors_name == "everforest" then
       vim.g.everforest_background = "medium"
     end
+
+
     vim.cmd("set background=light")
   end
   -- to ensure the focus switch I need to drop the
