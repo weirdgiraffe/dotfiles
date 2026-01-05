@@ -19,7 +19,6 @@ command=(
 	-v "${HOME}/.local/share/opencode/storage":/home/user/.local/share/opencode/storage
 	-v "${HOME}/.local/state/opencode":/home/user/.local/state/opencode
 	-v "${PWD}":"${WORKDIR}"
-	-v "/tmp/tmux-$(id -u)/default":/tmux-socket:z
 	-u "$(id -u):$(id -g)"
 	-w "${WORKDIR}"
 	opencode

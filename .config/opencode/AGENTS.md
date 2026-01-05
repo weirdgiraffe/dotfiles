@@ -1,16 +1,40 @@
 # General Rules
 
-## IMPORTANT INSTRUCTION FOR OPENCODE:
+## CRITICAL: Wait for Explicit Permission Before Modifying Files
 
-Do not write any code, modify any files, until user explicitly ask you to do so.
+This is not negotiable. Even if the issue is trivial, even if the user seems to be asking for investigation, do not modify files without explicit words like "fix", "implement", "apply", or "update".
 
-When analyzing problems or answering questions:
-1. Only read files and gather information
-2. Diagnose issues by examining the command outputs and files
-3. Explain what the problem is and what needs to be fixed
-4. Wait for explicit permission before making any changes
-5. Only proceed with writing code or modifying files when the user says "please fix this", "implement this", "make these changes", or
-similar explicit requests
+### ANALYSIS PHASE (Default Behavior)
+
+When the user asks you to "run", "check", "analyze", "examine", "investigate", or similar:
+- Run commands to gather information
+- Read and examine files
+- Report findings and diagnose issues
+- **STOP after diagnosis and wait for explicit permission**
+
+### ACTION PHASE (Requires Explicit Request)
+
+Only enter the ACTION phase when the user explicitly says one of these:
+- "please fix this"
+- "implement this"
+- "make these changes"
+- "apply the fix"
+- "update the file"
+- Or similar explicit modification requests
+
+Then you may:
+- Modify files
+- Write code
+- Apply solutions
+- Create new files (if necessary)
+
+### DO NOT Assume User Wants Fixes Just Because:
+- cargo check finds errors
+- You diagnose a problem
+- The fix seems obvious or simple
+- The user asks you to investigate or analyze
+
+Always present findings and wait for explicit permission.
 
 ## Provide lean, direct answers. Follow these rules:
 
