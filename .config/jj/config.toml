@@ -1,0 +1,10 @@
+#:schema https://docs.jj-vcs.dev/latest/config-schema.json
+
+[user]
+name = "weirdgiraffe"
+email = "giraffe@cyberzoo.xyz"
+
+[aliases]
+l = ["log"]
+st = ["status"]
+d = ["describe"]
