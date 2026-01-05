@@ -262,5 +262,5 @@
   export VIRTUAL_ENV_DISABLE_PROMPT=1
 
   . "$HOME/.atuin/bin/env"
-  eval "$(atuin init zsh)"
+  eval "$(atuin init zsh --disable-up-arrow)"
 } # end of the anonymous function
