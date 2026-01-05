@@ -32,13 +32,13 @@ vim.o.statuscolumn = "%@SignCb@%s%=%T%@NumCb@%l│%T"
 vim.cmd([[filetype on]])
 vim.cmd([[filetype plugin indent on]])
 vim.opt.syntax           = "enable" -- ensure that syntax highlighting is enabled
-vim.opt.synmaxcol        = 300 -- turn off syntax coloring after 300 symbols in one line
-vim.opt.autoindent       = true -- automaticaly indent based of filetype
+vim.opt.synmaxcol        = 300      -- turn off syntax coloring after 300 symbols in one line
+vim.opt.autoindent       = true     -- automaticaly indent based of filetype
 
 -- =============================================================================
 -- folding
 -- =============================================================================
-vim.opt.foldlevel        = 10 -- do not fold first 10 levels when open a file
+vim.opt.foldlevel        = 10       -- do not fold first 10 levels when open a file
 vim.opt.foldmethod       = "syntax" -- do folding based on syntax
 
 -- =============================================================================
@@ -77,12 +77,8 @@ vim.opt_global.clipboard = { "unnamed", "unnamedplus" }
 
 vim.o.shortmess          = vim.o.shortmess .. 'WI' -- disable intro message and write messages
 vim.go.termguicolors     = true                    -- enable 24-bit RGB colors in the terminal
-vim.o.guicursor          = "n-i-v-c-ci-ve:block" ..
-    ",r-cr:hor20,o:hor50" ..
-    ",n-i-r:Cursor/lCursor" ..
-    ",c-ci-cr:TermCursor"
-
-vim.opt.scrolloff        = 20 -- min number of lines to keep above/bellow current line
+vim.o.guicursor          = ''                      -- do not let Neovim change the cursor shape/blink at all
+vim.o.scrolloff          = 20                      -- min number of lines to keep above/bellow current line
 
 -- do not stop on the long messages, because I can always
 -- grab them using :messages if I need to

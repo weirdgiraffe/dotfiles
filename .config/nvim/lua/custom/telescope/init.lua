@@ -210,6 +210,7 @@ function M.project_files()
     "--unrestricted",
     "--absolute-path",
     "--exclude=.git",
+    "--exclude=.jj",
     "--exclude=target",
     "--exclude=node_modules",
     "--color=never",

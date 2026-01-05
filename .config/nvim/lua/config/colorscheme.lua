@@ -40,9 +40,9 @@ end
 
 background.setup({ default = "dark" })
 
--- sets vim colorscheme and background
+-- sets colorshceme background
 ---@param bg string? dark|light
-local function set_colorscheme(bg)
+local function set_background(bg)
   if bg == "dark" then
     -- need to ensure that everforest dark hard
     if vim.g.colors_name == "everforest" then
@@ -59,12 +59,12 @@ local function set_colorscheme(bg)
   -- to ensure the focus switch I need to drop the
   -- background color for the normal and float windows
   -- and rely on the terminal colors
-  vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
-  vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
+  vim.api.nvim_set_hl(0, "Normal", { bg = nil })
+  vim.api.nvim_set_hl(0, "NormalFloat", { bg = nil })
 end
 
--- sets colorscheme based on system appearance
-local function set_system_colorscheme()
+-- sets colorscheme background based on system appearance
+local function set_system_background()
   local command = [[osascript -e '
   tell application "System Events"
     tell appearance preferences
@@ -76,7 +76,7 @@ local function set_system_colorscheme()
     on_stdout = function(_, data, _)
       if systemBackground == "" then
         systemBackground = data[1] == "true" and "dark" or "light"
-        set_colorscheme(systemBackground)
+        set_background(systemBackground)
       end
     end
   })
@@ -85,16 +85,17 @@ local function set_system_colorscheme()
 end
 
 vim.o.background = background.load()
-set_colorscheme(vim.o.background)
-set_system_colorscheme()
+set_background(vim.o.background)
+set_system_background()
 
 vim.api.nvim_create_user_command("SetColorscheme", function(opts)
-  set_colorscheme(opts.args)
+  set_background(opts.args)
 end, { nargs = 1, force = true, desc = "set colorscheme" })
 
-vim.cmd([[colorscheme everforest]])
+-- vim.cmd([[colorscheme everforest]])
 -- vim.cmd([[colorscheme oxocarbon]])
 -- vim.cmd([[colorscheme vague]])
+vim.cmd([[colorscheme rose-pine]])
 
 -- text color for AI completions
 local _ = (function()
