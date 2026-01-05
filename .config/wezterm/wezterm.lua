@@ -24,11 +24,11 @@ config.font_size = 12.0
 local function scheme_for_appearance(appearance)
   if appearance:find("Dark") then
     -- return "Oxocarbon Dark (Gogh)"
-    return "Everforest Dark (Gogh)"
-    -- return "Rosé Pine Moon (Gogh)"
+    -- return "Everforest Dark (Gogh)"
+    return "Rosé Pine Moon (Gogh)"
   else
-    return "Everforest Light (Gogh)"
-    -- return "Rosé Pine Dawn (Gogh)"
+    -- return "Everforest Light (Gogh)"
+    return "Rosé Pine Dawn (Gogh)"
   end
 end
 
@@ -49,6 +49,7 @@ config.hide_tab_bar_if_only_one_tab               = true
 config.max_fps                                    = 120
 
 config.adjust_window_size_when_changing_font_size = false
+config.default_cursor_style                       = "BlinkingBlock"
 config.hide_mouse_cursor_when_typing              = true
 config.exit_behavior                              = "Close"
 
