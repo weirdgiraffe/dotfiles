@@ -1,5 +1,5 @@
 -- Pull in the wezterm API
-local wezterm = require 'wezterm'
+local wezterm = require 'wezterm' --[[@as Wezterm]]
 
 -- This will hold the configuration.
 local config = wezterm.config_builder()
@@ -30,11 +30,13 @@ config.font_size = 12.0
 local function scheme_for_appearance(appearance)
   if appearance:find("Dark") then
     -- return "Oxocarbon Dark (Gogh)"
-    -- return "Everforest Dark (Gogh)"
-    return "Rosé Pine Moon (Gogh)"
+    return "Everforest Dark (Gogh)"
+    -- return "Rosé Pine Moon (Gogh)"
+    --  return "fexoki-dark"
   else
-    -- return "Everforest Light (Gogh)"
-    return "Rosé Pine Dawn (Gogh)"
+    return "Everforest Light (Gogh)"
+    -- return "Rosé Pine Dawn (Gogh)"
+    -- return "fexoki-light"
   end
 end
 
@@ -48,7 +50,7 @@ config.window_padding                             = {
   bottom = 0,
 }
 
-config.window_decorations                         = "TITLE | RESIZE"
+config.window_decorations                         = "TITLE|RESIZE"
 -- config.window_decorations                         = "RESIZE"
 -- config.enable_tab_bar = false
 config.hide_tab_bar_if_only_one_tab               = true
@@ -94,6 +96,41 @@ table.insert(config.hyperlink_rules, {
 })
 
 config.enable_csi_u_key_encoding = true
+
+
+-- mimic TMUX with wezterm
+---@diagnostic disable-next-line: unused-function,unused-local
+local function mimic_tmux_keybindings(cfg)
+  cfg.leader = { key = 'b', mods = 'CTRL', timetout_milliseconds = 1000 }
+  cfg.keys = {
+    -- tmux: new window | wezterm: new tag
+    { mods = "LEADER",     key = 'c',        action = wezterm.action.SpawnTab("CurrentPaneDomain") },
+    -- split horizontal
+    { mods = "LEADER",     key = '%',        action = wezterm.action.SplitHorizontal({ domain = "CurrentPaneDomain" }) },
+    -- split vertical
+    { mods = "LEADER",     key = '"',        action = wezterm.action.SplitVertical({ domain = "CurrentPaneDomain" }) },
+    -- tmux: next window | weztermn: next tab
+    -- default key bindings: CTRL+Tab, CTRL+PageDown
+    { mods = "CTRL",       key = 'Tab',      action = wezterm.action.DisableDefaultAssignment },
+    { mods = "CTRL",       key = 'PageDown', action = wezterm.action.DisableDefaultAssignment },
+    { mods = "LEADER",     key = 'n',        action = wezterm.action.ActivateTabRelative(1) },
+    -- tmux: prev window | weztermn: prev tab
+    -- default key bindings: CTRL+Shift+Tab, CTRL+PageUp
+    { mods = "CTRL|SHIFT", key = 'Tab',      action = wezterm.action.DisableDefaultAssignment },
+    { mods = "CTRL",       key = 'PageDown', action = wezterm.action.DisableDefaultAssignment },
+    { mods = "LEADER",     key = 'p',        action = wezterm.action.ActivateTabRelative(-1) },
+    -- maximize current pane
+    { mods = "LEADER",     key = 'z',        action = wezterm.action.TogglePaneZoomState },
+  }
+end
+
+
+
+
+
+
+
+
 
 -- and finally, return the configuration to wezterm
 return config
