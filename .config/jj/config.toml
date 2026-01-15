@@ -5,6 +5,7 @@ name = "weirdgiraffe"
 email = "giraffe@cyberzoo.xyz"
 
 [aliases]
-l = ["log"]
+e = ["edit"]
+l = ["log", "-n", "10"]
 st = ["status"]
 d = ["describe"]
