@@ -94,10 +94,10 @@ vim.api.nvim_create_user_command("SetColorscheme", function(opts)
   set_background(opts.args)
 end, { nargs = 1, force = true, desc = "set colorscheme" })
 
--- vim.cmd([[colorscheme everforest]])
+vim.cmd([[colorscheme everforest]])
 -- vim.cmd([[colorscheme oxocarbon]])
 -- vim.cmd([[colorscheme vague]])
-vim.cmd([[colorscheme rose-pine]])
+-- vim.cmd([[colorscheme rose-pine]])
 
 -- text color for AI completions
 local _ = (function()

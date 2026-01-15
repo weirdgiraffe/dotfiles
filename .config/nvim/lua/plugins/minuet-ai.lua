@@ -9,8 +9,8 @@ return {
       blink = { enable_auto_complete = true },
       provider = 'openai_fim_compatible',
       notify = 'warn',
-      context_window = 512,
-      n_completions = 2,
+      context_window = 1024,
+      n_completions = 1,
       add_single_line_entry = true, -- ensures a single-line option is always present
       throttle = 500,               -- ms; minimum gap between requests (increase if needed)
       debounce = 500,               -- ms; wait after you stop typing before sending
