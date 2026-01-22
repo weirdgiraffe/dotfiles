@@ -110,6 +110,7 @@ local function telescope_opts()
   return opts
 end
 
+
 --- List lsp references using telescope
 function M.lsp_references()
   local opts = telescope_opts()
@@ -139,12 +140,19 @@ function M.lsp_goto_definition()
   return builtin.lsp_definitions(opts)
 end
 
+local function telescope_buffers_opts()
+  local opts = themes.get_ivy()
+  opts.path_display = display.path_display
+  return opts
+end
+
 -- List all buffers
 function M.buffers()
-  local opts = telescope_opts()
+  local opts = telescope_buffers_opts()
   opts.sort_mru = true
   opts.sort_lastused = true
   opts.preview_title = ''
+  opts.only_cwd = false
   return builtin.buffers(opts)
 end
 
