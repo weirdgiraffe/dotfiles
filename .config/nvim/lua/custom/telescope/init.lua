@@ -201,7 +201,8 @@ end
 -- List all files for current git repository
 function M.project_files()
   local opts = telescope_opts()
-  opts.sorter = file_sorter_boosting_prefix(opts.cwd)
+  local cwd = vim.fn.expand("%:p:h"):gsub("^oil://", "") -- remove oil:// prefix if present
+  opts.sorter = file_sorter_boosting_prefix(cwd)
   opts.find_command = {
     "fd",
     "--type=f",
@@ -221,7 +222,8 @@ end
 -- Live grep
 function M.live_grep()
   local opts = telescope_opts()
-  opts.sorter = file_sorter_boosting_prefix(opts.cwd)
+  local cwd = vim.fn.expand("%:p:h"):gsub("^oil://", "") -- remove oil:// prefix if present
+  opts.sorter = file_sorter_boosting_prefix(cwd)
   -- opts.type_filter = "f"
   opts.hidden = false
   opts.preview_title = ''
