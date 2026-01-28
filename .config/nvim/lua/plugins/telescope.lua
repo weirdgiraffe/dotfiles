@@ -10,7 +10,7 @@ return {
     telescope.setup({
       defaults = {
         dynamic_preview_title = true,
-        path_display = require("custom.telescope.display").relpath_display,
+        path_display = require("custom.telescope.display").smart_display,
         mappings = {
           i = {
             ["<C-j>"] = actions.move_selection_next,

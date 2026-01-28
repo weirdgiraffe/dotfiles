@@ -1,7 +1,6 @@
 local log = require("utils.log")
 local entry_display = require("telescope.pickers.entry_display")
 
-
 local function utf8_advance(b)
   if b < 128 then
     return 1
@@ -35,24 +34,6 @@ end
 
 local function diplay(dirname, filename)
   if #dirname > 0 then dirname = dirname .. "/" end
-
-
-  -- replace long paths for cargo packages
-  local _, end_pos = string.find(dirname, "registry/src/index.crates.io")
-  if end_pos then
-    end_pos = string.find(dirname, "/", end_pos)
-    if end_pos then
-      dirname = "📦 " .. string.sub(dirname, end_pos + 1)
-    end
-  end
-
-  -- replace long paths for go packages
-  _, end_pos = string.find(dirname, "pkg/mod/")
-  if end_pos then
-    dirname = "📦 " .. string.sub(dirname, end_pos + 1)
-  end
-
-
   local display_entry = entry_display.create({
     separator = "",
     items = {
@@ -70,34 +51,50 @@ local M = {}
 
 local homedir = vim.uv.os_homedir()
 
-function M.path_display(opts, path)
-  if opts.cwd then
-    path = opts.cwd .. "/" .. path
+local function smart_dirname(dirname, repo)
+  -- replace long paths for cargo packages
+  local _, end_pos = string.find(dirname, "registry/src/index.crates.io")
+  if end_pos then
+    end_pos = string.find(dirname, "/", end_pos)
+    if end_pos then
+      return "📦 " .. string.sub(dirname, end_pos + 1)
+    end
   end
-
-  local dirname = vim.fs.dirname(path)
-  local filename = vim.fs.basename(path)
-
+  -- replace long paths for go packages
+  _, end_pos = string.find(dirname, "pkg/mod/")
+  if end_pos then
+    if end_pos then
+      return "📦 " .. string.sub(dirname, end_pos + 1)
+    end
+  end
+  -- replace repo relative paths
+  if repo and string.sub(dirname, 1, #repo) == repo then
+    local replacement = vim.fs.relpath(repo, dirname)
+    if replacement == "." then
+      return replacement
+    end
+    return "./" .. replacement
+  end
   -- replace home relative paths
   if homedir and string.sub(dirname, 1, #homedir) == homedir then
-    vim.print("found homedir in path " .. dirname)
-    dirname = "~/" .. vim.fs.relpath(homedir, dirname)
+    return "~/" .. vim.fs.relpath(homedir, dirname)
   end
-
-  return diplay(dirname, filename)
+  return dirname
 end
 
-function M.relpath_display(opts, path)
-  local dirname = vim.fs.dirname(path)
-  local filename = vim.fs.basename(path)
-
-  if string.sub(dirname, 1, #opts.cwd) == opts.cwd then
-    dirname = "." .. string.sub(dirname, #opts.cwd + 1, #dirname)
-  elseif homedir and string.sub(dirname, 1, #homedir) == homedir then
-    dirname = "~/" .. vim.fs.relpath(homedir, dirname)
+function M.smart_display(repo)
+  return function(_, path)
+    local dirname = vim.fs.dirname(path)
+    local filename = vim.fs.basename(path)
+    if dirname == "." then
+      dirname = vim.fn.getcwd()
+    end
+    -- ensure that we have absolute path for
+    -- the dirname, so substitutions would
+    -- keep working
+    dirname = smart_dirname(vim.fn.expand(dirname), repo)
+    return diplay(dirname, filename)
   end
-
-  return diplay(dirname, filename)
 end
 
 return M

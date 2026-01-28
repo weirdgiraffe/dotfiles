@@ -103,13 +103,12 @@ end
 
 local function telescope_opts()
   local opts = themes.get_ivy()
-  local cwd = vim.fn.expand("%:p:h")
+  local cwd = vim.fn.expand("%:p:h"):gsub("^oil://", "") -- remove oil:// prefix if present
   local repo = git_repository(cwd)
   opts.cwd = repo or cwd
-  opts.path_display = display.relpath_display
+  opts.path_display = display.smart_display(repo)
   return opts
 end
-
 
 --- List lsp references using telescope
 function M.lsp_references()
@@ -138,22 +137,6 @@ function M.lsp_goto_definition()
   local opts = telescope_opts()
   opts.show_line = false
   return builtin.lsp_definitions(opts)
-end
-
-local function telescope_buffers_opts()
-  local opts = themes.get_ivy()
-  opts.path_display = display.path_display
-  return opts
-end
-
--- List all buffers
-function M.buffers()
-  local opts = telescope_buffers_opts()
-  opts.sort_mru = true
-  opts.sort_lastused = true
-  opts.preview_title = ''
-  opts.only_cwd = false
-  return builtin.buffers(opts)
 end
 
 --- Extracts path components from the path
@@ -204,14 +187,21 @@ local function file_sorter_boosting_prefix(boost_prefix)
   return file_sorter
 end
 
+-- List all buffers
+function M.buffers()
+  local opts = telescope_opts()
+  opts.cwd = nil
+  opts.sort_mru = true
+  opts.sort_lastused = true
+  opts.preview_title = ''
+  opts.only_cwd = false
+  return builtin.buffers(opts)
+end
 
 -- List all files for current git repository
 function M.project_files()
   local opts = telescope_opts()
-  local cwd = vim.fn.expand("%:p:h"):gsub("^oil://", "") -- remove oil:// prefix if present
-  local repo = git_repository(cwd)
-  opts.cwd = repo or cwd
-  opts.sorter = file_sorter_boosting_prefix(cwd)
+  opts.sorter = file_sorter_boosting_prefix(opts.cwd)
   opts.find_command = {
     "fd",
     "--type=f",
@@ -224,7 +214,6 @@ function M.project_files()
     "--color=never",
   }
   opts.hidden = false
-  opts.path_display = display.relpath_display
   opts.preview_title = ''
   return builtin.find_files(opts)
 end
@@ -232,12 +221,9 @@ end
 -- Live grep
 function M.live_grep()
   local opts = telescope_opts()
-  local cwd = vim.fn.expand("%:p:h"):gsub("^oil://", "") -- remove oil:// prefix if present
-  opts.cwd = cwd
-  opts.sorter = file_sorter_boosting_prefix(cwd)
+  opts.sorter = file_sorter_boosting_prefix(opts.cwd)
   -- opts.type_filter = "f"
   opts.hidden = false
-  opts.path_display = display.relpath_display
   opts.preview_title = ''
   return builtin.live_grep(opts)
 end
