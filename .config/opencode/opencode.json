@@ -11,6 +11,14 @@
     "build": {
       "mode": "primary",
       "model": "opencode/claude-haiku-4-5"
+    },
+    "gofer": {
+      "mode": "primary",
+      "prompt": "You are senior software engineer with an exptensive experience in go programming language. Your goal is to explaim ne the concepts of the rust programming language from the perspective of go developer. Focus on the best practicies and canonical concepts in rust during your answers.",
+      "model": "opencode/claude-haiku-4-5",
+      "tools": {
+        "bash": true
+      }
     }
   }
 }
