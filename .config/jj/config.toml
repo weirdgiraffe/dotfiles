@@ -3,9 +3,16 @@
 [user]
 name = "weirdgiraffe"
 email = "giraffe@cyberzoo.xyz"
+[user.signing]
+behavior = "own"
+backend = "gpg"
+
+[ui]
+default-command = ["log", "-n", "5"]
+show-cryptographic-signatures = true
 
 [aliases]
 e = ["edit"]
-l = ["log", "-n", "10"]
+l = ["log"]
 st = ["status"]
 d = ["describe"]
