@@ -24,8 +24,6 @@
   path=(${upath})
   export PATH
 
-  # set defaults shell keybindings to emacs keybindings
-  bindkey -e
 
   export EDITOR="nvim"
   export VISUAL="nvim"
@@ -248,7 +246,15 @@
     tmux clear-history
   }
   zle -N clear-scrollback-and-screen
+
   bindkey -e '^L' clear-scrollback-and-screen
+  bindkey -v '^L' clear-scrollback-and-screen
+
+  # just to keep the muscle memory, map 
+  # the most common emacs shortcuts
+  bindkey -v '^A' beginning-of-line
+  bindkey -v '^E' end-of-line
+  bindkey -v '^K' kill-line
 
   # make CTRL-W to remove the last word in the command line which will allow
   # to delete just last word, for example path components
@@ -260,6 +266,14 @@
   # reference: man zshoptions
   setopt AUTO_CD
   export VIRTUAL_ENV_DISABLE_PROMPT=1
+
+  # set defaults shell keybindings to emacs keybindings
+  # bindkey -e
+  
+  # set defaults shell keybindings to vi keybindings
+  # and reduce the key timeout
+  bindkey -v
+  export KEYTIMEOUT=1
 
   . "$HOME/.atuin/bin/env"
   eval "$(atuin init zsh --disable-up-arrow)"
