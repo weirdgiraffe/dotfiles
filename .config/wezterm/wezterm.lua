@@ -7,8 +7,13 @@ local config = wezterm.config_builder()
 config.font = wezterm.font_with_fallback({
   {
     -- family = "Iosevka Nerd Font",
-    family = "Martian Mono",
-    weight = "Regular",
+    -- family = "GeistMono Nerd Font",
+    -- family = "Martian Mono",
+    -- family = "Source Code Pro",
+    family = "Hack Nerd Font",
+    weight = "Medium",
+    -- weight = "Regular",
+    -- stretch = "Expanded",
   },
   {
     family = "Symbols Nerd Font Mono",
@@ -24,30 +29,30 @@ config.font = wezterm.font_with_fallback({
 -- config.font = wezterm.font("Hasklug Nerd Font")
 -- config.font = wezterm.font("EnvyCodeR Nerd Font")
 -- config.font = wezterm.font("GeistMono Nerd Font")
-config.font_size = 12.0
+-- config.font_size = 12.0
+config.font_size = 14.0
 
--- This is where you actually apply your config choices
-local function scheme_for_appearance(appearance)
+-- configur the colorscheme
+(function()
+  local appearance = wezterm.gui.get_appearance()
   if appearance:find("Dark") then
-    -- return "Oxocarbon Dark (Gogh)"
-    return "Everforest Dark (Gogh)"
-    -- return "Rosé Pine Moon (Gogh)"
-    --  return "fexoki-dark"
+    -- "Oxocarbon Dark (Gogh)"
+    -- "Rosé Pine Moon (Gogh)"
+    -- "fexoki-dark"
+    config.color_scheme = "Everforest Dark (Gogh)"
+    config.colors = { background = "#4f585e" }
   else
-    return "Everforest Light (Gogh)"
-    -- return "Rosé Pine Dawn (Gogh)"
-    -- return "fexoki-light"
+    -- "Rosé Pine Dawn (Gogh)"
+    -- "fexoki-light"
+    config.color_scheme = "Everforest Light (Gogh)"
   end
-end
-
-config.color_scheme                               = scheme_for_appearance(wezterm.gui.get_appearance())
-config.colors                                     = { cursor_bg = '#dbbc7f' }
+end)()
 
 config.window_padding                             = {
-  left = "10px",
-  right = "10px",
-  top = "15px",
-  bottom = 0,
+  left = '5px',
+  right = '5px',
+  top = '5px',
+  bottom = '5px',
 }
 
 config.window_decorations                         = "TITLE|RESIZE"
@@ -63,7 +68,7 @@ config.exit_behavior                              = "Close"
 
 -- configure opacity and gpu
 config.front_end                                  = "WebGpu"
-config.window_background_opacity                  = 0.99
+config.window_background_opacity                  = 1.0
 config.macos_window_background_blur               = 50
 config.mouse_bindings                             = {
   { -- Disable the default click behavior
@@ -84,53 +89,23 @@ config.mouse_bindings                             = {
 }
 
 config.hyperlink_rules                            = wezterm.default_hyperlink_rules()
+
 table.insert(config.hyperlink_rules, {
   regex = "\\b(0x[0-9a-fA-F]{64})\\b",
   format = "https://etherscan.io/tx/$1",
   highlight = 1,
 })
+
 table.insert(config.hyperlink_rules, {
   regex = "\\b(0x[0-9a-fA-F]{40})\\b",
   format = "https://etherscan.io/address/$1",
   highlight = 1,
 })
 
+
 config.enable_csi_u_key_encoding = true
 
-
--- mimic TMUX with wezterm
----@diagnostic disable-next-line: unused-function,unused-local
-local function mimic_tmux_keybindings(cfg)
-  cfg.leader = { key = 'b', mods = 'CTRL', timetout_milliseconds = 1000 }
-  cfg.keys = {
-    -- tmux: new window | wezterm: new tag
-    { mods = "LEADER",     key = 'c',        action = wezterm.action.SpawnTab("CurrentPaneDomain") },
-    -- split horizontal
-    { mods = "LEADER",     key = '%',        action = wezterm.action.SplitHorizontal({ domain = "CurrentPaneDomain" }) },
-    -- split vertical
-    { mods = "LEADER",     key = '"',        action = wezterm.action.SplitVertical({ domain = "CurrentPaneDomain" }) },
-    -- tmux: next window | weztermn: next tab
-    -- default key bindings: CTRL+Tab, CTRL+PageDown
-    { mods = "CTRL",       key = 'Tab',      action = wezterm.action.DisableDefaultAssignment },
-    { mods = "CTRL",       key = 'PageDown', action = wezterm.action.DisableDefaultAssignment },
-    { mods = "LEADER",     key = 'n',        action = wezterm.action.ActivateTabRelative(1) },
-    -- tmux: prev window | weztermn: prev tab
-    -- default key bindings: CTRL+Shift+Tab, CTRL+PageUp
-    { mods = "CTRL|SHIFT", key = 'Tab',      action = wezterm.action.DisableDefaultAssignment },
-    { mods = "CTRL",       key = 'PageDown', action = wezterm.action.DisableDefaultAssignment },
-    { mods = "LEADER",     key = 'p',        action = wezterm.action.ActivateTabRelative(-1) },
-    -- maximize current pane
-    { mods = "LEADER",     key = 'z',        action = wezterm.action.TogglePaneZoomState },
-  }
-end
-
-
-
-
-
-
-
-
+-- config.window_background_opacity = 0.5
 
 -- and finally, return the configuration to wezterm
 return config
